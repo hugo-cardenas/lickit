@@ -1,0 +1,15 @@
+.lick {
+  /*float: left;*/
+  /*margin-right: 35px;*/
+  /*margin-bottom: 35px;*/
+  width: 250px;
+}
+
+.description {
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.lick .card-footer, .lick .card-footer-item {
+  border: 0px;
+}
