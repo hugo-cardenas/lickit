@@ -4,13 +4,26 @@ import './App.css';
 import Lick from './Lick/Lick';
 import _ from 'lodash';
 
-const initialLicks = [
+const initialLicks = _.shuffle([
   {
     "description": "Django - Lady be good",
     "tracks": [],
     "name": "123",
     "id": 3,
-    tags: ['ii-V-I']
+    tags: ['ii-V-I', 'gypsy jazz']
+  }, {
+    "description": "Django - Blues clair",
+    "tracks": [],
+    "name": "123",
+    "id": 3,
+    tags: ['I-IV', 'gypsy jazz', 'blues']
+  }, 
+  {
+    "description": "Django - Blues clair 2",
+    "tracks": [],
+    "name": "123",
+    "id": 3,
+    tags: ['ii-V-I', 'gypsy jazz', 'blues']
   }, {
     "description": "Charlie Parker - Confirmation",
     "tracks": [],
@@ -30,13 +43,13 @@ const initialLicks = [
     "id": 1,
     tags: ['Dom7', 'bebop', 'Rhythm changes bridge']
   }, {
-    "description": "Charlie Parker - Perdido",
+    "description": "Charlie Parker - Yardbird suite",
     "tracks": [],
     "name": "foo",
     "id": 1,
-    tags: ['Dom7', 'bebop', 'Rhythm changes bridge']
+    tags: ['ii-V-I', 'bebop']
   }
-];
+]);
 
 const licks = _
   .range(27)
@@ -46,8 +59,9 @@ const chunks = _.chunk(licks, 3);
 
 function renderLick(lick) {
   return <Lick
-    key={Math.random()}
-    mode={Math.random() > 0.5 ? "edit": "view"}
+    mode={Math.random() > 0.5
+    ? "view"
+    : "view"}
     id={lick.id}
     name={lick.name}
     description={lick.description}
@@ -71,7 +85,7 @@ export default function () {
         <h1 className="title">JazzRoutine</h1>
       </header>
       <div className="main-content">
-        <div>
+        <div className="lick-collection">
           {chunks.map(chunk => renderRow(chunk))}
         </div>
       </div>

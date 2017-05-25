@@ -1,8 +1,8 @@
-.lick {
+.lick-collection .column {
   /*float: left;*/
   /*margin-right: 35px;*/
   /*margin-bottom: 35px;*/
-  /*width: 50px;*/
+  /*width: 250px;*/
 }
 
 .description {
@@ -12,4 +12,12 @@
 
 .lick .card-footer, .lick .card-footer-item {
   border: 0px;
+}
+
+.track-container {
+  margin-bottom: 5px;
+}
+
+.tag-container > .tags {
+  margin-bottom: 5px;
 }
