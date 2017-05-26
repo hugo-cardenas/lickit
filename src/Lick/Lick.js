@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './Lick.css';
+import TrackSection from './TrackSection/TrackSection';
 
 class Lick extends Component {
     constructor(props) {
@@ -15,7 +16,11 @@ class Lick extends Component {
 
         return (
             <div className="card lick">
-                {renderer.renderContent(props)}
+                <div className="card-content">
+                    {renderer.renderDescription(props)}
+                    <TrackSection mode={this.state.mode}/> 
+                    {renderer.renderTags(props)}
+                </div>
                 {renderer.renderFooter(this)}
             </div>
         );
@@ -35,14 +40,6 @@ function getRenderer(mode) {
 }
 
 const viewModeRenderer = {
-    renderContent: function (props) {
-        return <div className="card-content">
-            {this.renderDescription(props)}
-            {this.renderTracks(props)}
-            {this.renderTags(props)}
-        </div>;
-    },
-
     renderDescription: function (props) {
         return <p className="description">
             {props.description}
@@ -52,13 +49,15 @@ const viewModeRenderer = {
     renderTracks: function (props) {
         return <div className="track-container">
             <div className="tracks">
-                <audio
-                    controls
-                    src="http://developer.mozilla.org/@api/deki/files/2926/=AudioTest_(1).ogg">
-                    Your browser does not support the
-                    <code>audio</code>
-                    element.
-                </audio>
+                <div className="track">
+                    <audio
+                        controls
+                        src="http://developer.mozilla.org/@api/deki/files/2926/=AudioTest_(1).ogg">
+                        Your browser does not support the
+                        <code>audio</code>
+                        element.
+                    </audio>
+                </div>
             </div>
         </div>;
     },
@@ -95,13 +94,15 @@ const editModeRenderer = Object.assign({}, viewModeRenderer, {
     renderTracks: function (props) {
         return <div className="track-container">
             <div className="tracks">
-                <audio
-                    controls
-                    src="http://developer.mozilla.org/@api/deki/files/2926/=AudioTest_(1).ogg">
-                    Your browser does not support the
-                    <code>audio</code>
-                    element.
-                </audio>
+                <div className="track">
+                    <audio
+                        controls
+                        src="http://developer.mozilla.org/@api/deki/files/2926/=AudioTest_(1).ogg">
+                        Your browser does not support the
+                        <code>audio</code>
+                        element.
+                    </audio>
+                </div>
             </div>
             <div className="recorder">
                 <a className="button is-primary">

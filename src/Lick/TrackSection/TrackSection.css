@@ -1,0 +1,11 @@
+.track-container {
+  margin-bottom: 5px;
+}
+
+.recorder {
+  text-align: center;
+}
+
+.recorder > .button {
+  border-radius: 9999px;
+}

@@ -59,9 +59,7 @@ const chunks = _.chunk(licks, 3);
 
 function renderLick(lick) {
   return <Lick
-    mode={Math.random() > 0.5
-    ? "view"
-    : "view"}
+    mode="edit"
     id={lick.id}
     name={lick.name}
     description={lick.description}
