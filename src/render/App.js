@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import 'bulma/css/bulma.css';
 import './App.css';
 import Lick from './Lick/Lick';
@@ -17,8 +17,7 @@ const initialLicks = _.shuffle([
     "name": "123",
     "id": 3,
     tags: ['I-IV', 'gypsy jazz', 'blues']
-  }, 
-  {
+  }, {
     "description": "Django - Blues clair 2",
     "tracks": [],
     "name": "123",
@@ -76,17 +75,22 @@ function renderRow(chunk) {
   );
 }
 
-export default function () {
-  return (
-    <div className="container main-container">
-      <header className="main-header">
-        <h1 className="title">JazzRoutine</h1>
-      </header>
-      <div className="main-content">
-        <div className="lick-list">
-          {chunks.map(chunk => renderRow(chunk))}
+class App extends Component {
+  render() {
+    return (
+      <div className="container main-container">
+        <header className="main-header">
+          <h1 className="title">JazzRoutine</h1>
+        </header>
+        <div className="main-content">
+          <div className="lick-list">
+            {chunks.map(chunk => renderRow(chunk))}
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
+
 }
+
+export default App;
