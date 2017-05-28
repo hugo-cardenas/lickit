@@ -10,3 +10,10 @@ div {
 .main-header {
   margin-bottom: 50px;
 }
+
+.lick-list .column {
+  /*float: left;*/
+  /*margin-right: 35px;*/
+  /*margin-bottom: 35px;*/
+  min-width: 300px;
+}

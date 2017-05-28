@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './Lick.css';
-import TrackSection from './TrackSection/TrackSection';
+import TrackSection from './Track/TrackSection';
 
 class Lick extends Component {
     constructor(props) {
@@ -74,7 +74,7 @@ const viewModeRenderer = {
         return <footer className="card-footer">
             <a className="card-footer-item" onClick={() => lick.setState({mode: 'edit'})}>
                 <span className="icon is-small">
-                    <i className="fa fa-pencil"></i>
+                    <i className="fa fa-pencil-square-o"></i>
                 </span>
             </a>
             <a className="card-footer-item">

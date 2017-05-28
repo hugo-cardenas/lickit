@@ -11,7 +11,8 @@ class TrackSection extends Component {
     }
 
     render() {
-        switch (this.props.mode) {
+        const {mode} = this.props;
+        switch (mode) {
             case 'edit':
                 return this.renderTracksEdit();
             case 'view':
@@ -22,9 +23,10 @@ class TrackSection extends Component {
 
     renderTracksView() {
         return <div className="track-container">
-            <div className="tracks">
-                <div className="track">
+            <div className="track-list">
+                <div className="track level">
                     <audio
+                        className="level-left"
                         controls
                         src="http://developer.mozilla.org/@api/deki/files/2926/=AudioTest_(1).ogg">
                         Your browser does not support the
@@ -38,19 +40,25 @@ class TrackSection extends Component {
 
     renderTracksEdit() {
         return <div className="track-container">
-            <div className="tracks">
-                <div className="track">
-                    <audio
-                        controls
-                        src="http://developer.mozilla.org/@api/deki/files/2926/=AudioTest_(1).ogg">
-                        Your browser does not support the
-                        <code>audio</code>
-                        element.
-                    </audio>
-                    <span className="icon">
-                        <i className="fa fa-home"></i>
-                    </span>
-                </div>
+            <div className="track-list">
+                {[0, 1].map(i => <div className="track level">
+                    <div>
+                        <audio
+                            className="level-left"
+                            controls
+                            src="http://developer.mozilla.org/@api/deki/files/2926/=AudioTest_(1).ogg">
+                            Your browser does not support the
+                            <code>audio</code>
+                            element.
+                        </audio>
+                    </div>
+                    <a className="level-right">
+                        <span className="icon is-small">
+                            <i className="fa fa-trash"></i>
+                        </span>
+                    </a>
+                </div>)}
+
             </div>
             {this.renderRecorder()}
         </div>;

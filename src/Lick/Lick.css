@@ -1,29 +1,10 @@
-.lick-collection .column {
-  /*float: left;*/
-  /*margin-right: 35px;*/
-  /*margin-bottom: 35px;*/
-  /*width: 250px;*/
-}
-
 .description {
   font-size: 14px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .lick .card-footer, .lick .card-footer-item {
   border: 0px;
-}
-
-.track-container {
-  margin-bottom: 5px;
-}
-
-.recorder {
-  text-align: center;
-}
-
-.recorder > .button {
-  border-radius: 9999px;
 }
 
 .tag-container > .tags {

@@ -83,7 +83,7 @@ export default function () {
         <h1 className="title">JazzRoutine</h1>
       </header>
       <div className="main-content">
-        <div className="lick-collection">
+        <div className="lick-list">
           {chunks.map(chunk => renderRow(chunk))}
         </div>
       </div>
