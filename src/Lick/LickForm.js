@@ -1,16 +1,14 @@
-import React, {Component} from 'react';
-import './Lick.css';
-import TrackSection from './Track/TrackSection';
+import React from 'react';
+import TrackSectionForm from './Track/TrackSectionForm';
 
 function LickForm(props) {
-
-    const {description, tracks, tags, handleSave} = props;
+    const {description, trackSectionState, tags, handleSave} = props;
 
     return (
         <div className="card lick">
             <div className="card-content">
                 {renderDescription(description)}
-                <TrackSection mode="edit"/> 
+                <TrackSectionForm {...trackSectionState}/> 
                 {renderTags(tags)}
             </div>
             {renderFooter(handleSave)}

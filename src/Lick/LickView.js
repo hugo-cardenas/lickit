@@ -1,16 +1,14 @@
-import React, {Component} from 'react';
-import './Lick.css';
-import TrackSection from './Track/TrackSection';
+import React from 'react';
+import TrackSectionView from './Track/TrackSectionView';
 
 function LickView(props) {
-
-    const {description, tracks, tags, handleEdit} = props;
+    const {description, trackSectionState, tags, handleEdit} = props;
 
     return (
         <div className="card lick">
             <div className="card-content">
                 {renderDescription(description)}
-                <TrackSection mode="view"/> 
+                <TrackSectionView {...trackSectionState}/> 
                 {renderTags(tags)}
             </div>
             {renderFooter(handleEdit)}

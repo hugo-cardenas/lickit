@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import './Lick.css';
 import LickForm from './LickForm';
 import LickView from './LickView';
-import TrackSection from './Track/TrackSection';
 
 class Lick extends Component {
     constructor(props) {
