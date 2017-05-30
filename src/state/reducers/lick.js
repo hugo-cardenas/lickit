@@ -1,13 +1,10 @@
-export default function (state = [], action) {
+export default function (state = {}, action) {
     switch (action.type) {
         case 'delete':
-            const licks = state.licks.filter(lick => 
+            const licks = state.filter(lick => 
                 lick.id !== action.id
             );
-            return [
-                ...state,
-                licks
-            ];
+            return licks;
         default:
             return state;
     }

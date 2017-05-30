@@ -16,6 +16,7 @@ class Lick extends Component {
             case 'edit':
                 return this.renderForm();
             case 'view':
+            default:
                 return this.renderView();
         }
     }

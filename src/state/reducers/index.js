@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import lick from './lick';
+import licks from './lick';
 
 const rootReducer = combineReducers({
-    lick
+    licks
 });
 
 export default rootReducer;

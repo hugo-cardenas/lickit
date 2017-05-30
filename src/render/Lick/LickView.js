@@ -2,7 +2,7 @@ import React from 'react';
 import TrackSectionView from './Track/TrackSectionView';
 
 function LickView(props) {
-    const {description, trackSectionState, tags, handleEdit} = props;
+    const {id, description, trackSectionState, tags, handleEdit, handleDelete} = props;
 
     return (
         <div className="card lick">
@@ -11,7 +11,7 @@ function LickView(props) {
                 <TrackSectionView {...trackSectionState}/> 
                 {renderTags(tags)}
             </div>
-            {renderFooter(handleEdit)}
+            {renderFooter(id, handleEdit, handleDelete)}
         </div>
     );
 }
@@ -30,14 +30,14 @@ function renderTags(tags) {
     </div>;
 }
 
-function renderFooter(handleEdit) {
+function renderFooter(id, handleEdit, handleDelete) {
     return <footer className="card-footer">
         <a className="card-footer-item" onClick={() => handleEdit()}>
             <span className="icon is-small">
                 <i className="fa fa-pencil-square-o"></i>
             </span>
         </a>
-        <a className="card-footer-item">
+        <a className="card-footer-item" onClick={() => handleDelete(id)}>
             <span className="icon is-small">
                 <i className="fa fa-trash"></i>
             </span>

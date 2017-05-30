@@ -2,7 +2,7 @@ import React from 'react';
 import './TrackSection.css';
 
 function TrackSectionView(props) {
-    const {tracks, recordState, handleRecordStart, handleRecordStop} = props;
+    const {recordState, handleRecordStart, handleRecordStop} = props;
 
     return <div className="track-container">
         <div className="track-list">

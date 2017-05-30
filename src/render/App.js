@@ -4,79 +4,39 @@ import './App.css';
 import Lick from './Lick/Lick';
 import _ from 'lodash';
 
-const initialLicks = _.shuffle([
-  {
-    "description": "Django - Lady be good",
-    "tracks": [],
-    "name": "123",
-    "id": 3,
-    tags: ['ii-V-I', 'gypsy jazz']
-  }, {
-    "description": "Django - Blues clair",
-    "tracks": [],
-    "name": "123",
-    "id": 3,
-    tags: ['I-IV', 'gypsy jazz', 'blues']
-  }, {
-    "description": "Django - Blues clair 2",
-    "tracks": [],
-    "name": "123",
-    "id": 3,
-    tags: ['ii-V-I', 'gypsy jazz', 'blues']
-  }, {
-    "description": "Charlie Parker - Confirmation",
-    "tracks": [],
-    "name": "perico",
-    "id": 2,
-    tags: ['ii-V-I', 'bebop']
-  }, {
-    "description": "Charlie Parker - Donna Lee",
-    "tracks": [],
-    "name": "foo",
-    "id": 1,
-    tags: ['ii-V-I', 'bebop']
-  }, {
-    "description": "Dizzy Gillespie - Perdido",
-    "tracks": [],
-    "name": "foo",
-    "id": 1,
-    tags: ['Dom7', 'bebop', 'Rhythm changes bridge']
-  }, {
-    "description": "Charlie Parker - Yardbird suite",
-    "tracks": [],
-    "name": "foo",
-    "id": 1,
-    tags: ['ii-V-I', 'bebop']
-  }
-]);
+// import {bindActionCreators} from 'redux'; import {connect} from
+// 'react-redux'; import deleteLick from '../state/actions/lick';
 
-const licks = _
-  .range(27)
-  .map(i => initialLicks[i % initialLicks.length]);
-
-const chunks = _.chunk(licks, 3);
-
-function renderLick(lick) {
+function renderLick(lick, handleDelete) {
   return <Lick
     mode="edit"
     id={lick.id}
     name={lick.name}
     description={lick.description}
-    tags={lick.tags}/>;
+    tags={lick.tags}
+    handleDelete={handleDelete}/>;
 }
 
-function renderRow(chunk) {
+function renderRow(chunk, handleDelete) {
   return (
     <div className="columns">
       {chunk.map(lick => {
-        return <div className="column is-one-third">{renderLick(lick)}</div>
+        return <div className="column is-one-third">{renderLick(lick, handleDelete)}</div>
       })}
     </div>
   );
 }
 
+function getChunks(licks) {
+  return _.chunk(licks, 3);
+}
+
 class App extends Component {
   render() {
+    const {licks, handleDelete} = this.props;
+
+    const chunks = getChunks(licks, handleDelete);
+
     return (
       <div className="container main-container">
         <header className="main-header">
@@ -84,13 +44,18 @@ class App extends Component {
         </header>
         <div className="main-content">
           <div className="lick-list">
-            {chunks.map(chunk => renderRow(chunk))}
+            {chunks.map(chunk => renderRow(chunk, handleDelete))}
           </div>
         </div>
       </div>
     );
   }
-
 }
 
 export default App;
+
+// function mapStateToProps(state, props) {   return {licks: state.licks} }
+// function mapDispatchToProps(dispatch) {   return {     // actions:
+// bindActionCreators(lickActions, dispatch)     handleDelete: (id) =>
+// dispatch(deleteLick(id))   } } export default connect(mapStateToProps,
+// mapDispatchToProps)(App);
