@@ -24,7 +24,7 @@ class Lick extends Component {
     renderView() {
         const props = {
             ...this.props,
-            handleEdit: () => this.setState({mode: 'edit'})
+            handleEdit: () => this.setMode('edit')
         }
         return <LickView {...props}/>
     }
@@ -32,9 +32,14 @@ class Lick extends Component {
     renderForm() {
         const props = {
             ...this.props,
-            handleSave: () => this.setState({mode: 'view'})
+            handleSave: () => this.setMode('view'),
+            handleCancel: () => this.setMode('view')
         }
         return <LickForm {...props}/>
+    }
+
+    setMode(mode) {
+        this.setState({mode});
     }
 }
 

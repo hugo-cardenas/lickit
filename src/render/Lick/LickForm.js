@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import TrackSectionForm from './Track/TrackSectionForm';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
+import TrackSectionForm from './Track/TrackSectionForm';
 
 class LickForm extends Component {
     constructor(props) {
@@ -20,7 +21,7 @@ class LickForm extends Component {
     render() {
         const {id, description, trackSectionState, tags, tagInput} = this.state;
 
-        const {handleSave, handleDelete} = this.props;
+        const {handleSave, handleCancel, handleDelete} = this.props;
 
         return (
             <div className="card lick">
@@ -28,43 +29,9 @@ class LickForm extends Component {
                     {this.renderDescription(description)}
                     <TrackSectionForm {...trackSectionState}/> {this.renderTags(tags, tagInput)}
                 </div>
-                {this.renderFooter(id, handleSave, handleDelete)}
+                {this.renderFooter(id, handleSave, handleCancel, handleDelete)}
             </div>
         );
-    }
-
-    handleInputChange(event) {
-        const target = event.target;
-        const value = target.type === 'checkbox'
-            ? target.checked
-            : target.value;
-        const name = target.name;
-
-        this.setState({[name]: value});
-        console.log('SET ', {[name]: value});
-    }
-
-    handleDeleteTag(tag) {
-        this.setState({
-            tags: this
-                .state
-                .tags
-                .filter(storedTag => storedTag !== tag)
-        })
-    }
-
-    handleCreateTag(event) {
-        if (event.key !== 'Enter') {
-            return;
-        }
-
-        const tag = event.target.value;
-        let tags = this.state.tags;
-        tags.push(tag);
-        this.setState({
-            tagInput: '',
-            tags: _.uniq(tags)
-        });
     }
 
     renderDescription(description) {
@@ -78,10 +45,10 @@ class LickForm extends Component {
     renderTags(tags, tagInput) {
         return <div className="tag-container">
             <div className="tags">
-                {tags.map(tag => <span className="tag">{tag}
+                {tags.map(tag => <span key={tag} className="tag">{tag}
                     <button
                         className="delete is-small"
-                        onClick={(() => this.handleDeleteTag(tag)).bind(this)}></button>
+                        onClick={() => this.handleDeleteTag(tag)}></button>
                 </span>)}
             </div>
             {this.renderTagInput(tagInput)}
@@ -101,11 +68,16 @@ class LickForm extends Component {
         </p>;
     }
 
-    renderFooter(id, handleSave, handleDelete) {
+    renderFooter(id, handleSave, handleCancel, handleDelete) {
         return <footer className="card-footer">
             <a className="card-footer-item" onClick={() => handleSave()}>
                 <span className="icon is-small">
                     <i className="fa fa-floppy-o"></i>
+                </span>
+            </a>
+            <a className="card-footer-item" onClick={() => handleCancel()}>
+                <span className="icon is-small">
+                    <i className="fa fa-undo"></i>
                 </span>
             </a>
             <a className="card-footer-item" onClick={() => handleDelete(id)}>
@@ -115,6 +87,46 @@ class LickForm extends Component {
             </a>
         </footer>;
     }
+
+    handleInputChange(event) {
+        const target = event.target;
+        const value = target.type === 'checkbox'
+            ? target.checked
+            : target.value;
+        const name = target.name;
+
+        this.setState({[name]: value});
+    }
+
+    handleDeleteTag(tag) {
+        this.setState({
+            tags: this
+                .state
+                .tags
+                .filter(storedTag => storedTag !== tag)
+        })
+    }
+
+    handleCreateTag(event) {
+        const tag = event.target.value;
+        if (event.key !== 'Enter' || tag === '') {
+            return;
+        }
+        
+        let tags = this.state.tags;
+        tags.push(tag);
+        this.setState({
+            tagInput: '',
+            tags: _.uniq(tags)
+        });
+    }
 }
 
 export default LickForm;
+
+LickForm.propTypes = {
+    id: PropTypes.number.isRequired,
+    description: PropTypes.string.isRequired,
+    tracks: PropTypes.arrayOf(PropTypes.object).isRequired,
+    tags: PropTypes.arrayOf(PropTypes.string).isRequired
+}
