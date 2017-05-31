@@ -1,7 +1,7 @@
 import React from 'react';
 import './TrackSection.css';
 
-function TrackSectionView(props) {
+function TrackSectionForm(props) {
     const {recordState, handleRecordStart, handleRecordStop} = props;
 
     return <div className="track-container">
@@ -29,7 +29,7 @@ function TrackSectionView(props) {
     </div>;
 }
 
-export default TrackSectionView;
+export default TrackSectionForm;
 
 function renderRecorder(recordState, handleRecordStart, handleRecordStop) {
     switch(recordState) {
