@@ -60,47 +60,86 @@ test('render tags', () => {
 });
 
 test('delete tag', () => {
+  let expectedTags = ['foo', 'bar', 'baz'];
   const component = shallow(<LickForm {...getTestProps()}/>);
-  const tagsParent = component
-    .find('.tag')
-    .map(element => text());
-  expect(tagsParent.type()).toBe('div');
 
-  description.simulate('change', {
+  const tagElements = component.find('.tag');
+  tagElements.forEach(tagElement => {
+    const tag = tagElement.text();
+    const button = tagElement.find('button');
+    button.simulate('click');
+
+    // Remove the deleted tag from the list of expected tags and compare
+    expectedTags = expectedTags.filter(expectedTag => expectedTag !== tag);
+    expect(getTags(component)).toEqual(expectedTags);
+  });
+
+  expect(getTags(component)).toEqual([]);
+})
+
+test('input new tag', () => {
+  const component = shallow(<LickForm {...getTestProps()}/>);
+  const tagInput = component.find('.tag-container input');
+
+  // When typing, the value is kept in the field
+  tagInput.simulate('change', {
     target: {
-      name: 'description',
-      value: 'foo'
+      name: 'tagInput',
+      value: 'abc'
+    }
+  });
+  expect(getTagInputValue(component)).toBe('abc');
+
+  // After pressing Enter, the value is added to tags and the field gets cleaned
+  tagInput.simulate('keyPress', {
+    key: 'Enter',
+    target: {
+      name: 'tagInput',
+      value: 'abc'
     }
   });
   
-})
+  const tags = getTags(component);
+  expect(tags).toEqual(expect.arrayContaining(['foo', 'bar', 'baz', 'abc']));
+  expect(getTagInputValue(component)).toBe('');
+});
 
-// test('input new tag', () => {
-//   const component = shallow(<LickForm {...getTestProps()}/>);
-//   const tagsParent = component
-//     .find('.tag')
-//     .map(element => text());
-//   expect(tagsParent.type()).toBe('div');
-//   description.simulate('change', {
-//     target: {
-//       name: 'description',
-//       value: 'foo'
-//     }
-//   });
-//   expect(component.find('.description').prop('value')).toBe('foo');
-//   description.simulate('change', {
-//     target: {
-//       name: 'description',
-//       value: 'bar'
-//     }
-//   });
-//   expect(component.find('.description').prop('value')).toBe('bar');
-// });
+test('input duplicate tag', () => {
+  const component = shallow(<LickForm {...getTestProps()}/>);
+  const tagInput = component.find('.tag-container input');
 
-function getComponentTags(component) {
+  // When typing, the value is kept in the field
+  tagInput.simulate('change', {
+    target: {
+      name: 'tagInput',
+      value: 'bar'
+    }
+  });
+  expect(getTagInputValue(component)).toBe('bar');
+
+  // After pressing Enter, the value is not added to tags (duplicate)
+  // but the field still gets cleaned
+  tagInput.simulate('keyPress', {
+    key: 'Enter',
+    target: {
+      name: 'tagInput',
+      value: 'bar'
+    }
+  });
+  
+  const tags = getTags(component);
+  expect(tags).toEqual(expect.arrayContaining(['foo', 'bar', 'baz']));
+  expect(getTagInputValue(component)).toBe('');
+});
+
+function getTags(component) {
   return component
     .find('.tag')
-    .map(element => text());
+    .map(element => element.text());
+}
+
+function getTagInputValue(component){
+  return component.find('.tag-container input').prop('value');
 }
 
 function getTestProps() {
