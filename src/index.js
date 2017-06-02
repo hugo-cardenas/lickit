@@ -7,13 +7,15 @@ import registerServiceWorker from './registerServiceWorker';
 // createStore from './state/store'; console.log('initial state', initialState);
 // const store = createStore(initialState);
 
+const link = "http://developer.mozilla.org/@api/deki/files/2926/=AudioTest_(1).ogg";
+
 function getInitialState() {
   const initialLicks = _.shuffle([
     {
       "description": "Django - Lady be good",
       "tracks": [
-        {id: 1},
-        {id: 2}
+        {id: 1, link},
+        {id: 2, link}
       ],
       "name": "123",
       "id": 3,
@@ -21,8 +23,8 @@ function getInitialState() {
     }, {
       "description": "Django - Blues clair",
       "tracks": [
-        {id: 3},
-        {id: 4}
+        {id: 3, link},
+        {id: 4, link}
       ],
       "name": "123",
       "id": 3,
@@ -30,8 +32,8 @@ function getInitialState() {
     }, {
       "description": "Django - Blues clair 2",
       "tracks": [
-        {id: 5},
-        {id: 6},
+        {id: 5, link},
+        {id: 6, link},
       ],
       "name": "123",
       "id": 3,
@@ -39,7 +41,7 @@ function getInitialState() {
     }, {
       "description": "Charlie Parker - Confirmation",
       "tracks": [
-        {id: 7}
+        {id: 7, link}
       ],
       "name": "perico",
       "id": 2,
@@ -47,7 +49,7 @@ function getInitialState() {
     }, {
       "description": "Charlie Parker - Donna Lee",
       "tracks": [
-        {id: 8}
+        {id: 8, link}
       ],
       "name": "foo",
       "id": 1,
@@ -55,7 +57,7 @@ function getInitialState() {
     }, {
       "description": "Dizzy Gillespie - Perdido",
       "tracks": [
-        {id: 9}
+        {id: 9, link}
       ],
       "name": "foo",
       "id": 1,
@@ -70,7 +72,7 @@ function getInitialState() {
   ]);
 
   const licks = _
-    .range(18)
+    .range(5)
     .map(i => initialLicks[i % initialLicks.length])
     .map((lick, index) => {
       return {

@@ -2,13 +2,13 @@ import React from 'react';
 import TrackSectionView from './Track/TrackSectionView';
 
 function LickView(props) {
-    const {id, description, trackSectionState, tags, handleEdit, handleDelete} = props;
+    const {id, description, tracks, tags, handleEdit, handleDelete} = props;
 
     return (
         <div className="card lick">
             <div className="card-content">
                 {renderDescription(description)}
-                <TrackSectionView {...trackSectionState}/> 
+                <TrackSectionView tracks={tracks}/> 
                 {renderTags(tags)}
             </div>
             {renderFooter(id, handleEdit, handleDelete)}

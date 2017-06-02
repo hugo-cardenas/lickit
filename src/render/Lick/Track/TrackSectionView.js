@@ -2,9 +2,11 @@ import React from 'react';
 import './TrackSection.css';
 
 function TrackSectionView(props) {
+    const {tracks} = props;
+
     return <div className="track-container">
         <div className="track-list">
-            <div className="track level">
+            {tracks.map(track => <div key={track.id} className="track level">
                 <audio
                     className="level-left"
                     controls
@@ -13,7 +15,7 @@ function TrackSectionView(props) {
                     <code>audio</code>
                     element.
                 </audio>
-            </div>
+            </div>)}
         </div>
     </div>;
 }
