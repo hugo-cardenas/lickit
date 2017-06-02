@@ -2,11 +2,11 @@ import React from 'react';
 import './TrackSection.css';
 
 function TrackSectionForm(props) {
-    const {recordState, handleRecordStart, handleRecordStop} = props;
+    const {tracks, recordState, handleRecordStart, handleRecordStop} = props;
 
     return <div className="track-container">
         <div className="track-list">
-            {[0, 1].map(i => <div key={i} className="track level">
+            {tracks.map(track => <div key={track.id} className="track level">
                 <div>
                     <audio
                         className="level-left"
@@ -23,7 +23,6 @@ function TrackSectionForm(props) {
                     </span>
                 </a>
             </div>)}
-
         </div>
         {renderRecorder(recordState, handleRecordStart, handleRecordStop)}
     </div>;

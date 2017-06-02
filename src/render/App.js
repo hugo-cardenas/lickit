@@ -13,6 +13,7 @@ function renderLick(lick, handleDelete) {
     id={lick.id}
     name={lick.name}
     description={lick.description}
+    tracks={lick.tracks}
     tags={lick.tags}
     handleDelete={handleDelete}/>;
 }

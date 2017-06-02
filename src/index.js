@@ -70,7 +70,7 @@ function getInitialState() {
   ]);
 
   const licks = _
-    .range(5)
+    .range(18)
     .map(i => initialLicks[i % initialLicks.length])
     .map((lick, index) => {
       return {
