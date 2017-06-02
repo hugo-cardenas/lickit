@@ -7,7 +7,7 @@ class Lick extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            mode: this.props.mode
+            mode: 'view'
         };
     }
 

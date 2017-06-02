@@ -19,7 +19,6 @@ class LickForm extends Component {
     }
 
     render() {
-        // console.log('RENDER', this.state);
         const {id, description, trackSectionState, tags, tagInput} = this.state;
 
         const {handleSave, handleCancel, handleDelete} = this.props;

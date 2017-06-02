@@ -26,7 +26,7 @@ function renderDescription(description) {
 
 function renderTags(tags) {
     return <div className="tags">
-        {tags.map(tag => <span className="tag">{tag}</span>)}
+        {tags.map(tag => <span key={tag} className="tag">{tag}</span>)}
     </div>;
 }
 

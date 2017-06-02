@@ -11,37 +11,52 @@ function getInitialState() {
   const initialLicks = _.shuffle([
     {
       "description": "Django - Lady be good",
-      "tracks": [],
+      "tracks": [
+        {id: 1},
+        {id: 2}
+      ],
       "name": "123",
       "id": 3,
       tags: ['ii-V-I', 'gypsy jazz']
     }, {
       "description": "Django - Blues clair",
-      "tracks": [],
+      "tracks": [
+        {id: 3},
+        {id: 4}
+      ],
       "name": "123",
       "id": 3,
       tags: ['I-IV', 'gypsy jazz', 'blues']
     }, {
       "description": "Django - Blues clair 2",
-      "tracks": [],
+      "tracks": [
+        {id: 5},
+        {id: 6},
+      ],
       "name": "123",
       "id": 3,
       tags: ['ii-V-I', 'gypsy jazz', 'blues']
     }, {
       "description": "Charlie Parker - Confirmation",
-      "tracks": [],
+      "tracks": [
+        {id: 7}
+      ],
       "name": "perico",
       "id": 2,
       tags: ['ii-V-I', 'bebop']
     }, {
       "description": "Charlie Parker - Donna Lee",
-      "tracks": [],
+      "tracks": [
+        {id: 8}
+      ],
       "name": "foo",
       "id": 1,
       tags: ['ii-V-I', 'bebop']
     }, {
       "description": "Dizzy Gillespie - Perdido",
-      "tracks": [],
+      "tracks": [
+        {id: 9}
+      ],
       "name": "foo",
       "id": 1,
       tags: ['Dom7', 'bebop', 'Rhythm changes bridge']
@@ -55,7 +70,7 @@ function getInitialState() {
   ]);
 
   const licks = _
-    .range(27)
+    .range(5)
     .map(i => initialLicks[i % initialLicks.length])
     .map((lick, index) => {
       return {
@@ -94,7 +109,6 @@ function reduce(state, action) {
 
 function dispatch(action) {
   state = reduce(state, action);
-  console.log('NEW STATE:', state);
   render(state);
 }
 

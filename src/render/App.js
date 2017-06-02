@@ -9,7 +9,7 @@ import _ from 'lodash';
 
 function renderLick(lick, handleDelete) {
   return <Lick
-    mode="edit"
+    mode="view"
     id={lick.id}
     name={lick.name}
     description={lick.description}
@@ -18,10 +18,11 @@ function renderLick(lick, handleDelete) {
 }
 
 function renderRow(chunk, handleDelete) {
+  const chunkKey = chunk.map(lick => lick.id).join('-');
   return (
-    <div className="columns">
+    <div key={chunkKey} className="columns">
       {chunk.map(lick => {
-        return <div className="column is-one-third">{renderLick(lick, handleDelete)}</div>
+        return <div key={lick.id} className="column is-one-third">{renderLick(lick, handleDelete)}</div>
       })}
     </div>
   );
@@ -34,8 +35,8 @@ function getChunks(licks) {
 class App extends Component {
   render() {
     const {licks, handleDelete} = this.props;
-
     const chunks = getChunks(licks, handleDelete);
+
 
     return (
       <div className="container main-container">
