@@ -129,5 +129,7 @@ LickForm.propTypes = {
     id: PropTypes.number.isRequired,
     description: PropTypes.string.isRequired,
     tracks: PropTypes.arrayOf(PropTypes.object).isRequired,
-    tags: PropTypes.arrayOf(PropTypes.string).isRequired
+    tags: PropTypes.arrayOf(PropTypes.string).isRequired,
+    handleDelete: PropTypes.func.isRequired,
+    handleUpdate: PropTypes.func.isRequired,
 }

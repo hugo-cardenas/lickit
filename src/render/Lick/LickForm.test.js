@@ -132,6 +132,12 @@ test('input duplicate tag', () => {
   expect(getTagInputValue(component)).toBe('');
 });
 
+test('save lick', () => {
+  const component = shallow(<LickForm {...getTestProps()}/>);
+  
+  
+});
+
 function getTags(component) {
   return component
     .find('.tag')
@@ -149,6 +155,9 @@ function getTestProps() {
     tracks: [
       {}, {}
     ],
-    tags: ['foo', 'bar', 'baz']
+    tags: ['foo', 'bar', 'baz'],
+    handleDelete: () => {},
+    handleUpdate: () => {}
+
   }
 }

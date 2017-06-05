@@ -14,8 +14,13 @@ function getInitialState() {
     {
       "description": "Django - Lady be good",
       "tracks": [
-        {id: 1, link},
-        {id: 2, link}
+        {
+          id: 1,
+          link
+        }, {
+          id: 2,
+          link
+        }
       ],
       "name": "123",
       "id": 3,
@@ -23,8 +28,13 @@ function getInitialState() {
     }, {
       "description": "Django - Blues clair",
       "tracks": [
-        {id: 3, link},
-        {id: 4, link}
+        {
+          id: 3,
+          link
+        }, {
+          id: 4,
+          link
+        }
       ],
       "name": "123",
       "id": 3,
@@ -32,8 +42,13 @@ function getInitialState() {
     }, {
       "description": "Django - Blues clair 2",
       "tracks": [
-        {id: 5, link},
-        {id: 6, link},
+        {
+          id: 5,
+          link
+        }, {
+          id: 6,
+          link
+        }
       ],
       "name": "123",
       "id": 3,
@@ -41,7 +56,10 @@ function getInitialState() {
     }, {
       "description": "Charlie Parker - Confirmation",
       "tracks": [
-        {id: 7, link}
+        {
+          id: 7,
+          link
+        }
       ],
       "name": "perico",
       "id": 2,
@@ -49,7 +67,10 @@ function getInitialState() {
     }, {
       "description": "Charlie Parker - Donna Lee",
       "tracks": [
-        {id: 8, link}
+        {
+          id: 8,
+          link
+        }
       ],
       "name": "foo",
       "id": 1,
@@ -57,7 +78,10 @@ function getInitialState() {
     }, {
       "description": "Dizzy Gillespie - Perdido",
       "tracks": [
-        {id: 9, link}
+        {
+          id: 9,
+          link
+        }
       ],
       "name": "foo",
       "id": 1,
@@ -102,6 +126,15 @@ function reduce(state, action) {
           .licks
           .filter(lick => lick.id !== action.id)
       }
+    case 'UPDATE_LICK':
+      const newLick = action.lick;
+      const licks = state.licks;
+      const index = licks.findIndex(lick => lick.id === newLick.id);
+      licks[index] = newLick;
+      return {
+        ...state,
+        licks
+      }
     default:
       return {
         ...state
@@ -118,8 +151,16 @@ function deleteLick(id) {
   return {type: 'DELETE_LICK', id}
 }
 
+function updateLick(lick) {
+  return {type: 'UPDATE_LICK', lick}
+}
+
 state.handleDelete = (id) => {
   dispatch(deleteLick(id));
+}
+
+state.handleUpdate = (lick) => {
+  dispatch(updateLick(lick));
 }
 
 function render(state) {
