@@ -18,7 +18,7 @@ function TrackSectionForm(props) {
                         element.
                     </audio>
                 </div>
-                <a className="level-right delete-track-link" onClick={() => handleDeleteTrack(track.id)}>
+                <a className="level-right track-delete-link" onClick={() => handleDeleteTrack(track.id)}>
                     <span className="icon is-small">
                         <i className="fa fa-trash"></i>
                     </span>

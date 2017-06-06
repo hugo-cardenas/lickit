@@ -20,7 +20,7 @@ class LickForm extends Component {
 
     render() {
         const {id, description, tracks, tags, tagInput} = this.state;
-        const {handleSave, handleCancel, handleDelete} = this.props;
+        const {handleCancel, handleDelete} = this.props;
 
         const trackSectionState = {
             tracks,
@@ -35,7 +35,7 @@ class LickForm extends Component {
                     <TrackSectionForm {...trackSectionState}/> 
                     {this.renderTags(tags, tagInput)}
                 </div>
-                {this.renderFooter(id, handleSave, handleCancel, handleDelete)}
+                {this.renderFooter(id, handleCancel, handleDelete)}
             </div>
         );
     }
@@ -74,19 +74,19 @@ class LickForm extends Component {
         </p>;
     }
 
-    renderFooter(id, handleSave, handleCancel, handleDelete) {
+    renderFooter(id, handleCancel, handleDelete) {
         return <footer className="card-footer">
-            <a className="card-footer-item" onClick={() => handleSave()}>
+            <a className="card-footer-item lick-save-link" onClick={this.handleSave.bind(this)}>
                 <span className="icon is-small">
                     <i className="fa fa-floppy-o"></i>
                 </span>
             </a>
-            <a className="card-footer-item" onClick={() => handleCancel()}>
+            <a className="card-footer-item lick-cancel-link" onClick={() => handleCancel()}>
                 <span className="icon is-small">
                     <i className="fa fa-undo"></i>
                 </span>
             </a>
-            <a className="card-footer-item" onClick={() => handleDelete(id)}>
+            <a className="card-footer-item lick-delete-link" onClick={() => handleDelete(id)}>
                 <span className="icon is-small">
                     <i className="fa fa-trash"></i>
                 </span>
@@ -115,7 +115,7 @@ class LickForm extends Component {
                 .state
                 .tags
                 .filter(storedTag => storedTag !== tag)
-        })
+        });
     }
 
     handleCreateTag(event) {
@@ -131,6 +131,11 @@ class LickForm extends Component {
             tags: _.uniq(tags)
         });
     }
+
+    handleSave() {
+        const lick = _.pick(this.state, ['id', 'description', 'tracks', 'tags']);
+        this.props.handleSave(lick);
+    }
 }
 
 export default LickForm;
@@ -140,6 +145,7 @@ LickForm.propTypes = {
     description: PropTypes.string.isRequired,
     tracks: PropTypes.arrayOf(PropTypes.object).isRequired,
     tags: PropTypes.arrayOf(PropTypes.string).isRequired,
+    handleSave: PropTypes.func.isRequired,
+    handleCancel: PropTypes.func.isRequired,
     handleDelete: PropTypes.func.isRequired,
-    handleUpdate: PropTypes.func.isRequired,
 }

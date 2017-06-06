@@ -126,7 +126,8 @@ function reduce(state, action) {
           .licks
           .filter(lick => lick.id !== action.id)
       }
-    case 'UPDATE_LICK':
+    case 'SAVE_LICK':
+      console.log('SAVE LICK');
       const newLick = action.lick;
       const licks = state.licks;
       const index = licks.findIndex(lick => lick.id === newLick.id);
@@ -151,16 +152,16 @@ function deleteLick(id) {
   return {type: 'DELETE_LICK', id}
 }
 
-function updateLick(lick) {
-  return {type: 'UPDATE_LICK', lick}
+function saveLick(lick) {
+  return {type: 'SAVE_LICK', lick}
 }
 
 state.handleDelete = (id) => {
   dispatch(deleteLick(id));
 }
 
-state.handleUpdate = (lick) => {
-  dispatch(updateLick(lick));
+state.handleSave = (lick) => {
+  dispatch(saveLick(lick));
 }
 
 function render(state) {

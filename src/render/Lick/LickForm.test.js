@@ -155,8 +155,21 @@ test('input duplicate tag', () => {
 });
 
 test('save lick', () => {
-  const component = shallow(<LickForm {...getTestProps()}/>);
+  let props = getTestProps();
+  props.handleSave = jest.fn();
 
+  const expectedLick = {
+    id: props.id,
+    description: props.description,
+    tracks: props.tracks,
+    tags: props.tags
+  };
+  
+  const component = shallow(<LickForm {...props}/>);
+  component.find('.lick-save-link').simulate('click');
+
+  expect(props.handleSave).toHaveBeenCalledTimes(1);
+  expect(props.handleSave).toBeCalledWith(expectedLick);
 });
 
 function getTags(component) {
@@ -175,11 +188,12 @@ function getTestProps() {
   return {
     id: 42,
     description: 'Foobar baz',
-    tracks: [{}, {}],
+    tracks: [{id: 10}, {id: 20}],
     tags: [
       'foo', 'bar', 'baz'
     ],
-    handleDelete: () => {},
-    handleUpdate: () => {}
+    handleSave: () => {},
+    handleCancel: () => {},
+    handleDelete: () => {}
   }
 }

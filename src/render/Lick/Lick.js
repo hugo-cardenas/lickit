@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import './Lick.css';
 import LickForm from './LickForm';
 import LickView from './LickView';
@@ -30,11 +31,23 @@ class Lick extends Component {
     }
 
     renderForm() {
-        const props = {
-            ...this.props,
-            handleSave: () => this.setMode('view'),
-            handleCancel: () => this.setMode('view')
-        }
+        // const props = {
+        //     ...this.props,
+        //     handleCancel: () => this.setMode('view'),
+        //     handleSave: (lick) => {
+        //         this.props.handleSave(lick);
+        //         this.setMode('view');
+        //     }
+        // }
+        let props = Object.assign({}, this.props);
+        props.handleCancel = () => {
+            this.setMode('view');
+        };
+        props.handleSave = (lick) => {
+            this.props.handleSave(lick);
+            this.setMode('view');
+        };
+
         return <LickForm {...props}/>
     }
 
@@ -44,3 +57,12 @@ class Lick extends Component {
 }
 
 export default Lick;
+
+LickForm.propTypes = {
+    id: PropTypes.number.isRequired,
+    description: PropTypes.string.isRequired,
+    tracks: PropTypes.arrayOf(PropTypes.object).isRequired,
+    tags: PropTypes.arrayOf(PropTypes.string).isRequired,
+    handleSave: PropTypes.func.isRequired,
+    handleDelete: PropTypes.func.isRequired,
+}
