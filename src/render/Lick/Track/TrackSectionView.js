@@ -10,7 +10,7 @@ function TrackSectionView(props) {
                 <audio
                     className="level-left"
                     controls
-                    src="http://developer.mozilla.org/@api/deki/files/2926/=AudioTest_(1).ogg">
+                    src={track.link}>
                     Your browser does not support the
                     <code>audio</code>
                     element.

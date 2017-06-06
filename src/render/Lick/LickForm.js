@@ -20,14 +20,19 @@ class LickForm extends Component {
 
     render() {
         const {id, description, tracks, tags, tagInput} = this.state;
-
         const {handleSave, handleCancel, handleDelete} = this.props;
+
+        const trackSectionState = {
+            tracks,
+            handleDeleteTrack: this.handleDeleteTrack.bind(this),
+            handleRecordStop: () => {}
+        }
 
         return (
             <div className="card lick">
                 <div className="card-content">
                     {this.renderDescription(description)}
-                    <TrackSectionForm tracks={tracks}/> 
+                    <TrackSectionForm {...trackSectionState}/> 
                     {this.renderTags(tags, tagInput)}
                 </div>
                 {this.renderFooter(id, handleSave, handleCancel, handleDelete)}
@@ -97,6 +102,11 @@ class LickForm extends Component {
         const name = target.name;
 
         this.setState({[name]: value});
+    }
+
+    handleDeleteTrack(id){
+        const tracks = this.state.tracks.filter(track => track.id !== id);
+        this.setState({tracks});
     }
 
     handleDeleteTag(tag) {

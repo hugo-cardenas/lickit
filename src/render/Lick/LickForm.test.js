@@ -32,11 +32,33 @@ test('input description', () => {
 });
 
 test('render tracks', () => {
-  const component = shallow(<LickForm {...getTestProps()}/>);
+  const props = getTestProps();
+  const component = shallow(<LickForm {...props}/>);
   const trackSection = component.find('TrackSectionForm');
   expect(trackSection).toHaveLength(1);
-  // TODO Assert props passed
-})
+
+  expect(trackSection.prop('tracks')).toEqual(props.tracks);
+  expect(typeof trackSection.prop('handleDeleteTrack')).toBe('function');
+  expect(typeof trackSection.prop('handleRecordStop')).toBe('function');
+});
+
+test('delete track', () => {
+  let props = getTestProps();
+  props.tracks = [
+    {id: 10}, {id: 20}, {id: 30}
+  ]
+  const component = shallow(<LickForm {...props}/>);
+
+  const handleDeleteTrack = component.find('TrackSectionForm').prop('handleDeleteTrack');
+  handleDeleteTrack(20);
+
+  const expectedTracks = [{id: 10}, {id: 30}];
+  expect(component.find('TrackSectionForm').prop('tracks')).toEqual(expectedTracks);
+});
+
+test('record stop', () => {
+  // TODO
+});
 
 test('render tags', () => {
   const expectedTags = ['foo', 'bar', 'baz'];
@@ -98,7 +120,7 @@ test('input new tag', () => {
       value: 'abc'
     }
   });
-  
+
   const tags = getTags(component);
   expect(tags).toEqual(expect.arrayContaining(['foo', 'bar', 'baz', 'abc']));
   expect(getTagInputValue(component)).toBe('');
@@ -117,8 +139,8 @@ test('input duplicate tag', () => {
   });
   expect(getTagInputValue(component)).toBe('bar');
 
-  // After pressing Enter, the value is not added to tags (duplicate)
-  // but the field still gets cleaned
+  // After pressing Enter, the value is not added to tags (duplicate) but the
+  // field still gets cleaned
   tagInput.simulate('keyPress', {
     key: 'Enter',
     target: {
@@ -126,7 +148,7 @@ test('input duplicate tag', () => {
       value: 'bar'
     }
   });
-  
+
   const tags = getTags(component);
   expect(tags).toEqual(expect.arrayContaining(['foo', 'bar', 'baz']));
   expect(getTagInputValue(component)).toBe('');
@@ -134,8 +156,7 @@ test('input duplicate tag', () => {
 
 test('save lick', () => {
   const component = shallow(<LickForm {...getTestProps()}/>);
-  
-  
+
 });
 
 function getTags(component) {
@@ -144,20 +165,21 @@ function getTags(component) {
     .map(element => element.text());
 }
 
-function getTagInputValue(component){
-  return component.find('.tag-container input').prop('value');
+function getTagInputValue(component) {
+  return component
+    .find('.tag-container input')
+    .prop('value');
 }
 
 function getTestProps() {
   return {
     id: 42,
     description: 'Foobar baz',
-    tracks: [
-      {}, {}
+    tracks: [{}, {}],
+    tags: [
+      'foo', 'bar', 'baz'
     ],
-    tags: ['foo', 'bar', 'baz'],
     handleDelete: () => {},
     handleUpdate: () => {}
-
   }
 }

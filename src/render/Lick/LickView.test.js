@@ -47,9 +47,11 @@ function getTestProps() {
   return {
     id: 42,
     description: 'Foobar baz',
-    tracks: [
-      {}, {}
-    ],
+    trackSectionState: {
+      tracks: [{}, {}],
+      handleDeleteTrack: () => {},
+      handleRecordStop: () => {}
+    },
     tags: ['foo', 'bar', 'baz']
   }
 }

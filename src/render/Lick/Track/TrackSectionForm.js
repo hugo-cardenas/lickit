@@ -1,8 +1,9 @@
 import React from 'react';
 import './TrackSection.css';
+import PropTypes from 'prop-types';
 
 function TrackSectionForm(props) {
-    const {tracks, recordState, handleRecordStart, handleRecordStop} = props;
+    const {tracks, handleDeleteTrack, handleRecordStop} = props;
 
     return <div className="track-container">
         <div className="track-list">
@@ -11,52 +12,31 @@ function TrackSectionForm(props) {
                     <audio
                         className="level-left"
                         controls
-                        src="http://developer.mozilla.org/@api/deki/files/2926/=AudioTest_(1).ogg">
+                        src={track.link}>
                         Your browser does not support the
                         <code>audio</code>
                         element.
                     </audio>
                 </div>
-                <a className="level-right">
+                <a className="level-right delete-track-link" onClick={() => handleDeleteTrack(track.id)}>
                     <span className="icon is-small">
                         <i className="fa fa-trash"></i>
                     </span>
                 </a>
             </div>)}
         </div>
-        {renderRecorder(recordState, handleRecordStart, handleRecordStop)}
+        {renderRecorder(handleRecordStop)}
     </div>;
 }
 
 export default TrackSectionForm;
 
 function renderRecorder(recordState, handleRecordStart, handleRecordStop) {
-    switch(recordState) {
-        case 'started':
-            return renderRecorderStarted(handleRecordStart);
-        case 'stopped':
-        default:
-            return renderRecorderStopped(handleRecordStop);
-    }
-
+    return 'foo';
 }
 
-function renderRecorderStopped(handleRecordStart) {
-    return <div className="recorder">
-        <a className="button is-primary" onClick={() => handleRecordStart()}>
-            <span className="icon is-small">
-                <i className="fa fa-microphone"></i>
-            </span>
-        </a>
-    </div>;
-}
-
-function renderRecorderStarted(handleRecordStop) {
-    return <div className="recorder">
-        <a className="button is-primary" onClick={() => handleRecordStop()}>
-            <span className="icon is-small">
-                <i className="fa fa-stop"></i>
-            </span>
-        </a>
-    </div>
+TrackSectionForm.propTypes = {
+    tracks: PropTypes.arrayOf(PropTypes.object).isRequired,
+    handleDeleteTrack: PropTypes.func.isRequired,
+    handleRecordStop: PropTypes.func.isRequired
 }
