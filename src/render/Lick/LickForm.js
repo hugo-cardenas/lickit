@@ -53,7 +53,7 @@ class LickForm extends Component {
             <div className="tags">
                 {tags.map(tag => <span key={tag} className="tag">{tag}
                     <button
-                        className="delete is-small"
+                        className="delete is-small tag-delete"
                         onClick={() => this.handleDeleteTag(tag)}></button>
                 </span>)}
             </div>
@@ -62,7 +62,7 @@ class LickForm extends Component {
     }
 
     renderTagInput(tagInput) {
-        return <p className="control">
+        return <p className="control tag-input">
             <input
                 name="tagInput"
                 className="input is-small"
@@ -124,7 +124,7 @@ class LickForm extends Component {
             return;
         }
         
-        let tags = this.state.tags;
+        let tags = [...this.state.tags];
         tags.push(tag);
         this.setState({
             tagInput: '',
