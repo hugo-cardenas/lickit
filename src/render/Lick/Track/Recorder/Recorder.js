@@ -10,8 +10,6 @@ class Recorder extends Component {
     }
 
     render() {
-        const {handleRecordStop} = this.props;
-
         switch (this.state.recordState) {
             case 'recording':
                 return this.renderRecorderRecording();

@@ -1,6 +1,7 @@
 import React from 'react';
-import './TrackSection.css';
 import PropTypes from 'prop-types';
+import './TrackSection.css';
+import Recorder from './Recorder/Recorder';
 
 function TrackSectionForm(props) {
     const {tracks, handleDeleteTrack, handleRecordStop} = props;
@@ -31,8 +32,8 @@ function TrackSectionForm(props) {
 
 export default TrackSectionForm;
 
-function renderRecorder(recordState, handleRecordStart, handleRecordStop) {
-    return 'foo';
+function renderRecorder(handleRecordStop) {
+    return <Recorder {...{handleRecordStop}}/>;
 }
 
 TrackSectionForm.propTypes = {
