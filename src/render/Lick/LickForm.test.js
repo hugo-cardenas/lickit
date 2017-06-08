@@ -166,7 +166,7 @@ test('save lick', () => {
   };
   
   const component = shallow(<LickForm {...props}/>);
-  component.find('.lick-save-link').simulate('click');
+  component.find('.lick-save').simulate('click');
 
   expect(props.handleSave).toHaveBeenCalledTimes(1);
   expect(props.handleSave).toBeCalledWith(expectedLick);

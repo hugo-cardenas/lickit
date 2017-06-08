@@ -14,7 +14,7 @@ test('input and cancel', () => {
   
   // Delete track
   const trackSectionForm = form.find('TrackSectionForm').dive();
-  trackSectionForm.find('.track').first().find('.delete-track-link').first().simulate('click');
+  trackSectionForm.find('.track').first().find('.track-delete').first().simulate('click');
   
   // Delete tag and input new one
   form.find('.tag').first().find('.tag-delete').simulate('click');
@@ -22,7 +22,7 @@ test('input and cancel', () => {
   form.find('.tag-input input').simulate('keyPress', createKeyPressEvent('Enter', 'tagInput', 'abc'));
 
   // Click cancel button
-  form.find('.lick-cancel-link').first().simulate('click');
+  form.find('.lick-cancel').first().simulate('click');
 
   // Check unchanged fields after clicking cancel
   const newView = component.find('LickView').dive();

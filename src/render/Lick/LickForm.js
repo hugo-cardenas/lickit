@@ -76,17 +76,17 @@ class LickForm extends Component {
 
     renderFooter(id, handleCancel, handleDelete) {
         return <footer className="card-footer">
-            <a className="card-footer-item lick-save-link" onClick={this.handleSave.bind(this)}>
+            <a className="card-footer-item lick-save" onClick={this.handleSave.bind(this)}>
                 <span className="icon is-small">
                     <i className="fa fa-floppy-o"></i>
                 </span>
             </a>
-            <a className="card-footer-item lick-cancel-link" onClick={() => handleCancel()}>
+            <a className="card-footer-item lick-cancel" onClick={() => handleCancel()}>
                 <span className="icon is-small">
                     <i className="fa fa-undo"></i>
                 </span>
             </a>
-            <a className="card-footer-item lick-delete-link" onClick={() => handleDelete(id)}>
+            <a className="card-footer-item lick-delete" onClick={() => handleDelete(id)}>
                 <span className="icon is-small">
                     <i className="fa fa-trash"></i>
                 </span>

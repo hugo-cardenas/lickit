@@ -21,7 +21,7 @@ class Recorder {
                             element.
                         </audio>
                     </div>
-                    <a className="level-right delete-track-link">
+                    <a className="level-right track-delete">
                         <span className="icon is-small">
                             <i className="fa fa-trash"></i>
                         </span>

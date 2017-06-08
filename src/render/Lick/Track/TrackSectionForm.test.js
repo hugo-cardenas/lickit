@@ -40,7 +40,7 @@ test('delete track', () => {
   const originalTrackElements = component.find('.track');
   expect(originalTrackElements).toHaveLength(3);
 
-  originalTrackElements.at(1).find('.track-delete-link').first().simulate('click');
+  originalTrackElements.at(1).find('.track-delete').first().simulate('click');
 
   // Assert that the delete handler gets called with the correct track id
   expect(props.handleDeleteTrack).toHaveBeenCalledTimes(1);
