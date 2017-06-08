@@ -4,7 +4,7 @@ import './TrackSection.css';
 import Recorder from './Recorder/Recorder';
 
 function TrackSectionForm(props) {
-    const {tracks, handleDeleteTrack, handleRecordStop} = props;
+    const {tracks, handleDeleteTrack, handleRecordTrack} = props;
 
     return <div className="track-container">
         <div className="track-list">
@@ -26,18 +26,18 @@ function TrackSectionForm(props) {
                 </a>
             </div>)}
         </div>
-        {renderRecorder(handleRecordStop)}
+        {renderRecorder(handleRecordTrack)}
     </div>;
 }
 
 export default TrackSectionForm;
 
-function renderRecorder(handleRecordStop) {
-    return <Recorder {...{handleRecordStop}}/>;
+function renderRecorder(handleRecordTrack) {
+    return <Recorder {...{handleRecordTrack}}/>;
 }
 
 TrackSectionForm.propTypes = {
     tracks: PropTypes.arrayOf(PropTypes.object).isRequired,
     handleDeleteTrack: PropTypes.func.isRequired,
-    handleRecordStop: PropTypes.func.isRequired
+    handleRecordTrack: PropTypes.func.isRequired
 }

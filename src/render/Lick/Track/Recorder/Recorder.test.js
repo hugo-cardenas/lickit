@@ -4,26 +4,28 @@ import Recorder from './Recorder';
 
 test('start and stop', () => {
   const props = getProps();
-  props.handleRecordStop = jest.fn();
-
   const component = shallow(<Recorder {...props}/>);
-  
+
   // Idle state show microphone button
   expect(component.find('.button i').hasClass('fa-microphone')).toBe(true);
+  expect(component.find('Recorder').prop('command')).toBe('stop');
+  expect(component.find('Recorder').prop('onStop')).toBe(props.handleRecordTrack);
   
   // After clicking, show stop button
   component.find('.button').simulate('click');
   expect(component.find('.button i').hasClass('fa-stop')).toBe(true);
+  expect(component.find('Recorder').prop('command')).toBe('start');
+  expect(component.find('Recorder').prop('onStop')).toBe(props.handleRecordTrack);
 
-  // After clicking, show microphone button again and handler function called
+  // After clicking, show microphone button again
   component.find('.button').simulate('click');
   expect(component.find('.button i').hasClass('fa-microphone')).toBe(true);
-  expect(props.handleRecordStop).toHaveBeenCalledTimes(1);
-  //expect(props.handleRecordStop).toBeCalledWith(20); TODO
+  expect(component.find('Recorder').prop('command')).toBe('stop');
+  expect(component.find('Recorder').prop('onStop')).toBe(props.handleRecordTrack);
 });
 
 function getProps(){
   return {
-    handleRecordStop: () => {},
+    handleRecordTrack: () => 'foo',
   };
 }

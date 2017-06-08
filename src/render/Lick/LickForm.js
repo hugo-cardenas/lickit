@@ -16,6 +16,9 @@ class LickForm extends Component {
         this.handleCreateTag = this
             .handleCreateTag
             .bind(this);
+        this.handleRecordTrack = this
+            .handleRecordTrack
+            .bind(this);
     }
 
     render() {
@@ -25,8 +28,8 @@ class LickForm extends Component {
         const trackSectionState = {
             tracks,
             handleDeleteTrack: this.handleDeleteTrack.bind(this),
-            handleRecordStop: () => {}
-        }
+            handleRecordTrack: this.handleRecordTrack
+        };
 
         return (
             <div className="card lick">
@@ -104,8 +107,15 @@ class LickForm extends Component {
         this.setState({[name]: value});
     }
 
-    handleDeleteTrack(id){
+    handleDeleteTrack(id) {
         const tracks = this.state.tracks.filter(track => track.id !== id);
+        this.setState({tracks});
+    }
+
+    handleRecordTrack(blob) {
+        const url = URL.createObjectURL(blob);
+        let tracks = [...this.state.tracks];
+        tracks.push({id: tracks[tracks.length - 1].id + 1, link: url});
         this.setState({tracks});
     }
 

@@ -55,6 +55,6 @@ function getProps(){
       {id: 30, link: 'http://baz.mp3'},
     ],
     handleDeleteTrack: () => {},
-    handleRecordStop: () => {},
+    handleRecordTrack: () => {},
   };
 }
