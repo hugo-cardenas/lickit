@@ -1,30 +1,41 @@
 import React from 'react';
-import {render} from 'enzyme';
+import {shallow} from 'enzyme';
 import Lick from './Lick';
 
 test('input and cancel', () => {
-  const component = render(<Lick {...getTestProps()}/>);
+  const component = shallow(<Lick {...getTestProps()}/>);
   
-  console.log(component.find('.description'));
-
-  component.find('.description').simulate('change', createEvent('description', 'abc def'));
-  component.find('.track').first().find('.delete-track-link').simulate('click');
+  let view = component.find('LickView').dive();
+  view.find('.lick-edit').simulate('click');
   
-  component.find('.tag').first().find('.tag-delete').simulate('click');
-  component.find('.tag-input input').simulate('change', createEvent('tagInput', 'abc'));
-  component.find('.tag-input input').simulate('keyPress', createKeyPressEvent('Enter', 'tagInput', 'abc'));
+  // Input description
+  const form = component.find('LickForm').dive();
+  form.find('.description').simulate('change', createEvent('description', 'abc def'));
+  
+  // Delete track
+  const trackSectionForm = form.find('TrackSectionForm').dive();
+  trackSectionForm.find('.track').first().find('.delete-track-link').first().simulate('click');
+  
+  // Delete tag and input new one
+  form.find('.tag').first().find('.tag-delete').simulate('click');
+  form.find('.tag-input input').simulate('change', createEvent('tagInput', 'abc'));
+  form.find('.tag-input input').simulate('keyPress', createKeyPressEvent('Enter', 'tagInput', 'abc'));
 
-  component.find('.lick-cancel').simulate('click');
+  // Click cancel button
+  form.find('.lick-cancel-link').first().simulate('click');
 
   // Check unchanged fields after clicking cancel
-  expect(component.find('.description').prop('value')).toBe('Foobar baz');
+  const newView = component.find('LickView').dive();
+  expect(newView.find('.description').text()).toBe('Foobar baz');  
   
-  expect(component.find('.track')).toHaveLength(1);
-  expect(component.find('.track').first().key()).toBe(20);
-
-  expect(component.find('.tag')).toHaveLength(3);
-
-  return (component
+  const trackSectionView = newView.find('TrackSectionView').dive();
+  expect(trackSectionView.find('.track')).toHaveLength(2);
+  const tracks = trackSectionView.find('.track');
+  expect(tracks.at(0).key()).toBe('10');
+  expect(tracks.at(1).key()).toBe('20');
+  
+  expect(newView.find('.tag')).toHaveLength(3);
+  expect(newView
     .find('.tag')
     .map(element => element.text()))
     .toEqual(expect.arrayContaining(['foo', 'bar', 'baz']));

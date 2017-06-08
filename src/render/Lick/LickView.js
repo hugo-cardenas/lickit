@@ -32,12 +32,12 @@ function renderTags(tags) {
 
 function renderFooter(id, handleEdit, handleDelete) {
     return <footer className="card-footer">
-        <a className="card-footer-item" onClick={() => handleEdit()}>
+        <a className="card-footer-item lick-edit" onClick={() => handleEdit()}>
             <span className="icon is-small">
                 <i className="fa fa-pencil-square-o"></i>
             </span>
         </a>
-        <a className="card-footer-item" onClick={() => handleDelete(id)}>
+        <a className="card-footer-item lick-delete" onClick={() => handleDelete(id)}>
             <span className="icon is-small">
                 <i className="fa fa-trash"></i>
             </span>

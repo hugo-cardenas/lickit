@@ -124,7 +124,7 @@ class LickForm extends Component {
             return;
         }
         
-        let tags = [...this.state.tags];
+        let tags = this.state.tags;
         tags.push(tag);
         this.setState({
             tagInput: '',
