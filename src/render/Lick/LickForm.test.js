@@ -61,6 +61,7 @@ test.skip('record track', () => {
 
   const handleRecordTrack = component.find('TrackSectionForm').prop('handleRecordTrack');
   // TODO Fix usage of URL global - doesn't work in test
+  // TODO Remove npm blob-util if not useful
   //handleRecordTrack(new Blob(['foo']));
 
   // TODO Check url of generated track
