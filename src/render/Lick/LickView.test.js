@@ -10,10 +10,11 @@ test('render description', () => {
 });
 
 test('render tracks', () => {
-  const component = shallow(<LickView {...getTestProps()}/>);
+  const props = getTestProps();
+  const component = shallow(<LickView {...props}/>);
   const trackSection = component.find('TrackSectionView');
   expect(trackSection).toHaveLength(1);
-  // TODO Assert props passed
+  expect(trackSection.prop('tracks')).toEqual(props.tracks);
 });
 
 test('render tags', () => {

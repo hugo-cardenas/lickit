@@ -9,110 +9,39 @@ import registerServiceWorker from './registerServiceWorker';
 
 const link = "http://developer.mozilla.org/@api/deki/files/2926/=AudioTest_(1).ogg";
 
-function getInitialState() {
-  const initialLicks = _.shuffle([
-    {
-      "description": "Django - Lady be good",
-      "tracks": [
-        {
-          id: 1,
-          link
-        }, {
-          id: 2,
-          link
-        }
-      ],
-      "name": "123",
-      "id": 3,
-      tags: ['ii-V-I', 'gypsy jazz']
-    }, {
-      "description": "Django - Blues clair",
-      "tracks": [
-        {
-          id: 3,
-          link
-        }, {
-          id: 4,
-          link
-        }
-      ],
-      "name": "123",
-      "id": 3,
-      tags: ['I-IV', 'gypsy jazz', 'blues']
-    }, {
-      "description": "Django - Blues clair 2",
-      "tracks": [
-        {
-          id: 5,
-          link
-        }, {
-          id: 6,
-          link
-        }
-      ],
-      "name": "123",
-      "id": 3,
-      tags: ['ii-V-I', 'gypsy jazz', 'blues']
-    }, {
-      "description": "Charlie Parker - Confirmation",
-      "tracks": [
-        {
-          id: 7,
-          link
-        }
-      ],
-      "name": "perico",
-      "id": 2,
-      tags: ['ii-V-I', 'bebop']
-    }, {
-      "description": "Charlie Parker - Donna Lee",
-      "tracks": [
-        {
-          id: 8,
-          link
-        }
-      ],
-      "name": "foo",
-      "id": 1,
-      tags: ['ii-V-I', 'bebop']
-    }, {
-      "description": "Dizzy Gillespie - Perdido",
-      "tracks": [
-        {
-          id: 9,
-          link
-        }
-      ],
-      "name": "foo",
-      "id": 1,
-      tags: ['Dom7', 'bebop', 'Rhythm changes bridge']
-    }, {
-      "description": "Charlie Parker - Yardbird suite",
-      "tracks": [],
-      "name": "foo",
-      "id": 1,
-      tags: ['ii-V-I', 'bebop']
-    }
-  ]);
+function rand(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
 
+const descriptions = ['Django - Lady be good', 'Django - Blues clair', 'Django - Blues clair 2', 'Charlie Parker - Confirmation', 'Dizzy Gillespie - Perdido'];
+
+const tags = [
+  'gypsy jazz',
+  'bebop',
+  'blues',
+  'ii-V-I',
+  'V-I',
+  'altered scale',
+  'diminished',
+  'rhythm changes'
+]
+
+function getInitialState() {
   const licks = _
     .range(5)
-    .map(i => initialLicks[i % initialLicks.length])
-    .map((lick, index) => {
+    .map(i => {
       return {
-        ...lick,
-        id: index
-      }
+        id: i,
+        description: descriptions[rand(0, descriptions.length - 1)],
+        tracks: _.range(rand(0, 2)).map(i => {return {
+          id: i,
+          link: link + `?a=${i}`
+        }}),
+        tags: _.uniq(_.range(rand(0, 3)).map(i => tags[rand(0, tags.length - 1)]))
+      };
     });
 
-  return {
-    licks: licks.map(lick => {
-      return {
-        ...lick,
-        mode: 'view'
-      }
-    })
-  };
+  return {licks};
 }
 
 let state = getInitialState();

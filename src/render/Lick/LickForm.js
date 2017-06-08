@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
+import blobUtil from 'blob-util';
 import TrackSectionForm from './Track/TrackSectionForm';
 
 class LickForm extends Component {
@@ -113,9 +114,10 @@ class LickForm extends Component {
     }
 
     handleRecordTrack(blob) {
-        const url = URL.createObjectURL(blob);
+        const url = blobUtil.createObjectURL(blob);
         let tracks = [...this.state.tracks];
-        tracks.push({id: tracks[tracks.length - 1].id + 1, link: url});
+        // TODO Decide how to save non-stored tracks (with, without id, etc)
+        tracks.push({id: url, link: url});
         this.setState({tracks});
     }
 

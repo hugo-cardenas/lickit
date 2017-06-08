@@ -45,7 +45,7 @@ function getTestProps() {
   return {
     id: 42,
     description: 'Foobar baz',
-    tracks: [{id: 10}, {id: 20}],
+    tracks: [{id: 10, link: 'http://foo.mp3'}, {id: 20, link: 'http://bar.mp3'}],
     tags: [
       'foo', 'bar', 'baz'
     ],

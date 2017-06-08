@@ -8,7 +8,7 @@ function TrackSectionForm(props) {
 
     return <div className="track-container">
         <div className="track-list">
-            {tracks.map(track => <div key={track.id} className="track level">
+            {tracks.map(track => <div key={track.link} className="track level">
                 <div>
                     <audio
                         className="level-left"

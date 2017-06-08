@@ -20,7 +20,7 @@ test('render tracks', () => {
     expect(trackElement.hasClass('track')).toBe(true);
     expect(trackElement.hasClass('level')).toBe(true);
 
-    expect(trackElement.key()).toBe(tracks[i].id.toString());
+    expect(trackElement.key()).toBe(tracks[i].link);
 
     const audio = trackElement.find('audio');
     expect(audio).toHaveLength(1);

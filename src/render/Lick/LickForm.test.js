@@ -39,7 +39,7 @@ test('render tracks', () => {
 
   expect(trackSection.prop('tracks')).toEqual(props.tracks);
   expect(typeof trackSection.prop('handleDeleteTrack')).toBe('function');
-  expect(typeof trackSection.prop('handleRecordStop')).toBe('function');
+  expect(typeof trackSection.prop('handleRecordTrack')).toBe('function');
 });
 
 test('delete track', () => {
@@ -56,8 +56,16 @@ test('delete track', () => {
   expect(component.find('TrackSectionForm').prop('tracks')).toEqual(expectedTracks);
 });
 
-test('record stop', () => {
-  // TODO
+test.skip('record track', () => {
+  const component = shallow(<LickForm {...getTestProps()}/>);
+
+  const handleRecordTrack = component.find('TrackSectionForm').prop('handleRecordTrack');
+  // TODO Fix usage of URL global - doesn't work in test
+  //handleRecordTrack(new Blob(['foo']));
+
+  // TODO Check url of generated track
+  // const expectedTracks = [{id: 10}, {id: 20}, {link: 'foo.mp3'}];
+  expect(component.find('TrackSectionForm').prop('tracks')).toHaveLength(3);
 });
 
 test('render tags', () => {
