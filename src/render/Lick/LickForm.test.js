@@ -37,14 +37,14 @@ test('render tracks', () => {
   const trackSection = component.find('TrackSectionForm');
   expect(trackSection).toHaveLength(1);
 
-  expect(trackSection.prop('tracks')).toEqual(props.tracks);
+  expect(trackSection.prop('tracks')).toEqual(props.lick.tracks);
   expect(typeof trackSection.prop('handleDeleteTrack')).toBe('function');
   expect(typeof trackSection.prop('handleRecordTrack')).toBe('function');
 });
 
 test('delete track', () => {
   let props = getTestProps();
-  props.tracks = [
+  props.lick.tracks = [
     {id: 10}, {id: 20}, {id: 30}
   ]
   const component = shallow(<LickForm {...props}/>);
@@ -167,10 +167,10 @@ test('save lick', () => {
   props.handleSave = jest.fn();
 
   const expectedLick = {
-    id: props.id,
-    description: props.description,
-    tracks: props.tracks,
-    tags: props.tags
+    id: props.lick.id,
+    description: props.lick.description,
+    tracks: props.lick.tracks,
+    tags: props.lick.tags
   };
   
   const component = shallow(<LickForm {...props}/>);
@@ -194,12 +194,16 @@ function getTagInputValue(component) {
 
 function getTestProps() {
   return {
-    id: 42,
-    description: 'Foobar baz',
-    tracks: [{id: 10}, {id: 20}],
-    tags: [
-      'foo', 'bar', 'baz'
-    ],
+    lick: {
+      id: 42,
+      description: 'Foobar baz',
+      tracks: [
+        {id: 10}, {id: 20}
+      ],
+      tags: [
+        'foo', 'bar', 'baz'
+      ]
+    },
     handleSave: () => {},
     handleCancel: () => {},
     handleDelete: () => {}

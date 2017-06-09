@@ -7,9 +7,23 @@ class LickForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            ...props,
+            lick: this.props.lick,
             tagInput: ''
         };
+        this.bindHandlers();
+        
+    }
+
+    bindHandlers() {
+        this.handleInputDescription = this
+            .handleInputDescription
+            .bind(this);
+        this.handleInputTag = this
+            .handleInputTag
+            .bind(this);
+        this.setLickState = this
+            .setLickState
+            .bind(this);
         this.handleInputChange = this
             .handleInputChange
             .bind(this);
@@ -22,7 +36,8 @@ class LickForm extends Component {
     }
 
     render() {
-        const {id, description, tracks, tags, tagInput} = this.state;
+        const {lick, tagInput} = this.state;
+        const {id, description, tracks, tags} = lick;
         const {handleCancel, handleDelete} = this.props;
 
         const trackSectionState = {
@@ -47,8 +62,9 @@ class LickForm extends Component {
         return <textarea
             name="description"
             className="textarea description"
+            placeholder="Add some description"
             value={description}
-            onChange={this.handleInputChange}/>;
+            onChange={this.handleInputDescription}/>;
     }
 
     renderTags(tags, tagInput) {
@@ -72,7 +88,7 @@ class LickForm extends Component {
                 type="text"
                 placeholder="Add new tag"
                 value={tagInput}
-                onChange={this.handleInputChange}
+                onChange={this.handleInputTag}
                 onKeyPress={this.handleCreateTag}/>
         </p>;
     }
@@ -107,25 +123,32 @@ class LickForm extends Component {
         this.setState({[name]: value});
     }
 
+    handleInputDescription(event) {
+        this.setLickState({description: event.target.value});
+    }
+
+    handleInputTag(event) {
+        this.setState({
+            tagInput: event.target.value
+        });
+    }
+
     handleDeleteTrack(id) {
-        const tracks = this.state.tracks.filter(track => track.id !== id);
-        this.setState({tracks});
+        const tracks = this.getLickState().tracks.filter(track => track.id !== id);
+        this.setLickState({tracks});
     }
 
     handleRecordTrack(blob) {
         const url = URL.createObjectURL(blob);
-        let tracks = [...this.state.tracks];
+        let tracks = [...this.getLickState().tracks];
         // TODO Decide how to save non-stored tracks (with, without id, etc)
         tracks.push({id: url, link: url});
-        this.setState({tracks});
+        this.setLickState({tracks});
     }
 
     handleDeleteTag(tag) {
-        this.setState({
-            tags: this
-                .state
-                .tags
-                .filter(storedTag => storedTag !== tag)
+        this.setLickState({
+            tags: this.getLickState().tags.filter(storedTag => storedTag !== tag)
         });
     }
 
@@ -135,28 +158,39 @@ class LickForm extends Component {
             return;
         }
         
-        let tags = this.state.tags;
+        let tags = this.getLickState().tags;
         tags.push(tag);
         this.setState({
             tagInput: '',
-            tags: _.uniq(tags)
+            lick: {...this.getLickState(), tags: _.uniq(tags)}
         });
     }
 
     handleSave() {
-        const lick = _.pick(this.state, ['id', 'description', 'tracks', 'tags']);
-        this.props.handleSave(lick);
+        this.props.handleSave(this.getLickState());
+    }
+
+    getLickState(){
+        return this.state.lick;
+    }
+
+    setLickState(state){
+        this.setState({
+            lick: {...this.getLickState(), ...state}
+        });
     }
 }
 
 export default LickForm;
 
 LickForm.propTypes = {
-    id: PropTypes.number.isRequired,
-    description: PropTypes.string.isRequired,
-    tracks: PropTypes.arrayOf(PropTypes.object).isRequired,
-    tags: PropTypes.arrayOf(PropTypes.string).isRequired,
+    lick: PropTypes.shape({
+        id: PropTypes.number,
+        description: PropTypes.string,
+        tracks: PropTypes.arrayOf(PropTypes.object),
+        tags: PropTypes.arrayOf(PropTypes.string)
+    }),
     handleSave: PropTypes.func.isRequired,
     handleCancel: PropTypes.func.isRequired,
-    handleDelete: PropTypes.func.isRequired,
-}
+    handleDelete: PropTypes.func.isRequired
+};

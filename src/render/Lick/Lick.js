@@ -8,7 +8,7 @@ class Lick extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            mode: 'view'
+            mode: this.props.mode || 'view'
         };
     }
 
@@ -24,30 +24,23 @@ class Lick extends Component {
 
     renderView() {
         const props = {
-            ...this.props,
-            handleEdit: () => this.setMode('edit')
+            lick: this.props.lick,
+            handleEdit: () => this.setMode('edit'),
+            handleDelete: this.props.handleDelete
         }
         return <LickView {...props}/>
     }
 
     renderForm() {
-        // const props = {
-        //     ...this.props,
-        //     handleCancel: () => this.setMode('view'),
-        //     handleSave: (lick) => {
-        //         this.props.handleSave(lick);
-        //         this.setMode('view');
-        //     }
-        // }
-        let props = Object.assign({}, this.props);
-        props.handleCancel = () => {
-            this.setMode('view');
+        const props = {
+            lick: this.props.lick,
+            handleSave: (lick) => {
+                this.props.handleSave(lick);
+                this.setMode('view');
+            },
+            handleCancel: () => this.setMode('view'),
+            handleDelete: this.props.handleDelete
         };
-        props.handleSave = (lick) => {
-            this.props.handleSave(lick);
-            this.setMode('view');
-        };
-
         return <LickForm {...props}/>
     }
 
@@ -59,10 +52,13 @@ class Lick extends Component {
 export default Lick;
 
 LickForm.propTypes = {
-    id: PropTypes.number.isRequired,
-    description: PropTypes.string.isRequired,
-    tracks: PropTypes.arrayOf(PropTypes.object).isRequired,
-    tags: PropTypes.arrayOf(PropTypes.string).isRequired,
+    lick: PropTypes.shape({
+        id: PropTypes.number,
+        description: PropTypes.string,
+        tracks: PropTypes.arrayOf(PropTypes.object),
+        tags: PropTypes.arrayOf(PropTypes.string)
+    }),
     handleSave: PropTypes.func.isRequired,
     handleDelete: PropTypes.func.isRequired,
-}
+    mode: PropTypes.oneOf(['edit', 'view'])
+};

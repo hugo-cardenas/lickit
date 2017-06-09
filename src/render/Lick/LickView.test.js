@@ -11,7 +11,7 @@ test('render description', () => {
 
 test('render description with links', () => {
   const props = getTestProps();
-  props.description = "foo\nbar.com\nbaz";
+  props.lick.description = "foo\nbar.com\nbaz";
 
   const component = shallow(<LickView {...props}/>);
   const description = component.find('.description');
@@ -29,7 +29,7 @@ test('render tracks', () => {
   const component = shallow(<LickView {...props}/>);
   const trackSection = component.find('TrackSectionView');
   expect(trackSection).toHaveLength(1);
-  expect(trackSection.prop('tracks')).toEqual(props.tracks);
+  expect(trackSection.prop('tracks')).toEqual(props.lick.tracks);
 });
 
 test('render tags', () => {
@@ -61,13 +61,13 @@ function getTags(component) {
 
 function getTestProps() {
   return {
-    id: 42,
-    description: 'Foobar baz',
-    trackSectionState: {
+    lick: {
+      id: 42,
+      description: 'Foobar baz',
       tracks: [{}, {}],
-      handleDeleteTrack: () => {},
-      handleRecordStop: () => {}
+      tags: ['foo', 'bar', 'baz']
     },
-    tags: ['foo', 'bar', 'baz']
-  }
+    handleEdit: () => {},
+    handleDelete: () => {}
+  };
 }

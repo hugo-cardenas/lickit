@@ -34,7 +34,7 @@ const tags = [
 
 function getInitialState() {
   const licks = _
-    .range(5)
+    .range(0)
     .map(i => {
       return {
         id: i,
@@ -47,7 +47,7 @@ function getInitialState() {
       };
     });
 
-  return {licks};
+  return {licks: licks.map(lick => { return {lick}; })};
 }
 
 let state = getInitialState();
@@ -59,22 +59,43 @@ function reduce(state, action) {
         ...state,
         licks: state
           .licks
-          .filter(lick => lick.id !== action.id)
-      }
+          .filter(lick => lick.lick.id !== action.id)
+      };
     case 'SAVE_LICK':
-      const newLick = action.lick;
+      console.log(action.lick);
+      const newLick = {lick: action.lick};
       const licks = state.licks;
-      const index = licks.findIndex(lick => lick.id === newLick.id);
+      console.log(state.licks);
+      const index = licks.findIndex(lick => lick.lick.id === newLick.lick.id);
       licks[index] = newLick;
+      // console.log({
+      //   ...state,
+      //   licks
+      // });
       return {
         ...state,
         licks
+      };
+    case 'CREATE_LICK':
+      return {
+        ...state,
+        licks: [{lick: createEmptyLick(), mode: 'edit'}, ...state.licks]
       }
     default:
       return {
         ...state
       };
   }
+}
+
+function createEmptyLick() {
+  return {
+    id: rand(1, 9999999),
+    description: '',
+    tracks: [],
+    tags: [],
+    mode: 'edit'
+  };
 }
 
 function dispatch(action) {
@@ -90,12 +111,20 @@ function saveLick(lick) {
   return {type: 'SAVE_LICK', lick}
 }
 
+function createLick() {
+  return {type: 'CREATE_LICK'}
+}
+
 state.handleDelete = (id) => {
   dispatch(deleteLick(id));
 }
 
 state.handleSave = (lick) => {
   dispatch(saveLick(lick));
+}
+
+state.handleCreate = () => {
+  dispatch(createLick());
 }
 
 function render(state) {

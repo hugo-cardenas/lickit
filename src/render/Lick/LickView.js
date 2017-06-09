@@ -3,7 +3,8 @@ import {linkifier} from 'react-linkifier';
 import TrackSectionView from './Track/TrackSectionView';
 
 function LickView(props) {
-    const {id, description, tracks, tags, handleEdit, handleDelete} = props;
+    const {lick, handleEdit, handleDelete} = props;
+    const {id, description, tracks, tags} = lick;
 
     return (
         <div className="card lick">
