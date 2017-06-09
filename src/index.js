@@ -13,7 +13,13 @@ function rand(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-const descriptions = ['Django - Lady be good', 'Django - Blues clair', 'Django - Blues clair 2', 'Charlie Parker - Confirmation', 'Dizzy Gillespie - Perdido'];
+const descriptions = [
+  'Django - Lady be good' + "\n" + 'https://youtu.be/2Am48nza7JE?t=16s', 
+  'Django - Blues clair', 
+  'Django - Blues clair 2', 
+  'Charlie Parker - Confirmation', 
+  'Dizzy Gillespie - Perdido' + "\n" + 'https://youtu.be/X8gCmtkuVgk?t=20s'
+];
 
 const tags = [
   'gypsy jazz',
@@ -56,7 +62,6 @@ function reduce(state, action) {
           .filter(lick => lick.id !== action.id)
       }
     case 'SAVE_LICK':
-      console.log('SAVE LICK');
       const newLick = action.lick;
       const licks = state.licks;
       const index = licks.findIndex(lick => lick.id === newLick.id);

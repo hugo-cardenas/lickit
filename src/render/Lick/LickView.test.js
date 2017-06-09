@@ -5,8 +5,23 @@ import LickView from './LickView';
 test('render description', () => {
   const component = shallow(<LickView {...getTestProps()}/>);
   const description = component.find('.description');
-  expect(description.type()).toBe('p');
+  expect(description.type()).toBe('pre');
   expect(description.text()).toBe('Foobar baz');
+});
+
+test('render description with links', () => {
+  const props = getTestProps();
+  props.description = "foo\nbar.com\nbaz";
+
+  const component = shallow(<LickView {...props}/>);
+  const description = component.find('.description');
+
+  expect(description.type()).toBe('pre');
+
+  const expectedDescriptionHtml = "<pre class=\"description\"><span>foo" + 
+      "\n</span><a target=\"_blank\" href=\"http://bar.com\">bar.com</a><span>" + 
+      "\nbaz</span></pre>";
+  expect(description.html()).toBe(expectedDescriptionHtml);
 });
 
 test('render tracks', () => {

@@ -1,4 +1,5 @@
 import React from 'react';
+import {linkifier} from 'react-linkifier';
 import TrackSectionView from './Track/TrackSectionView';
 
 function LickView(props) {
@@ -19,9 +20,9 @@ function LickView(props) {
 export default LickView;
 
 function renderDescription(description) {
-    return <p className="description">
-        {description}
-    </p>;
+    return <pre className="description">
+        {linkifier(description, {target: '_blank'})}
+    </pre>;
 }
 
 function renderTags(tags) {

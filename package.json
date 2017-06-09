@@ -7,6 +7,7 @@
     "prop-types": "^15.5.10",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "react-linkifier": "^3.0.1",
     "react-recorder": "git://github.com/hugo-cardenas/react-recorder.git#ec1e07fa785dd7fc108863c90500bbffe2fbd71a",
     "react-redux": "^5.0.5",
     "redux": "^3.6.0"
