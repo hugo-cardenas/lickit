@@ -1,5 +1,5 @@
 import React from 'react';
-import {shallow} from 'enzyme';
+import {mount, shallow} from 'enzyme';
 import LickForm from './LickForm';
 
 test('render description', () => {
@@ -57,16 +57,15 @@ test('delete track', () => {
 });
 
 test.skip('record track', () => {
-  const component = shallow(<LickForm {...getTestProps()}/>);
-
+  const component = mount(<LickForm {...getTestProps()}/>);
   const handleRecordTrack = component.find('TrackSectionForm').prop('handleRecordTrack');
-  // TODO Fix usage of URL global - doesn't work in test
-  // TODO Remove npm blob-util if not useful
+
+  // TODO Find a way of having URL and web Audio API work on enzyme
   //handleRecordTrack(new Blob(['foo']));
 
   // TODO Check url of generated track
   // const expectedTracks = [{id: 10}, {id: 20}, {link: 'foo.mp3'}];
-  expect(component.find('TrackSectionForm').prop('tracks')).toHaveLength(3);
+  // expect(component.find('TrackSectionForm').prop('tracks')).toHaveLength(3);
 });
 
 test('render tags', () => {
