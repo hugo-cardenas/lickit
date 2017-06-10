@@ -1,6 +1,6 @@
 import React from 'react';
 import {shallow} from 'enzyme';
-import Recorder from './Recorder';
+import Recorder from 'src/render/Lick/Track/Recorder/Recorder';
 
 test('start and stop', () => {
   const props = getProps();

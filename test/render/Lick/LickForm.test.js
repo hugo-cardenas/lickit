@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount, shallow} from 'enzyme';
-import LickForm from './LickForm';
+import LickForm from 'src/render/Lick/LickForm';
 
 test('render description', () => {
   const component = shallow(<LickForm {...getTestProps()}/>);

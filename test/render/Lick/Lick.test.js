@@ -1,6 +1,6 @@
 import React from 'react';
 import {shallow} from 'enzyme';
-import Lick from './Lick';
+import Lick from 'src/render/Lick/Lick';
 
 test('render form due to mode prop', () => {
   let props = getTestProps();

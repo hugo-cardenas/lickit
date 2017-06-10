@@ -1,6 +1,6 @@
 import React from 'react';
 import {shallow} from 'enzyme';
-import LickView from './LickView';
+import LickView from 'src/render/Lick/LickView';
 
 test('render description', () => {
   const component = shallow(<LickView {...getTestProps()}/>);

@@ -1,6 +1,6 @@
 import React from 'react';
 import {shallow} from 'enzyme';
-import TrackSectionForm from './TrackSectionForm';
+import TrackSectionForm from 'src/render/Lick/Track/TrackSectionForm';
 
 test('render tracks', () => {
   const props = getProps();

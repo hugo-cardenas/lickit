@@ -1,6 +1,6 @@
 import React from 'react';
 import {shallow} from 'enzyme';
-import TrackSectionView from './TrackSectionView';
+import TrackSectionView from 'src/render/Lick/Track/TrackSectionView';
 
 test('render tracks', () => {
   const tracks = [

@@ -7,33 +7,29 @@ import _ from 'lodash';
 // import {bindActionCreators} from 'redux'; import {connect} from
 // 'react-redux'; import deleteLick from '../state/actions/lick';
 
-function renderLick(lick, handleDelete, handleSave) {
+function renderLick(lickState, handleDelete, handleSave) {
   return <Lick
-    lick={lick.lick}
+    lick={lickState.lick}
     handleDelete={handleDelete}
     handleSave={handleSave}
-    mode={lick.mode}/>;
+    mode={lickState.mode}/>;
 }
 
 function renderRow(chunk, handleDelete, handleSave) {
-  const chunkKey = chunk.map(lick => lick.lick.id).join('-');
+  const chunkKey = chunk.map(lickState => lickState.lick.id).join('-');
   return (
     <div key={chunkKey} className="columns">
-      {chunk.map(lick => {
-        return <div key={lick.lick.id} className="column is-one-third">{renderLick(lick, handleDelete, handleSave)}</div>
+      {chunk.map(lickState => {
+        return <div key={lickState.lick.id} className="column is-one-third">{renderLick(lickState, handleDelete, handleSave)}</div>
       })}
     </div>
   );
 }
 
-function getChunks(licks) {
-  return _.chunk(licks, 3);
-}
-
 class App extends Component {
   render() {
     const {licks, handleDelete, handleSave, handleCreate} = this.props;
-    const chunks = getChunks(licks);
+    const chunks = _.chunk(licks, 3);
 
 
     return (
