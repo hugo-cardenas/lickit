@@ -1,4 +1,4 @@
-const 
+export const 
     LICK_CREATE = 'lick_create',
-    LICK_SAVE = 'lick_save',
+    LICK_UPDATE = 'lick_update',
     LICK_DELETE = 'lick_delete';
