@@ -54,6 +54,7 @@ it('update lick, success', () => {
 });
 
 const invalidLicks = [
+    // TODO Missing id?
     {
         id: 20,
         // description: 'bar baz',
@@ -65,11 +66,59 @@ const invalidLicks = [
         description: 'bar baz',
         // tracks: [{id: 200}],
         tags: ['foo', 'baz']
+    },
+    {
+        id: 20,
+        description: 'bar baz',
+        tracks: [{id: 200}],
+        // tags: ['foo', 'baz']
+    },
+    {
+        id: 20,
+        description: 42, // Invalid
+        tracks: [{id: 200}],
+        tags: ['foo', 'baz']
+    },
+    {
+        id: 20,
+        description: 'bar baz',
+        tracks: 42, // Invalid
+        tags: ['foo', 'baz']
+    },
+    {
+        id: 20,
+        description: 'bar baz',
+        tracks: 42, // Invalid
+        tags: ['foo', 'baz']
+    },
+    {
+        id: 20,
+        description: 'bar baz',
+        tracks: [{id: 200}, 'foo'], // Invalid
+        tags: ['foo', 'baz']
+    },
+    {
+        id: 20,
+        description: 'bar baz',
+        tracks: [{id: 200}, {foo: 'bar'}], // Invalid
+        tags: ['foo', 'baz']
+    },
+    {
+        id: 20,
+        description: 'bar baz',
+        tracks: [{id: 200}],
+        tags: 42 // Invalid
+    },
+    {
+        id: 20,
+        description: 'bar baz',
+        tracks: [{id: 200}],
+        tags: ['foo', 42] // Invalid
     }
 ];
 
 invalidLicks.forEach((lick, i) => {
-    it.skip(`update lick, invalid data #${i}`, () => {
+    it(`update lick, invalid data #${i}`, () => {
         // TODO
         const state = Object.freeze([
             {id: 10},
@@ -77,7 +126,14 @@ invalidLicks.forEach((lick, i) => {
             {id: 30}
         ]);
 
-        expect(() => lickReducer(state, updateLick(lick))).toThrow(/invalid lick/);
+        try {
+            lickReducer(state, updateLick(lick));
+        } catch (err) {
+            console.log(err);
+        }
+        
+
+        expect(() => lickReducer(state, updateLick(lick))).toThrow(/Invalid lick/);
     });
 });
 
