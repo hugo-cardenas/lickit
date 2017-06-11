@@ -123,7 +123,7 @@ const invalidLicks = [
     // [Object.assign({}, validLick, {tracks: [{id: 200}, 'foo']}), ['tracks']], // TODO ENABLE
 
     [Object.assign({}, validLick, {tags: 42}), ['tags']],
-    [Object.assign({}, validLick, {tags: ['foo', 42]}), ['tags']], // TODO ENABLE
+    [Object.assign({}, validLick, {tags: ['foo', 42]}), ['tags']]
 ];
 
 invalidLicks.forEach((entry, i) => {

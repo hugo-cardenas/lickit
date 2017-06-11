@@ -5,7 +5,6 @@ import Lick from './Lick/Lick';
 import _ from 'lodash';
 
 import {createLick, updateLick, deleteLick} from '../state/actions/lick';
-import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 function renderLick(lickState, handleDelete, handleSave) {
@@ -56,8 +55,6 @@ class App extends Component {
     );
   }
 }
-
-// export default App;
 
 function mapStateToProps(state, props) {
   return {licks: state.licks}

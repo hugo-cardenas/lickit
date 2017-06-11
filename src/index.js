@@ -14,11 +14,11 @@ function rand(min, max) {
 }
 
 const descriptions = [
-  'Django - Lady be good' + "\n" + 'https://youtu.be/2Am48nza7JE?t=16s', 
+  'Django - Lady be good\nhttps://youtu.be/2Am48nza7JE?t=16s', 
   'Django - Blues clair', 
   'Django - Blues clair 2', 
   'Charlie Parker - Confirmation', 
-  'Dizzy Gillespie - Perdido' + "\n" + 'https://youtu.be/X8gCmtkuVgk?t=20s'
+  'Dizzy Gillespie - Perdido\nhttps://youtu.be/X8gCmtkuVgk?t=20s'
 ];
 
 const tags = [
