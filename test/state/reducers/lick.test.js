@@ -24,9 +24,12 @@ it('reduce unknown action', () => {
 it('create lick', () => {
     const state = Object.freeze([]);
     const expectedState = [{
-        description: '',
-        tracks: [],
-        tags: []
+        lick: {
+            description: '',
+            tracks: [],
+            tags: []
+        },
+        mode: 'edit'
     }];
 
     expect(lickReducer(state, createLick())).toEqual(expectedState);
@@ -34,14 +37,14 @@ it('create lick', () => {
 
 it('update lick, success', () => {
     const state = Object.freeze([
-        {id: 10},
-        {
+        {lick: {id: 10}},
+        {lick: {
             id: 20,
             description: 'foo',
             tracks: [{id: 100}, {id: 200}],
             tags: ['foo', 'bar']
-        }, 
-        {id: 30}
+        }}, 
+        {lick: {id: 30}}
     ]);
 
     const updatedLick = {
@@ -52,9 +55,9 @@ it('update lick, success', () => {
     };
 
     const expectedState = [
-        {id: 10},
-        updatedLick,
-        {id: 30}
+        {lick: {id: 10}},
+        {lick: updatedLick},
+        {lick: {id: 30}}
     ];
 
     expect(lickReducer(state, updateLick(updatedLick))).toEqual(expectedState);
@@ -112,8 +115,8 @@ invalidLicks.forEach((entry, i) => {
 
 it('update lick, id not found', () => {
     const state = Object.freeze([
-        {id: 10},
-        {id: 30}
+        {lick: {id: 10}},
+        {lick: {id: 30}}
     ]);
 
     const lick = {
@@ -135,14 +138,14 @@ it('update lick, id not found', () => {
 
 it('delete lick, success', () => {
     const state = Object.freeze([
-        {id: 10},
-        {id: 20}, 
-        {id: 30}
+        {lick: {id: 10}},
+        {lick: {id: 20}}, 
+        {lick: {id: 30}}
     ]);
 
     const expectedState = Object.freeze([
-        {id: 10},
-        {id: 30}
+        {lick: {id: 10}},
+        {lick: {id: 30}}
     ]);
 
     expect(lickReducer(state, deleteLick(20))).toEqual(expectedState);
@@ -150,9 +153,9 @@ it('delete lick, success', () => {
 
 it('delete lick, id not found', () => {
     const state = Object.freeze([
-        {id: 10},
-        {id: 20}, 
-        {id: 30}
+        {lick: {id: 10}},
+        {lick: {id: 20}}, 
+        {lick: {id: 30}}
     ]);
 
     try {

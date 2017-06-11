@@ -132,7 +132,7 @@ function render(state) {
     <App {...state}/>, document.getElementById('root'));
 }
 
-render(state);
+// render(state);
 
 /*ReactDOM.render(
   <Provider store={store}>

@@ -23,9 +23,12 @@ function createLick(state) {
     return [
         ...state,
         {
-            description: '',
-            tracks: [],
-            tags: []
+            lick: {
+                description: '',
+                tracks: [],
+                tags: []
+            },
+            mode: 'edit'
         }
     ];
 }
@@ -38,7 +41,7 @@ function updateLick(state, lick) {
         throw new VError(error, 'Unable to reduce %s with lick %s', LICK_UPDATE, JSON.stringify(lick));
     }
     const newState = [...state];
-    newState[index] = lick;
+    newState[index] = {...state[index], lick};
     return newState;
 }
 
@@ -68,9 +71,9 @@ function validateLick(lick) {
 }
 
 function findLickIndex(state, id) {
-    const index = state.findIndex(storedLick => storedLick.id === id);
+    const index = state.findIndex(lickState => lickState.lick.id === id);
     if (index < 0) {
         throw new VError('Id %s not found', id);
     }
     return index;
-}   
+}
