@@ -1,3 +1,5 @@
+import _ from 'lodash';
+import VError from 'verror';
 import lickReducer from 'src/state/reducers/lick';
 import {createLick, updateLick, deleteLick} from 'src/state/actions/lick';
 
@@ -53,73 +55,37 @@ it('update lick, success', () => {
     expect(lickReducer(state, updateLick(updatedLick))).toEqual(expectedState);
 });
 
-const invalidLicks = [
-    // TODO Missing id?
-    {
-        id: 20,
-        // description: 'bar baz',
-        tracks: [{id: 200}],
-        tags: ['foo', 'baz']
-    },
-    {
-        id: 20,
-        description: 'bar baz',
-        // tracks: [{id: 200}],
-        tags: ['foo', 'baz']
-    },
-    {
-        id: 20,
-        description: 'bar baz',
-        tracks: [{id: 200}],
-        // tags: ['foo', 'baz']
-    },
-    {
-        id: 20,
-        description: 42, // Invalid
-        tracks: [{id: 200}],
-        tags: ['foo', 'baz']
-    },
-    {
-        id: 20,
-        description: 'bar baz',
-        tracks: 42, // Invalid
-        tags: ['foo', 'baz']
-    },
-    {
-        id: 20,
-        description: 'bar baz',
-        tracks: 42, // Invalid
-        tags: ['foo', 'baz']
-    },
-    {
-        id: 20,
-        description: 'bar baz',
-        tracks: [{id: 200}, 'foo'], // Invalid
-        tags: ['foo', 'baz']
-    },
-    {
-        id: 20,
-        description: 'bar baz',
-        tracks: [{id: 200}, {foo: 'bar'}], // Invalid
-        tags: ['foo', 'baz']
-    },
-    {
-        id: 20,
-        description: 'bar baz',
-        tracks: [{id: 200}],
-        tags: 42 // Invalid
-    },
-    {
-        id: 20,
-        description: 'bar baz',
-        tracks: [{id: 200}],
-        tags: ['foo', 42] // Invalid
-    }
+const validLick = {
+    id: 20,
+    description: 'bar baz',
+    tracks: [{id: 200}],
+    tags: ['foo', 'baz']
+};
+
+const invalidLicks = [   
+    // Missing fields
+    [_.pick(validLick, ['description', 'tracks', 'tags']), ['id']],
+    [_.pick(validLick, ['id', 'tracks', 'tags']), ['description']],
+    [_.pick(validLick, ['id', 'description', 'tags']), ['tracks']],
+    [_.pick(validLick, ['id', 'description', 'tracks']), ['tags']],
+    [_.pick(validLick, ['id', 'tracks']), ['description', 'tags']],
+    
+    // Invalid values
+    [Object.assign({}, validLick, {id: 'foo'}), ['id']],
+    [Object.assign({}, validLick, {id: -1}), ['id']],
+
+    [Object.assign({}, validLick, {description: 42}), ['description']],
+
+    [Object.assign({}, validLick, {tracks: 42}), ['tracks']],
+    // [Object.assign({}, validLick, {tracks: [{id: 200}, 'foo']}), ['tracks']], // TODO ENABLE
+
+    [Object.assign({}, validLick, {tags: 42}), ['tags']],
+    [Object.assign({}, validLick, {tags: ['foo', 42]}), ['tags']], // TODO ENABLE
 ];
 
-invalidLicks.forEach((lick, i) => {
+invalidLicks.forEach((entry, i) => {
     it(`update lick, invalid data #${i}`, () => {
-        // TODO
+        const [lick, invalidProperties] = entry;    
         const state = Object.freeze([
             {id: 10},
             {id: 20}, 
@@ -128,27 +94,36 @@ invalidLicks.forEach((lick, i) => {
 
         try {
             lickReducer(state, updateLick(lick));
-        } catch (err) {
-            console.log(err);
+            throw new Error();
+        } catch (error) {
+            expect(error.message).toEqual(expect.stringContaining('Invalid lick'));
+            expect(error.message).toEqual(expect.stringContaining(JSON.stringify(lick)));
+            invalidProperties.forEach(property => {
+                expect(VError.cause(error).message).toEqual(expect.stringContaining(property));
+            })
         }
-        
-
-        expect(() => lickReducer(state, updateLick(lick))).toThrow(/Invalid lick/);
     });
 });
 
-it.skip('update lick, not found', () => {
+it('update lick, not found', () => {
     const state = Object.freeze([
         {id: 10},
         {id: 30}
     ]);
 
-    const updatedLick = {
+    const lick = {
         id: 20,
         description: 'bar baz',
         tracks: [{id: 200}],
         tags: ['foo', 'baz']
     };
 
-    expect(lickReducer(state, updateLick(updatedLick))).toEqual(expectedState);
+    try {
+        lickReducer(state, updateLick(lick));
+        throw new Error();
+    } catch (error) {
+        expect(error.message).toEqual(expect.stringContaining('Invalid lick'));
+        expect(error.message).toEqual(expect.stringContaining(JSON.stringify(lick)));
+        expect(error.message).toEqual(expect.stringContaining('Id 20 not found'));
+    }
 });

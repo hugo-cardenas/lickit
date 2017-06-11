@@ -1,5 +1,6 @@
 import VError from 'verror';
 import validate from 'validate.js';
+import Joi from 'joi';
 import {
     LICK_CREATE,
     LICK_UPDATE,
@@ -29,22 +30,31 @@ function createLick(state) {
 }
 
 function updateLick(state, lick) {
-    // TODO Validate lick
     validateLick(lick);
-    // TODO Handle id not found
-    const index = state.findIndex(storedLick => storedLick.id === lick.id);
+    const index = findLickIndex(state, lick);
     const newState = [...state];
     newState[index] = lick;
     return newState;
 }
 
 function validateLick(lick) {
-    console.log(lick);
-    const constraints = {
-        description: {
-            presence: true
-        }
-    };
-    const errors = validate(lick, constraints);
-    throw new VError(`Invalid lick ${JSON.stringify(lick)}: ${JSON.stringify(errors)}`);
+    const schema = Joi.object().keys({    
+        id: Joi.number().min(1).required(),
+        description: Joi.string().required(),
+        tracks: Joi.array().required(),     // TODO Validate nested track objects
+        tags: Joi.array().items(Joi.string()).required()
+    });
+
+    const {error} = Joi.validate(lick, schema, {abortEarly: false, convert: false});
+    if (error) {
+        throw new VError(error, 'Invalid lick %s', JSON.stringify(lick));
+    }
 }
+
+function findLickIndex(state, lick) {
+    const index = state.findIndex(storedLick => storedLick.id === lick.id);
+    if (index < 0) {
+        throw new VError('Invalid lick %s, Id %s not found', JSON.stringify(lick), lick.id);
+    }
+    return index;
+}   
