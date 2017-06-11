@@ -1,5 +1,4 @@
 import VError from 'verror';
-import validate from 'validate.js';
 import Joi from 'joi';
 import {
     LICK_CREATE,
@@ -13,6 +12,8 @@ export default function (state = [], action) {
             return createLick(state);
         case LICK_UPDATE:
             return updateLick(state, action.lick);
+        case LICK_DELETE:
+            return deleteLick(state, action.id);
         default:
             return state;
     }
@@ -30,10 +31,25 @@ function createLick(state) {
 }
 
 function updateLick(state, lick) {
-    validateLick(lick);
-    const index = findLickIndex(state, lick);
+    try {
+        validateLick(lick);
+        var index = findLickIndex(state, lick.id);
+    } catch (error) {
+        throw new VError(error, 'Unable to reduce %s with lick %s', LICK_UPDATE, JSON.stringify(lick));
+    }
     const newState = [...state];
     newState[index] = lick;
+    return newState;
+}
+
+function deleteLick(state, id) {
+    try {
+        var index = findLickIndex(state, id);
+    } catch (error) {
+        throw new VError(error, 'Unable to reduce %s with id %s', LICK_DELETE, id);
+    }
+    const newState = [...state];
+    newState.splice(index, 1)
     return newState;
 }
 
@@ -47,14 +63,14 @@ function validateLick(lick) {
 
     const {error} = Joi.validate(lick, schema, {abortEarly: false, convert: false});
     if (error) {
-        throw new VError(error, 'Invalid lick %s', JSON.stringify(lick));
+        throw error;
     }
 }
 
-function findLickIndex(state, lick) {
-    const index = state.findIndex(storedLick => storedLick.id === lick.id);
+function findLickIndex(state, id) {
+    const index = state.findIndex(storedLick => storedLick.id === id);
     if (index < 0) {
-        throw new VError('Invalid lick %s, Id %s not found', JSON.stringify(lick), lick.id);
+        throw new VError('Id %s not found', id);
     }
     return index;
 }   

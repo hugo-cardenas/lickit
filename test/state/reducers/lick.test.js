@@ -2,6 +2,11 @@ import _ from 'lodash';
 import VError from 'verror';
 import lickReducer from 'src/state/reducers/lick';
 import {createLick, updateLick, deleteLick} from 'src/state/actions/lick';
+import {
+    LICK_CREATE,
+    LICK_UPDATE,
+    LICK_DELETE
+} from 'src/state/actions/types';
 
 it('define default state', () => {
     const expectedState = [];
@@ -96,7 +101,7 @@ invalidLicks.forEach((entry, i) => {
             lickReducer(state, updateLick(lick));
             throw new Error();
         } catch (error) {
-            expect(error.message).toEqual(expect.stringContaining('Invalid lick'));
+            expect(error.message).toEqual(expect.stringContaining('Unable to reduce ' + LICK_UPDATE));
             expect(error.message).toEqual(expect.stringContaining(JSON.stringify(lick)));
             invalidProperties.forEach(property => {
                 expect(VError.cause(error).message).toEqual(expect.stringContaining(property));
@@ -105,7 +110,7 @@ invalidLicks.forEach((entry, i) => {
     });
 });
 
-it('update lick, not found', () => {
+it('update lick, id not found', () => {
     const state = Object.freeze([
         {id: 10},
         {id: 30}
@@ -122,8 +127,39 @@ it('update lick, not found', () => {
         lickReducer(state, updateLick(lick));
         throw new Error();
     } catch (error) {
-        expect(error.message).toEqual(expect.stringContaining('Invalid lick'));
+        expect(error.message).toEqual(expect.stringContaining('Unable to reduce ' + LICK_UPDATE));
         expect(error.message).toEqual(expect.stringContaining(JSON.stringify(lick)));
         expect(error.message).toEqual(expect.stringContaining('Id 20 not found'));
+    }
+});
+
+it('delete lick, success', () => {
+    const state = Object.freeze([
+        {id: 10},
+        {id: 20}, 
+        {id: 30}
+    ]);
+
+    const expectedState = Object.freeze([
+        {id: 10},
+        {id: 30}
+    ]);
+
+    expect(lickReducer(state, deleteLick(20))).toEqual(expectedState);
+});
+
+it('delete lick, id not found', () => {
+    const state = Object.freeze([
+        {id: 10},
+        {id: 20}, 
+        {id: 30}
+    ]);
+
+    try {
+        lickReducer(state, deleteLick(999));
+        throw new Error();
+    } catch (error) {
+        expect(error.message).toEqual(expect.stringContaining('Unable to reduce ' + LICK_DELETE));
+        expect(error.message).toEqual(expect.stringContaining('Id 999 not found'));
     }
 });
