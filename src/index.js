@@ -3,9 +3,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './render/App';
 import registerServiceWorker from './registerServiceWorker';
-// import './index.css'; import {Provider} from 'react-redux'; import
-// createStore from './state/store'; console.log('initial state', initialState);
-// const store = createStore(initialState);
+// import './index.css'; 
+import {Provider} from 'react-redux'; 
+import createStore from './state/store';
 
 const link = "http://developer.mozilla.org/@api/deki/files/2926/=AudioTest_(1).ogg";
 
@@ -34,7 +34,7 @@ const tags = [
 
 function getInitialState() {
   const licks = _
-    .range(0)
+    .range(2)
     .map(i => {
       return {
         id: i,
@@ -50,92 +50,13 @@ function getInitialState() {
   return {licks: licks.map(lick => { return {lick}; })};
 }
 
-let state = getInitialState();
+const store = createStore(getInitialState());
 
-function reduce(state, action) {
-  switch (action.type) {
-    case 'DELETE_LICK':
-      return {
-        ...state,
-        licks: state
-          .licks
-          .filter(lick => lick.lick.id !== action.id)
-      };
-    case 'SAVE_LICK':
-      console.log(action.lick);
-      const newLick = {lick: action.lick};
-      const licks = state.licks;
-      console.log(state.licks);
-      const index = licks.findIndex(lick => lick.lick.id === newLick.lick.id);
-      licks[index] = newLick;
-      // console.log({
-      //   ...state,
-      //   licks
-      // });
-      return {
-        ...state,
-        licks
-      };
-    case 'CREATE_LICK':
-      return {
-        ...state,
-        licks: [{lick: createEmptyLick(), mode: 'edit'}, ...state.licks]
-      }
-    default:
-      return {
-        ...state
-      };
-  }
-}
+// TODO Handle errors
 
-function createEmptyLick() {
-  return {
-    id: rand(1, 9999999),
-    description: '',
-    tracks: [],
-    tags: [],
-    mode: 'edit'
-  };
-}
-
-function dispatch(action) {
-  state = reduce(state, action);
-  render(state);
-}
-
-function deleteLick(id) {
-  return {type: 'DELETE_LICK', id}
-}
-
-function saveLick(lick) {
-  return {type: 'SAVE_LICK', lick}
-}
-
-function createLick() {
-  return {type: 'CREATE_LICK'}
-}
-
-state.handleDelete = (id) => {
-  dispatch(deleteLick(id));
-}
-
-state.handleSave = (lick) => {
-  dispatch(saveLick(lick));
-}
-
-state.handleCreate = () => {
-  dispatch(createLick());
-}
-
-function render(state) {
-  ReactDOM.render(
-    <App {...state}/>, document.getElementById('root'));
-}
-
-// render(state);
-
-/*ReactDOM.render(
+ReactDOM.render(
   <Provider store={store}>
   <App/>
-</Provider>, document.getElementById('root'));*/
+</Provider>, document.getElementById('root'));
+
 registerServiceWorker();

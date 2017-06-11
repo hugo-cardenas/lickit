@@ -22,46 +22,71 @@ it('reduce unknown action', () => {
 });
 
 it('create lick', () => {
-    const state = Object.freeze([]);
-    const expectedState = [{
-        lick: {
-            description: '',
-            tracks: [],
-            tags: []
+    const state = Object.freeze([{lick: {id: 10}}]);
+    const expectedState = [
+        {
+            lick: {
+                    description: '',
+                    tracks: [],
+                    tags: []
+                },
+            mode: 'edit'
         },
-        mode: 'edit'
-    }];
+        {lick: {id: 10}}
+    ];
 
     expect(lickReducer(state, createLick())).toEqual(expectedState);
 });
 
-it('update lick, success', () => {
-    const state = Object.freeze([
-        {lick: {id: 10}},
-        {lick: {
-            id: 20,
-            description: 'foo',
-            tracks: [{id: 100}, {id: 200}],
-            tags: ['foo', 'bar']
-        }}, 
-        {lick: {id: 30}}
-    ]);
-
-    const updatedLick = {
+const validLicks = [
+    {
         id: 20,
         description: 'bar baz',
         tracks: [{id: 200}],
         tags: ['foo', 'baz']
-    };
+    },
+    {
+        id: 20,
+        description: '',
+        tracks: [{id: 200}],
+        tags: ['foo', 'baz']
+    },
+    {
+        id: 20,
+        description: 'bar baz',
+        tracks: [],
+        tags: ['foo', 'baz']
+    },
+    {
+        id: 20,
+        description: 'bar baz',
+        tracks: [{id: 200}],
+        tags: []
+    }
+];
 
-    const expectedState = [
-        {lick: {id: 10}},
-        {lick: updatedLick},
-        {lick: {id: 30}}
-    ];
+validLicks.forEach((lick, i) => {
+    it('update lick, success #' + i, () => {
+        const state = Object.freeze([
+            {lick: {id: 10}},
+            {lick: {
+                id: 20,
+                description: 'foo',
+                tracks: [{id: 100}, {id: 200}],
+                tags: ['foo', 'bar']
+            }}, 
+            {lick: {id: 30}}
+        ]);
 
-    expect(lickReducer(state, updateLick(updatedLick))).toEqual(expectedState);
-});
+        const expectedState = [
+            {lick: {id: 10}},
+            {lick: lick},
+            {lick: {id: 30}}
+        ];
+
+        expect(lickReducer(state, updateLick(lick))).toEqual(expectedState);
+    });
+})
 
 const validLick = {
     id: 20,
@@ -92,7 +117,7 @@ const invalidLicks = [
 ];
 
 invalidLicks.forEach((entry, i) => {
-    it(`update lick, invalid data #${i}`, () => {
+    it('update lick, invalid data #' +i, () => {
         const [lick, invalidProperties] = entry;    
         const state = Object.freeze([
             {id: 10},

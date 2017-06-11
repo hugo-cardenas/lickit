@@ -4,8 +4,9 @@ import './App.css';
 import Lick from './Lick/Lick';
 import _ from 'lodash';
 
-// import {bindActionCreators} from 'redux'; import {connect} from
-// 'react-redux'; import deleteLick from '../state/actions/lick';
+import {createLick, updateLick, deleteLick} from '../state/actions/lick';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
 
 function renderLick(lickState, handleDelete, handleSave) {
   return <Lick
@@ -16,7 +17,9 @@ function renderLick(lickState, handleDelete, handleSave) {
 }
 
 function renderRow(chunk, handleDelete, handleSave) {
-  const chunkKey = chunk.map(lickState => lickState.lick.id).join('-');
+  const chunkKey = chunk
+    .map(lickState => lickState.lick.id)
+    .join('-');
   return (
     <div key={chunkKey} className="columns">
       {chunk.map(lickState => {
@@ -30,7 +33,6 @@ class App extends Component {
   render() {
     const {licks, handleDelete, handleSave, handleCreate} = this.props;
     const chunks = _.chunk(licks, 3);
-
 
     return (
       <div className="container main-container">
@@ -55,10 +57,18 @@ class App extends Component {
   }
 }
 
-export default App;
+// export default App;
 
-// function mapStateToProps(state, props) {   return {licks: state.licks} }
-// function mapDispatchToProps(dispatch) {   return {     // actions:
-// bindActionCreators(lickActions, dispatch)     handleDelete: (id) =>
-// dispatch(deleteLick(id))   } } export default connect(mapStateToProps,
-// mapDispatchToProps)(App);
+function mapStateToProps(state, props) {
+  return {licks: state.licks}
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    handleCreate: () => dispatch(createLick()),
+    handleSave: (lick) => dispatch(updateLick(lick)),
+    handleDelete: (id) => dispatch(deleteLick(id))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

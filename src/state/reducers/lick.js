@@ -1,5 +1,5 @@
 import VError from 'verror';
-import Joi from 'joi';
+import Joi from 'joi-browser';
 import {
     LICK_CREATE,
     LICK_UPDATE,
@@ -21,15 +21,17 @@ export default function (state = [], action) {
 
 function createLick(state) {
     return [
-        ...state,
         {
             lick: {
+                // TODO Refactor this hack, generate ids in a proper way
+                // id: state.length ? Math.max(...state.map(lickState => lickState.lick.id)) + 1 : 1,
                 description: '',
                 tracks: [],
                 tags: []
             },
             mode: 'edit'
-        }
+        },
+        ...state
     ];
 }
 
@@ -59,7 +61,7 @@ function deleteLick(state, id) {
 function validateLick(lick) {
     const schema = Joi.object().keys({    
         id: Joi.number().min(1).required(),
-        description: Joi.string().required(),
+        description: Joi.string().allow('').required(),
         tracks: Joi.array().required(),     // TODO Validate nested track objects
         tags: Joi.array().items(Joi.string()).required()
     });
