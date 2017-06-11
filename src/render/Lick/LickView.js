@@ -21,6 +21,7 @@ function LickView(props) {
 export default LickView;
 
 function renderDescription(description) {
+    // TODO Wrap long links
     return <pre className="description">
         {linkifier(description, {target: '_blank'})}
     </pre>;

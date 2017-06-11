@@ -37,7 +37,7 @@ function getInitialState() {
     .range(2)
     .map(i => {
       return {
-        id: i,
+        id: i + 1,
         description: descriptions[rand(0, descriptions.length - 1)],
         tracks: _.range(rand(0, 2)).map(i => {return {
           id: i,

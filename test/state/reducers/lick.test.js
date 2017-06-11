@@ -35,7 +35,17 @@ it('create lick', () => {
         {lick: {id: 10}}
     ];
 
-    expect(lickReducer(state, createLick())).toEqual(expectedState);
+    const newState = lickReducer(state, createLick());
+    expect(newState).toHaveLength(2);
+    
+    expect(newState[0].mode).toBe('edit');
+    expect(newState[0].lick.id).toBeGreaterThan(0);
+    expect(newState[0].lick.id).not.toBe(10);
+    expect(newState[0].lick.description).toBe('');
+    expect(newState[0].lick.tracks).toEqual([]);
+    expect(newState[0].lick.tags).toEqual([]);
+
+    expect(newState[1]).toEqual({lick: {id: 10}});
 });
 
 const validLicks = [

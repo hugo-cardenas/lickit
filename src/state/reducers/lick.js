@@ -23,8 +23,9 @@ function createLick(state) {
     return [
         {
             lick: {
+                // TODO Add field createdAt
                 // TODO Refactor this hack, generate ids in a proper way
-                // id: state.length ? Math.max(...state.map(lickState => lickState.lick.id)) + 1 : 1,
+                id: state.length ? Math.max(...state.map(lickState => lickState.lick.id)) + 1 : 1,
                 description: '',
                 tracks: [],
                 tags: []
