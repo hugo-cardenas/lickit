@@ -19,8 +19,11 @@
     "react-scripts": "1.0.5",
     "react-test-renderer": "^15.5.4"
   },
+  "main": "src/electron-starter.js",
   "scripts": {
-    "start": "react-scripts start",
+    "react-start": "BROWSER=none react-scripts start",
+    "electron-start": "ELECTRON_DEV=1 electron .",
+    "start": "concurrently 'npm run react-start' 'wait-on -c wait-on.config.json https://localhost:3000 && npm run electron-start'",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom --testMatch='<rootDir>/test/**/*.test.js'",
     "eject": "react-scripts eject"
