@@ -79,18 +79,21 @@ validLicks.forEach((lick, i) => {
     it('update lick, success #' + i, () => {
         const state = Object.freeze([
             {lick: {id: 10}},
-            {lick: {
-                id: 20,
-                description: 'foo',
-                tracks: [{id: 100}, {id: 200}],
-                tags: ['foo', 'bar']
-            }}, 
+            {
+                lick: {
+                    id: 20,
+                    description: 'foo',
+                    tracks: [{id: 100}, {id: 200}],
+                    tags: ['foo', 'bar']
+                },
+                mode: 'edit'
+            }, 
             {lick: {id: 30}}
         ]);
 
         const expectedState = [
             {lick: {id: 10}},
-            {lick: lick},
+            {lick: lick, mode: 'view'},
             {lick: {id: 30}}
         ];
 

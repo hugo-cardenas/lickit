@@ -44,7 +44,7 @@ function updateLick(state, lick) {
         throw new VError(error, 'Unable to reduce %s with lick %s', LICK_UPDATE, JSON.stringify(lick));
     }
     const newState = [...state];
-    newState[index] = {...state[index], lick};
+    newState[index] = {mode: 'view', lick};
     return newState;
 }
 
