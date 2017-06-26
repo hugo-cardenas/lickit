@@ -2,7 +2,7 @@ import promisify from 'promisify-node';
 import path from 'path';
 import createStorage from 'src/state/storage/stateStorage';
 const tmp = promisify('tmp');
-const fs = promisify('fs');
+// const fs = promisify('fs');
 
 // TODO Solve tmp dirs not being deleted
 // TODO Put back to correct name
