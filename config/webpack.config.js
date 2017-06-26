@@ -1,12 +1,12 @@
-var {join} = require('path');
-
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({template: './public/index.html', filename: 'index.html', inject: 'body'});
+const { join } = require('path');
+const htmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
     devServer: {
-        hot: true,
         contentBase: 'build',
+        hot: true,
+        https: true,
         port: 3000,
         stats: 'minimal'
     },
@@ -20,7 +20,7 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: ['style-loader', 'css-loader']
-            }, 
+            },
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
@@ -30,5 +30,8 @@ module.exports = {
             }
         ]
     },
-    plugins: [HtmlWebpackPluginConfig]
+    plugins: [
+        new htmlWebpackPlugin({ template: './public/index.html', filename: 'index.html', inject: 'body' }),
+        new webpack.HotModuleReplacementPlugin()
+    ]
 };

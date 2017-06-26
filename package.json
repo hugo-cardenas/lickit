@@ -35,11 +35,10 @@
   },
   "main": "src/electron-starter.js",
   "scripts": {
-    "react-start": "webpack-dev-server --config ./config/webpack.config.js",
-    "electron-start": "ELECTRON_DEV=1 electron .",
-    "start": "concurrently 'npm run react-start' 'wait-on -c wait-on.config.json https://localhost:3000 && npm run electron-start'",
+    "start-react": "webpack-dev-server --config ./config/webpack.config.js",
+    "start-electron": "ELECTRON_DEV=1 electron .",
+    "start": "concurrently 'npm run start-react' 'wait-on -c wait-on.config.json https://localhost:3000 && npm run start-electron'",
     "build": "webpack --config ./config/webpack.config.js",
-    "test": "react-scripts test --env=jsdom --testMatch='<rootDir>/test/**/*.test.js'",
-    "eject": "react-scripts eject"
+    "test": "react-scripts test --env=jsdom --testMatch='<rootDir>/test/**/*.test.js'"
   }
 }
