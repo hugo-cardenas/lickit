@@ -1,6 +1,12 @@
 import VError from 'verror';
 import promisify from 'promisify-node';
-const fs = promisify('fs');
+import {promisifyAll} from 'bluebird';
+
+// TODO Wut
+// import {remote} from 'electron';
+// console.log('STATE STORAGE FS:', remote.require('fs'));
+// let fs = promisify(window.require('fs'));
+
 
 /**
  * @param {Object} config {filePath}

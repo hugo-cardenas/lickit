@@ -4,6 +4,9 @@ import createStorage from 'src/state/storage/stateStorage';
 const tmp = promisify('tmp');
 const fs = promisify('fs');
 
+// TODO Solve tmp dirs not being deleted
+// TODO Put back to correct name
+
 it('save and load state', () => {
     const state = {
         foo: 123,

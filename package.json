@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "bluebird": "^3.5.0",
+    "bulma": "^0.4.2",
+    "electron": "^1.6.11",
+    "extract-zip": "=1.6.0",
     "joi-browser": "^10.0.6",
     "lodash": "^4.17.4",
     "promisify-node": "^0.4.0",

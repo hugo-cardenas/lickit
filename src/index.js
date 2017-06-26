@@ -6,6 +6,7 @@ import registerServiceWorker from './registerServiceWorker';
 // import './index.css'; 
 import {Provider} from 'react-redux'; 
 import createStore from './state/store';
+// import storage from './state/storage';
 
 const link = "http://developer.mozilla.org/@api/deki/files/2926/=AudioTest_(1).ogg";
 
@@ -50,13 +51,29 @@ function getInitialState() {
   return {licks: licks.map(lick => { return {lick}; })};
 }
 
-const store = createStore(getInitialState());
-
 // TODO Handle errors
-
+const initialState = getInitialState();
+const store = createStore(initialState);
 ReactDOM.render(
   <Provider store={store}>
   <App/>
 </Provider>, document.getElementById('root'));
 
 registerServiceWorker();
+  
+
+// storage.loadState()
+//   .then(initialState => {
+//     const store = createStore(initialState);
+//     store.subscribe(() => {
+//       console.log('SAVING STATE', store.getState());
+//       storage.saveState(store.getState());
+//     });
+
+//     ReactDOM.render(
+//       <Provider store={store}>
+//       <App/>
+//     </Provider>, document.getElementById('root'));
+
+//     registerServiceWorker();
+//   });
