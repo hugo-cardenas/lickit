@@ -11,10 +11,6 @@ module.exports = {
         stats: 'minimal'
     },
     entry: './src/index.js',
-    output: {
-        filename: 'bundle.js',
-        path: join(__dirname, '../build')
-    },
     module: {
         rules: [
             {
@@ -30,8 +26,16 @@ module.exports = {
             }
         ]
     },
+    output: {
+        filename: 'bundle.js',
+        path: join(__dirname, '../build')
+    },
     plugins: [
         new htmlWebpackPlugin({ template: './public/index.html', filename: 'index.html', inject: 'body' }),
         new webpack.HotModuleReplacementPlugin()
-    ]
+    ],
+    resolve: {
+        mainFields: ["browser", "module", "main"]
+    },
+    target: 'electron-main'
 };
