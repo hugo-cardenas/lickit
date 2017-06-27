@@ -33,7 +33,8 @@
     "react-test-renderer": "^15.5.4",
     "tmp": "0.0.31",
     "webpack": "^3.0.0",
-    "webpack-dev-server": "^2.5.0"
+    "webpack-dev-server": "^2.5.0",
+    "webpack-merge": "^4.1.0"
   },
   "main": "src/electron-starter.js",
   "scripts": {
