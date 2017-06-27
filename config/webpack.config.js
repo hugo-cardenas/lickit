@@ -6,11 +6,12 @@ module.exports = {
     devServer: {
         contentBase: 'build',
         hot: true,
-        https: true,
         port: 3000,
         stats: 'minimal'
     },
-    entry: './src/index.js',
+    entry: [
+        './src/index.js'
+    ],
     module: {
         rules: [
             {
