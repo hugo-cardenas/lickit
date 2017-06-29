@@ -13,11 +13,18 @@ let mainWindow;
 
 function createWindow() {
     // Create the browser window.
-    mainWindow = new BrowserWindow({width: 800, height: 600});
+    mainWindow = new BrowserWindow({ width: 800, height: 600 });
     mainWindow.maximize();
 
     // and load the index.html of the app.
     mainWindow.loadURL('http://localhost:3000');
+
+    // mainWindow.loadURL(url.format({
+    //     pathname: path.join(__dirname, 'index.html'),
+    //     protocol: 'file:',
+    //     slashes: true
+    // }));
+
 
     // Open the DevTools.
     mainWindow.webContents.openDevTools();
@@ -32,7 +39,7 @@ function createWindow() {
 }
 
 // TODO Check this
-app.commandLine.appendSwitch("ignore-certificate-errors");
+// app.commandLine.appendSwitch("ignore-certificate-errors");
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

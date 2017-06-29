@@ -1,11 +1,18 @@
+const webpack = require('webpack');
+const merge = require('webpack-merge');
 const { join } = require('path');
 const htmlWebpackPlugin = require('html-webpack-plugin');
-const webpack = require('webpack');
+const baseConfig = require('./webpack.config.base');
 
 module.exports = {
     entry: [
         './src/index.js'
     ],
+    devServer: {
+        hot: true,
+        port: 3000,
+        stats: 'minimal'
+    },
     module: {
         rules: [
             {
@@ -31,6 +38,8 @@ module.exports = {
             template: './public/index.html',
             filename: 'index.html',
             inject: 'body'
-        })
-    ]
+        }),
+        new webpack.HotModuleReplacementPlugin()
+    ],
+    target: 'electron-main'
 };

@@ -26,6 +26,8 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-es2017": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "electron-installer-dmg": "^0.2.1",
+    "electron-packager": "^8.7.2",
     "enzyme": "^2.8.2",
     "html-webpack-plugin": "^2.29.0",
     "jest": "^20.0.4",
@@ -36,12 +38,14 @@
     "webpack-dev-server": "^2.5.0",
     "webpack-merge": "^4.1.0"
   },
-  "main": "src/electron-starter.js",
+  "main": "./src/app",
   "scripts": {
-    "start-react": "webpack-dev-server --config ./config/webpack.config.js",
+    "start-react": "webpack-dev-server --config ./config/webpack.config.dev.js",
     "start-electron": "ELECTRON_DEV=1 electron .",
     "start": "concurrently 'npm run start-react' 'wait-on --config wait-on.config.json http://localhost:3000 && npm run start-electron'",
-    "build": "webpack --config ./config/webpack.config.js",
+    "build": "webpack --config ./config/webpack.config.electron.js",
+    "build-foo": "electron-packager ./build jazz-routine --platform=darwin arch=x64 --overwrite --osxSign=true",
+    "build-bar": "electron-installer-dmg ./jazz-routine-darwin-x64/jazz-routine.app jazz-routine",
     "test": "NODE_PATH=. jest --config=./test/jest.config.json"
   }
 }
