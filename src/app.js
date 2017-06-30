@@ -11,23 +11,34 @@ const url = require('url');
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
+function isDev() {
+    return process.env.ELECTRON_ENV === 'development';
+}
+
 function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({ width: 800, height: 600 });
     mainWindow.maximize();
 
+    // TODO Clean this
+    let appUrl;
+    if (isDev()) {
+        appUrl = 'http://localhost:3000';
+    } else {
+        appUrl = url.format({
+            pathname: path.join(__dirname, 'index.html'),
+            protocol: 'file:',
+            slashes: true
+        });
+    }
+
     // and load the index.html of the app.
-    mainWindow.loadURL('http://localhost:3000');
-
-    // mainWindow.loadURL(url.format({
-    //     pathname: path.join(__dirname, 'index.html'),
-    //     protocol: 'file:',
-    //     slashes: true
-    // }));
-
+    mainWindow.loadURL(appUrl);
 
     // Open the DevTools.
-    mainWindow.webContents.openDevTools();
+    if (isDev()) {
+        mainWindow.webContents.openDevTools();
+    }
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {

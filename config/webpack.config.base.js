@@ -3,9 +3,9 @@ const htmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = {
-    entry: [
-        './src/index.js'
-    ],
+    entry: {
+        bundle: './src/index.js',
+    },
     module: {
         rules: [
             {
@@ -21,16 +21,12 @@ module.exports = {
             }
         ]
     },
-    output: {
-        filename: 'bundle.js',
-        path: join(__dirname, '../build')
-    },
     plugins: [
         new htmlWebpackPlugin({
-            chunks: ['bundle'],
             template: './public/index.html',
             filename: 'index.html',
-            inject: 'body'
+            inject: false
         })
-    ]
+    ],
+    target: 'electron-main'
 };

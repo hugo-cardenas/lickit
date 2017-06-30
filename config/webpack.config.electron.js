@@ -5,7 +5,6 @@ const baseConfig = require('./webpack.config.base');
 
 module.exports = merge(baseConfig, {
     entry: {
-        bundle: './src/index.js',
         app: './src/app.js'
     },
     node: {
@@ -14,6 +13,5 @@ module.exports = merge(baseConfig, {
     output: {
         filename: '[name].js',
         path: join(__dirname, '../build')
-    },
-    target: 'electron-main'
+    }
 });

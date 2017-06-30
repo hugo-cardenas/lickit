@@ -38,14 +38,15 @@
     "webpack-dev-server": "^2.5.0",
     "webpack-merge": "^4.1.0"
   },
-  "main": "./src/app",
+  "main": "app",
   "scripts": {
     "start-react": "webpack-dev-server --config ./config/webpack.config.dev.js",
-    "start-electron": "ELECTRON_DEV=1 electron .",
+    "start-electron": "ELECTRON_ENV=development electron ./src/app",
     "start": "concurrently 'npm run start-react' 'wait-on --config wait-on.config.json http://localhost:3000 && npm run start-electron'",
-    "build": "webpack --config ./config/webpack.config.electron.js",
-    "build-foo": "electron-packager ./build jazz-routine --platform=darwin arch=x64 --overwrite --osxSign=true",
-    "build-bar": "electron-installer-dmg ./jazz-routine-darwin-x64/jazz-routine.app jazz-routine",
+    "build": "npm run build-bundle && npm run build-package && npm run build-dmg",
+    "build-bundle": "webpack --config ./config/webpack.config.electron.js",
+    "build-package": "electron-packager ./build jazz-routine --platform=darwin arch=x64 --overwrite --osxSign=true",
+    "build-dmg": "electron-installer-dmg ./jazz-routine-darwin-x64/jazz-routine.app jazz-routine --overwrite",
     "test": "NODE_PATH=. jest --config=./test/jest.config.json"
   }
 }
