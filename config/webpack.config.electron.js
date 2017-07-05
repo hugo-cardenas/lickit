@@ -9,9 +9,5 @@ module.exports = merge(baseConfig, {
     },
     node: {
         __dirname: false
-    },
-    output: {
-        filename: '[name].js',
-        path: join(__dirname, '../build')
     }
 });

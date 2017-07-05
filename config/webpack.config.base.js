@@ -21,9 +21,13 @@ module.exports = {
             }
         ]
     },
+    output: {
+        filename: '[name].js',
+        path: join(__dirname, '../dist')
+    },
     plugins: [
         new htmlWebpackPlugin({
-            template: './public/index.html',
+            template: './src/template/index.html',
             filename: 'index.html',
             inject: false
         })
