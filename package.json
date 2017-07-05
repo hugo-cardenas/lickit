@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "blob-to-buffer": "^1.2.6",
     "bulma": "^0.4.2",
     "electron": "^1.6.11",
     "electron-json-storage": "^3.0.5",
