@@ -12,7 +12,7 @@ it('define default state', () => {
     const expectedState = [];
 
     expect(lickReducer(undefined, {type: 'invalid action'})).toEqual(expectedState);
-})
+});
 
 it('reduce unknown action', () => {
     const state = Object.freeze([]);
