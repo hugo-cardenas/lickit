@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import TrackSectionForm from './Track/TrackSectionForm';
 import fs from 'fs';
 import toBuffer from 'blob-to-buffer';
+import trackStorage from '../../track/storage';
 
 class LickForm extends Component {
     constructor(props) {
@@ -142,17 +143,12 @@ class LickForm extends Component {
 
     handleRecordTrack(blob) {
         // TODO Implement correctly within Redux on save
-        toBuffer(blob, (err, buffer) => {
-            if (err) console.error(err);
-            fs.writeFile('/tmp/test.wav', buffer, (err) => {
-                if (err) console.error(err);
-            });
-        });
+        // trackStorage.saveBlob(blob);
 
         const url = URL.createObjectURL(blob);
         let tracks = [...this.getLickState().tracks];
         // TODO Decide how to save non-stored tracks (with, without id, etc)
-        tracks.push({id: url, link: url});
+        tracks.push({blob, id: url, link: url});
         this.setLickState({tracks});
     }
 

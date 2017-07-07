@@ -1,6 +1,6 @@
 import path from 'path';
 import electron from 'electron';
-import createUrlResolver from './resolver';
+import createUrlResolver from './urlResolver';
 
 const userDataDir = (electron.app || electron.remote.app).getPath('userData');
 

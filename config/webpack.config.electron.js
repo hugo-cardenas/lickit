@@ -6,8 +6,5 @@ const baseConfig = require('./webpack.config.base');
 module.exports = merge(baseConfig, {
     entry: {
         app: './src/app.js'
-    },
-    node: {
-        __dirname: false
     }
 });

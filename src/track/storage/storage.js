@@ -8,11 +8,15 @@ import pify from 'pify';
 const fs = pify(libFs);
 const toBuffer = pify(libToBuffer);
 
+function rand(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
 function createTrackStorage(resolveUrl) {
 
     async function saveBlob(blob) {
-        // TODO Generate proper id
-        const id = 42;
+        // TODO Hack, Generate proper id
+        const id = rand(1,9999999999999);
         try {
             const buffer = await toBuffer(blob);
             const path = resolveUrl(id);

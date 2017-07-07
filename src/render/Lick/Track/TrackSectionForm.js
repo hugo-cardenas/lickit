@@ -2,18 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './TrackSection.css';
 import Recorder from './Recorder/Recorder';
+import resolveUrl from '../../../track/urlResolver';
 
 function TrackSectionForm(props) {
     const {tracks, handleDeleteTrack, handleRecordTrack} = props;
 
     return <div className="track-container">
         <div className="track-list">
-            {tracks.map(track => <div key={track.link} className="track level">
+            {tracks.map(track => <div key={track.id} className="track level">
                 <div>
                     <audio
                         className="level-left"
                         controls
-                        src={track.link}>
+                        src={track.link ? track.link : resolveUrl(track.id)}>
                         Your browser does not support the
                         <code>audio</code>
                         element.
