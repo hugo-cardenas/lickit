@@ -28,7 +28,7 @@ class Lick extends Component {
             handleEdit: () => this.setMode('edit'),
             handleDelete: this.props.handleDelete
         }
-        return <LickView {...props}/>
+        return <LickView {...props}/>;
     }
 
     renderForm() {
@@ -41,7 +41,7 @@ class Lick extends Component {
             handleCancel: () => this.setMode('view'),
             handleDelete: this.props.handleDelete
         };
-        return <LickForm {...props}/>
+        return <LickForm {...props}/>;
     }
 
     setMode(mode) {

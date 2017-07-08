@@ -57,4 +57,4 @@ export default Recorder;
 
 Recorder.propTypes = {
     handleRecordTrack: PropTypes.func.isRequired
-}
+};

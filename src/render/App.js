@@ -3,7 +3,6 @@ import 'bulma/css/bulma.css';
 import './App.css';
 import Lick from './Lick/Lick';
 import _ from 'lodash';
-
 import {createLick, updateLick, deleteLick} from '../state/actions/lick';
 import {connect} from 'react-redux';
 
