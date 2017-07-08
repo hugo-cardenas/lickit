@@ -1,6 +1,5 @@
 import React from 'react';
 import './TrackSection.css';
-import resolveUrl from '../../../track/urlResolver';
 
 function TrackSectionView(props) {
     const {tracks} = props;
@@ -11,7 +10,7 @@ function TrackSectionView(props) {
                 <audio
                     className="level-left"
                     controls
-                    src={'file://' + resolveUrl(track.id)}>
+                    src={track.link}>
                     Your browser does not support the
                     <code>audio</code>
                     element.

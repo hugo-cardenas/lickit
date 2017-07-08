@@ -2,9 +2,6 @@ import React, {Component} from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import TrackSectionForm from './Track/TrackSectionForm';
-import fs from 'fs';
-import toBuffer from 'blob-to-buffer';
-import trackStorage from '../../track/storage';
 
 class LickForm extends Component {
     constructor(props) {
@@ -142,9 +139,6 @@ class LickForm extends Component {
     }
 
     handleRecordTrack(blob) {
-        // TODO Implement correctly within Redux on save
-        // trackStorage.saveBlob(blob);
-
         const url = URL.createObjectURL(blob);
         let tracks = [...this.getLickState().tracks];
         // TODO Decide how to save non-stored tracks (with, without id, etc)

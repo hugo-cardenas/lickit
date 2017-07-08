@@ -12,8 +12,7 @@ function rand(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-function createTrackStorage(resolveUrl) {
-
+export default function createTrackStorage(resolveUrl) {
     async function saveBlob(blob) {
         // TODO Hack, Generate proper id
         const id = rand(1,9999999999999);
@@ -42,5 +41,3 @@ function createTrackStorage(resolveUrl) {
 
     return { saveBlob };
 }
-
-export default createTrackStorage;

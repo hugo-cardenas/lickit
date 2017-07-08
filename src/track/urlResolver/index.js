@@ -1,12 +1,23 @@
-import path from 'path';
 import electron from 'electron';
+import path from 'path';
 import createUrlResolver from './urlResolver';
 
-const userDataDir = (electron.app || electron.remote.app).getPath('userData');
+let urlResolver;
 
-const config = {
-    extension: 'wav',
-    dir: path.join(userDataDir, 'tracks')
-};
+export function getUrlResolver() {
+    if (!urlResolver) {
+        urlResolver = createUrlResolver(getConfig());
+    }
+    return urlResolver;
+}
 
-export default createUrlResolver(config);
+function getConfig() {
+    return {
+        extension: 'wav',
+        dir: path.join(getUserDataDir(), 'tracks')
+    };
+}
+
+function getUserDataDir() {
+    return (electron.app || electron.remote.app).getPath('userData');
+}
