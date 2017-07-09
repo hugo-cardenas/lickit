@@ -9,11 +9,13 @@ function mapStateToProps(state) {
 
 function mapLickStateToProps(lickState) {
     return {
+        mode: lickState.mode ? lickState.mode : undefined,
         lick: {
             ...lickState.lick,
             tracks: lickState.lick.tracks.map(track => {
                 return {
                     ...track,
+                    // Calculate track urls to filesystem from their id
                     url: 'file://' + getUrlResolver()(track.id)
                 };
             })

@@ -4,9 +4,7 @@ import { LICK_CREATE, LICK_DELETE } from 'src/state/actions/types';
 
 // Mock the call electron.app.getPath('userData') - TODO extract to common
 jest.mock('electron', () => {
-    const tmp = require('tmp');
-
-    const electron = {
+    return {
         app: {
             getPath: name => {
                 if (name === 'userData') {
@@ -16,23 +14,13 @@ jest.mock('electron', () => {
             }
         }
     };
-
-    let userDataPath;
-
-    function getUserDataPath() {
-        if (!userDataPath) {
-            userDataPath = tmp.dirSync({ unsafeCleanup: true }).name;
-        }
-        return userDataPath;
-    }
-
-    return electron;
 });
 
 it('map state to props', () => {
     const state = {
         licks: [
             {
+                mode: 'edit',
                 lick: {
                     id: 42,
                     description: 'Foo bar 42',
@@ -46,6 +34,7 @@ it('map state to props', () => {
     const expectedProps = {
         licks: [
             {
+                mode: 'edit',
                 lick: {
                     id: 42,
                     description: 'Foo bar 42',
@@ -72,7 +61,7 @@ it('map dispatch to props - update lick', async() => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
-    const lick = {foo: 'bar'};
+    const lick = { foo: 'bar' };
     await (props.handleSave(lick));
 
     expect(dispatch.mock.calls.length).toBe(1);

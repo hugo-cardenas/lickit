@@ -20,8 +20,8 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
-        "web-preferences": {
-            "web-security": false
+        webPreferences: {
+            webSecurity: false
         }
     });
     mainWindow.maximize();
