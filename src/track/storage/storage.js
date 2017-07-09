@@ -15,7 +15,7 @@ function rand(min, max) {
 export default function createTrackStorage(resolveUrl) {
     async function saveBlob(blob) {
         // TODO Hack, Generate proper id
-        const id = rand(1,9999999999999);
+        const id = rand(1, 9999999999999);
         try {
             const buffer = await toBuffer(blob);
             const path = resolveUrl(id);
@@ -24,6 +24,15 @@ export default function createTrackStorage(resolveUrl) {
             throw new VError(error, 'Unable to save blob');
         }
         return id;
+    }
+
+    async function deleteTrack(id) {
+        const path = resolveUrl(id);
+        try {
+            await fs.unlink(path);
+        } catch (error) {
+            throw new VError(error, 'Unable to delete track with id %d', id);
+        }
     }
 
     async function saveBuffer(trackPath, buffer) {
@@ -39,5 +48,5 @@ export default function createTrackStorage(resolveUrl) {
         }
     }
 
-    return { saveBlob };
+    return { saveBlob, deleteTrack };
 }

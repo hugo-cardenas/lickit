@@ -14,6 +14,8 @@ export default function getActions(trackStorage) {
         return (dispatch) => {
             // TODO Validate lick here? - NO. Validate only the required part for saving tracks
 
+            // TODO Filter also tracks missing from the new state and delete them from filesystem
+            // TODO Implement storage.deleteTrack(id)
             const tracks = lick.tracks;
             return Promise.all(tracks.map(track => saveTrack(track)))
                 .then(tracks => {
