@@ -154,7 +154,7 @@ class LickForm extends Component {
 
     handleCreateTag(event) {
         const tag = event.target.value;
-        if (event.key !== 'Enter' || tag === '') {
+        if (event.key !== 'Enter' || tag === '') {
             return;
         }
         
@@ -185,11 +185,11 @@ export default LickForm;
 
 LickForm.propTypes = {
     lick: PropTypes.shape({
-        id: PropTypes.number,
-        description: PropTypes.string,
-        tracks: PropTypes.arrayOf(PropTypes.object),
-        tags: PropTypes.arrayOf(PropTypes.string)
-    }),
+        id: PropTypes.number.isRequired,
+        description: PropTypes.string.isRequired,
+        tracks: PropTypes.arrayOf(PropTypes.object).isRequired,
+        tags: PropTypes.arrayOf(PropTypes.string).isRequired
+    }).isRequired,
     handleSave: PropTypes.func.isRequired,
     handleCancel: PropTypes.func.isRequired,
     handleDelete: PropTypes.func.isRequired

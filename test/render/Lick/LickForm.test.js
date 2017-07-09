@@ -45,14 +45,14 @@ test('render tracks', () => {
 test('delete track', () => {
     let props = getTestProps();
     props.lick.tracks = [
-        { id: 10 }, { id: 20 }, { id: 30 }
+        { id: 10, url: 'foo.abc' }, { id: 20, url: 'bar.abc' }, { id: 30, url: 'baz.abc' }
     ];
     const component = shallow(<LickForm {...props}/>);
 
     const handleDeleteTrack = component.find('TrackSectionForm').prop('handleDeleteTrack');
     handleDeleteTrack(20);
 
-    const expectedTracks = [{ id: 10 }, { id: 30 }];
+    const expectedTracks = [{ id: 10, url: 'foo.abc' }, { id: 30, url: 'baz.abc' }];
     expect(component.find('TrackSectionForm').prop('tracks')).toEqual(expectedTracks);
 });
 
@@ -198,7 +198,7 @@ function getTestProps() {
             id: 42,
             description: 'Foobar baz',
             tracks: [
-                { id: 10 }, { id: 20 }
+                { id: 10, url: 'foo.baz' }, { id: 20, url: 'bar.baz' }
             ],
             tags: [
               'foo', 'bar', 'baz'

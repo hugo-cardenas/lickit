@@ -37,6 +37,15 @@ it('renders without crashing', () => {
 
     ReactDOM.render(
         <Provider store={store}>
-      <App/>
+      <App {...getProps()}/>
   </Provider>, div);
 });
+
+function getProps() {
+    return {
+        licks: [],
+        handleCreate: () => {},
+        handleSave: () => {},
+        handleDelete: () => {}
+    };
+}

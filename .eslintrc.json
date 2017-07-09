@@ -5,6 +5,7 @@
         "es6": true,
         "node": true
     },
+    "extends": ["eslint:recommended", "plugin:react/recommended"],
     "rules": {
         "constructor-super": "warn",
         "no-const-assign": "warn",
