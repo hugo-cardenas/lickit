@@ -17,11 +17,7 @@ export default function getActions(trackStorage) {
             // TODO Handle what to do if only some of the promises fail 
             // (e.g. deletes successfully all tracks except one)
 
-            // TODO May write a Redux selector for this http://redux.js.org/docs/recipes/ComputingDerivedData.html
-
-            const storedTracks = getState().licks
-                .find(lickState => lickState.lick.id === lick.id)
-                .lick.tracks;
+            const storedTracks = getStoredTracks(getState(), lick.id);
 
             let tracks;
             try {
@@ -36,7 +32,7 @@ export default function getActions(trackStorage) {
             }
             return dispatch({
                 type: LICK_UPDATE,
-                lick: {...lick, tracks}
+                lick: { ...lick, tracks }
             });
         };
     }
@@ -55,9 +51,26 @@ export default function getActions(trackStorage) {
         trackStorage.deleteTrack(id);
     }
 
+    // TODO Delete also all lick's tracks
+    // TODO Handle errors when deleting tracks (some may fail, some may succeed)
     function deleteLick(id) {
-        return { type: LICK_DELETE, id };
+        return async(dispatch, getState) => {
+            const storedTracks = getStoredTracks(getState(), id);
+            try {
+                await Promise.all(storedTracks.map(track => deleteTrack(track.id)));
+            } catch (error) {
+                throw error;
+            }
+            return dispatch({ type: LICK_DELETE, id });
+        };
     }
 
     return { createLick, updateLick, deleteLick };
+}
+
+// TODO May write a Redux selector for this http://redux.js.org/docs/recipes/ComputingDerivedData.html
+function getStoredTracks(state, lickId) {
+    return state.licks
+        .find(lickState => lickState.lick.id === lickId)
+        .lick.tracks;
 }

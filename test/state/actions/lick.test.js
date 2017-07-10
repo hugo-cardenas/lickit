@@ -1,4 +1,4 @@
-import { LICK_UPDATE } from 'src/state/actions/types';
+import { LICK_UPDATE, LICK_DELETE } from 'src/state/actions/types';
 import getActions from 'src/state/actions/lick/lick';
 
 // TODO Test error
@@ -72,5 +72,47 @@ it('update lick', async() => {
     expect(dispatch).toHaveBeenCalledWith({
         type: LICK_UPDATE,
         lick: expectedLick
+    });
+});
+
+it('delete lick', async() => {
+    const state = {
+        licks: [
+            { lick: { id: 512 } },
+            {
+                lick: {
+                    id: 1024,
+                    tracks: [
+                        { id: 40 }, // To be deleted
+                        { id: 42 } // To be deleted
+                    ]
+                }
+            },
+            { lick: { id: 2048 } }
+        ]
+    };
+
+    const lickId = 1024;
+
+    const storage = {
+        deleteTrack: jest.fn()
+            .mockReturnValueOnce(Promise.resolve())
+            .mockReturnValueOnce(Promise.resolve())
+    };
+    const { deleteLick } = getActions(storage);
+
+    const action = deleteLick(lickId);
+    const dispatch = jest.fn();
+    const getState = jest.fn().mockReturnValueOnce(state);
+    await action(dispatch, getState);
+
+    expect(storage.deleteTrack).toHaveBeenCalledTimes(2);
+    expect(storage.deleteTrack).toHaveBeenCalledWith(40);
+    expect(storage.deleteTrack).toHaveBeenCalledWith(42);
+
+    expect(dispatch).toHaveBeenCalledTimes(1);
+    expect(dispatch).toHaveBeenCalledWith({
+        type: LICK_DELETE,
+        id: lickId
     });
 });

@@ -1,6 +1,6 @@
 import { mapStateToProps, mapDispatchToProps } from 'src/map';
-import { updateLick } from 'src/state/actions/lick';
-import { LICK_CREATE, LICK_DELETE } from 'src/state/actions/types';
+import { updateLick, deleteLick } from 'src/state/actions/lick';
+import { LICK_CREATE } from 'src/state/actions/types';
 
 // Mock the call electron.app.getPath('userData') - TODO extract to common
 jest.mock('electron', () => {
@@ -53,8 +53,8 @@ it('map dispatch to props - create lick', () => {
     const props = mapDispatchToProps(dispatch);
 
     props.handleCreate();
-    expect(dispatch.mock.calls.length).toBe(1);
-    expect(dispatch.mock.calls[0][0]).toEqual({ type: LICK_CREATE });
+    expect(dispatch).toHaveBeenCalledTimes(1);
+    expect(dispatch).toHaveBeenCalledWith({type: LICK_CREATE});
 });
 
 it('map dispatch to props - update lick', async() => {
@@ -64,16 +64,18 @@ it('map dispatch to props - update lick', async() => {
     const lick = { foo: 'bar' };
     await (props.handleSave(lick));
 
-    expect(dispatch.mock.calls.length).toBe(1);
+    expect(dispatch).toHaveBeenCalledTimes(1);
     // Tricky thing - as updateLick returns a thunk, we just compare the functions returned
     expect(dispatch.mock.calls[0][0].toString()).toEqual(updateLick(dispatch).toString());
 });
 
-it('map dispatch to props - delete lick', () => {
+it('map dispatch to props - delete lick', async() => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
-    props.handleDelete(42);
-    expect(dispatch.mock.calls.length).toBe(1);
-    expect(dispatch.mock.calls[0][0]).toEqual({ type: LICK_DELETE, id: 42 });
+    await (props.handleDelete(42));
+
+    expect(dispatch).toHaveBeenCalledTimes(1);
+    // Tricky thing - as updateLick returns a thunk, we just compare the functions returned
+    expect(dispatch.mock.calls[0][0].toString()).toEqual(deleteLick(dispatch).toString());
 });
