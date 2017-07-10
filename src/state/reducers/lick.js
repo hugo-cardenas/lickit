@@ -17,7 +17,7 @@ export default function (state = [], action) {
         default:
             return state;
     }
-};
+}
 
 function createLick(state) {
     return [

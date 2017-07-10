@@ -141,6 +141,7 @@ class LickForm extends Component {
     handleRecordTrack(blob) {
         const url = URL.createObjectURL(blob);
         let tracks = [...this.getLickState().tracks];
+        // TODO Do in a better way
         // Set temporarily url as id until it gets saved (in order to be able to delete unsaved tracks)
         tracks.push({blob, id: url, url: url});
         this.setLickState({tracks});
