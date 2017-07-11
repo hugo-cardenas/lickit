@@ -28,6 +28,7 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-es2017": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "codecov": "^2.2.0",
     "electron-installer-dmg": "^0.2.1",
     "electron-packager": "^8.7.2",
     "enzyme": "^2.8.2",
@@ -49,6 +50,7 @@
     "build-bundle": "webpack --config ./config/webpack.config.electron.js",
     "build-package": "electron-packager . jazz-routine --platform=darwin --arch=x64 --overwrite --osxSign=true --out=./pkg --ignore='.babelrc|.gitignore|.jsbeautifyrc|config|coverage|LICENSE|node_modules|public|README.md|src|test'",
     "build-dmg": "electron-installer-dmg ./pkg/jazz-routine-darwin-x64/jazz-routine.app ./pkg/jazz-routine --overwrite",
-    "test": "NODE_PATH=. jest --config=./test/jest.config.json"
+    "test": "NODE_PATH=. jest --config=./test/jest.config.json",
+    "test-ci": "npm test -- --coverage && codecov"
   }
 }
