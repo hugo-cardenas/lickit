@@ -20,13 +20,13 @@ test('render tracks', () => {
     expect(trackElement.hasClass('track')).toBe(true);
     expect(trackElement.hasClass('level')).toBe(true);
 
-    expect(trackElement.key()).toBe(tracks[i].link);
+    expect(trackElement.key()).toBe(tracks[i].url);
 
     const audio = trackElement.find('audio');
     expect(audio).toHaveLength(1);
-    expect(audio.hasClass('level-left')).toBe(true)
+    expect(audio.hasClass('level-left')).toBe(true);
     expect(audio.prop('controls')).toBeTruthy();
-    expect(audio.prop('src')).toBe(tracks[i].link)
+    expect(audio.prop('src')).toBe(tracks[i].url);
   });
 });
 
@@ -50,9 +50,9 @@ test('delete track', () => {
 function getProps(){
   return {
     tracks: [
-      {id: 10, link: 'http://foo.mp3'},
-      {id: 20, link: 'http://bar.mp3'},
-      {id: 30, link: 'http://baz.mp3'},
+      {id: 10, url: 'http://foo.mp3'},
+      {id: 20, url: 'http://bar.mp3'},
+      {id: 30, url: 'http://baz.mp3'},
     ],
     handleDeleteTrack: () => {},
     handleRecordTrack: () => {},

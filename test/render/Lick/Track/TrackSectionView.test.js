@@ -4,9 +4,9 @@ import TrackSectionView from 'src/render/Lick/Track/TrackSectionView';
 
 test('render tracks', () => {
   const tracks = [
-    {id: 1, link: 'http://foo.mp3'},
-    {id: 2, link: 'http://bar.mp3'},
-    {id: 3, link: 'http://baz.mp3'},
+    {id: 1, url: 'http://foo.mp3'},
+    {id: 2, url: 'http://bar.mp3'},
+    {id: 3, url: 'http://baz.mp3'},
   ];
   const props = {tracks};
   const component = shallow(<TrackSectionView {...props}/>);
@@ -28,8 +28,8 @@ test('render tracks', () => {
 
     const audio = trackElement.find('audio');
     expect(audio).toHaveLength(1);
-    expect(audio.hasClass('level-left')).toBe(true)
+    expect(audio.hasClass('level-left')).toBe(true);
     expect(audio.prop('controls')).toBeTruthy();
-    expect(audio.prop('src')).toBe(tracks[i].link)
+    expect(audio.prop('src')).toBe(tracks[i].url);
   });
 });

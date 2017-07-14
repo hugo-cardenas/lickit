@@ -21,6 +21,10 @@ module.exports = {
             }
         ]
     },
+    node: {
+        __dirname: false,
+        __filename: false
+    },
     output: {
         filename: '[name].js',
         path: join(__dirname, '../dist')

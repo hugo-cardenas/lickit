@@ -8,7 +8,7 @@ class Lick extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            mode: this.props.mode || 'view'
+            mode: this.props.mode || 'view'
         };
     }
 
@@ -28,7 +28,7 @@ class Lick extends Component {
             handleEdit: () => this.setMode('edit'),
             handleDelete: this.props.handleDelete
         }
-        return <LickView {...props}/>
+        return <LickView {...props}/>;
     }
 
     renderForm() {
@@ -41,7 +41,7 @@ class Lick extends Component {
             handleCancel: () => this.setMode('view'),
             handleDelete: this.props.handleDelete
         };
-        return <LickForm {...props}/>
+        return <LickForm {...props}/>;
     }
 
     setMode(mode) {
@@ -51,13 +51,13 @@ class Lick extends Component {
 
 export default Lick;
 
-LickForm.propTypes = {
+Lick.propTypes = {
     lick: PropTypes.shape({
-        id: PropTypes.number,
-        description: PropTypes.string,
-        tracks: PropTypes.arrayOf(PropTypes.object),
-        tags: PropTypes.arrayOf(PropTypes.string)
-    }),
+        id: PropTypes.number.isRequired,
+        description: PropTypes.string.isRequired,
+        tracks: PropTypes.arrayOf(PropTypes.object).isRequired,
+        tags: PropTypes.arrayOf(PropTypes.string).isRequired
+    }).isRequired,
     handleSave: PropTypes.func.isRequired,
     handleDelete: PropTypes.func.isRequired,
     mode: PropTypes.oneOf(['edit', 'view'])

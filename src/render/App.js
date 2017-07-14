@@ -1,14 +1,12 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import 'bulma/css/bulma.css';
 import './App.css';
 import Lick from './Lick/Lick';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-import {createLick, updateLick, deleteLick} from '../state/actions/lick';
-import {connect} from 'react-redux';
-
 function renderLick(lickState, handleDelete, handleSave) {
-  return <Lick
+    return <Lick
     lick={lickState.lick}
     handleDelete={handleDelete}
     handleSave={handleSave}
@@ -16,25 +14,25 @@ function renderLick(lickState, handleDelete, handleSave) {
 }
 
 function renderRow(chunk, handleDelete, handleSave) {
-  const chunkKey = chunk
-    .map(lickState => lickState.lick.id)
-    .join('-');
-  return (
-    <div key={chunkKey} className="columns">
-      {chunk.map(lickState => {
-        return <div key={lickState.lick.id} className="column is-one-third">{renderLick(lickState, handleDelete, handleSave)}</div>
-      })}
-    </div>
-  );
+    const chunkKey = chunk
+        .map(lickState => lickState.lick.id)
+        .join('-');
+    return (
+        <div key={chunkKey} className="columns">
+        {chunk.map(lickState => {
+          return <div key={lickState.lick.id} className="column is-one-third">{renderLick(lickState, handleDelete, handleSave)}</div>
+        })}
+        </div>
+    );
 }
 
 class App extends Component {
-  render() {
-    const {licks, handleDelete, handleSave, handleCreate} = this.props;
-    const chunks = _.chunk(licks, 3);
+    render() {
+        const { licks, handleDelete, handleSave, handleCreate } = this.props;
+        const chunks = _.chunk(licks, 3);
 
-    return (
-      <div className="container main-container">
+        return (
+            <div className="container main-container">
         <header className="main-header">
           <h1 className="title">JazzRoutine</h1>
         </header>
@@ -52,20 +50,15 @@ class App extends Component {
           </div>
         </div>
       </div>
-    );
-  }
+        );
+    }
 }
 
-function mapStateToProps(state, props) {
-  return {licks: state.licks}
-}
+export default App;
 
-function mapDispatchToProps(dispatch) {
-  return {
-    handleCreate: () => dispatch(createLick()),
-    handleSave: (lick) => dispatch(updateLick(lick)),
-    handleDelete: (id) => dispatch(deleteLick(id))
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+App.propTypes = {
+    licks: PropTypes.arrayOf(PropTypes.object).isRequired,
+    handleCreate: PropTypes.func.isRequired,
+    handleSave: PropTypes.func.isRequired,
+    handleDelete: PropTypes.func.isRequired
+};

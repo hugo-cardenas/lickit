@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import TrackSectionForm from './Track/TrackSectionForm';
-import fs from 'fs';
-import toBuffer from 'blob-to-buffer';
 
 class LickForm extends Component {
     constructor(props) {
@@ -141,18 +139,11 @@ class LickForm extends Component {
     }
 
     handleRecordTrack(blob) {
-        // TODO Implement correctly within Redux on save
-        toBuffer(blob, (err, buffer) => {
-            if (err) console.error(err);
-            fs.writeFile('/tmp/test.wav', buffer, (err) => {
-                if (err) console.error(err);
-            });
-        });
-
         const url = URL.createObjectURL(blob);
         let tracks = [...this.getLickState().tracks];
-        // TODO Decide how to save non-stored tracks (with, without id, etc)
-        tracks.push({id: url, link: url});
+        // TODO Do in a better way
+        // Set temporarily url as id until it gets saved (in order to be able to delete unsaved tracks)
+        tracks.push({blob, id: url, url: url});
         this.setLickState({tracks});
     }
 
@@ -164,7 +155,7 @@ class LickForm extends Component {
 
     handleCreateTag(event) {
         const tag = event.target.value;
-        if (event.key !== 'Enter' || tag === '') {
+        if (event.key !== 'Enter' || tag === '') {
             return;
         }
         
@@ -195,11 +186,11 @@ export default LickForm;
 
 LickForm.propTypes = {
     lick: PropTypes.shape({
-        id: PropTypes.number,
-        description: PropTypes.string,
-        tracks: PropTypes.arrayOf(PropTypes.object),
-        tags: PropTypes.arrayOf(PropTypes.string)
-    }),
+        id: PropTypes.number.isRequired,
+        description: PropTypes.string.isRequired,
+        tracks: PropTypes.arrayOf(PropTypes.object).isRequired,
+        tags: PropTypes.arrayOf(PropTypes.string).isRequired
+    }).isRequired,
     handleSave: PropTypes.func.isRequired,
     handleCancel: PropTypes.func.isRequired,
     handleDelete: PropTypes.func.isRequired

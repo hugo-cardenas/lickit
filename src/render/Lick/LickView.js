@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {linkifier} from 'react-linkifier';
 import TrackSectionView from './Track/TrackSectionView';
@@ -47,3 +48,14 @@ function renderFooter(id, handleEdit, handleDelete) {
         </a>
     </footer>;
 }
+
+LickView.propTypes = {
+    lick: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        description: PropTypes.string.isRequired,
+        tracks: PropTypes.arrayOf(PropTypes.object).isRequired,
+        tags: PropTypes.arrayOf(PropTypes.string).isRequired
+    }).isRequired,
+    handleEdit: PropTypes.func.isRequired,
+    handleDelete: PropTypes.func.isRequired
+};

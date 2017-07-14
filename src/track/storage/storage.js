@@ -8,11 +8,14 @@ import pify from 'pify';
 const fs = pify(libFs);
 const toBuffer = pify(libToBuffer);
 
-function createTrackStorage(resolveUrl) {
+function rand(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+}
 
+export default function createTrackStorage(resolveUrl) {
     async function saveBlob(blob) {
-        // TODO Generate proper id
-        const id = 42;
+        // TODO Hack, Generate proper id
+        const id = rand(1, 9999999999999);
         try {
             const buffer = await toBuffer(blob);
             const path = resolveUrl(id);
@@ -21,6 +24,15 @@ function createTrackStorage(resolveUrl) {
             throw new VError(error, 'Unable to save blob');
         }
         return id;
+    }
+
+    async function deleteTrack(id) {
+        const path = resolveUrl(id);
+        try {
+            await fs.unlink(path);
+        } catch (error) {
+            throw new VError(error, 'Unable to delete track with id %d', id);
+        }
     }
 
     async function saveBuffer(trackPath, buffer) {
@@ -36,7 +48,5 @@ function createTrackStorage(resolveUrl) {
         }
     }
 
-    return { saveBlob };
+    return { saveBlob, deleteTrack };
 }
-
-export default createTrackStorage;

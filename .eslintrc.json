@@ -5,13 +5,7 @@
         "es6": true,
         "node": true
     },
-    "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
-        },
-        "ecmaVersion": 8,
-        "sourceType": "module"
-    },
+    "extends": ["eslint:recommended", "plugin:react/recommended"],
     "rules": {
         "constructor-super": "warn",
         "no-const-assign": "warn",
@@ -21,5 +15,16 @@
         "no-unused-vars": "warn",
         "semi": ["warn", "always"],
         "valid-typeof": "warn"
-    }
+    },
+    "parserOptions": {
+        "ecmaFeatures": {
+            "experimentalObjectRestSpread": true,
+            "jsx": true
+        },
+        "ecmaVersion": 8,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react"
+    ]
 }

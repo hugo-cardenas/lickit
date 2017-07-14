@@ -4,16 +4,16 @@ import './TrackSection.css';
 import Recorder from './Recorder/Recorder';
 
 function TrackSectionForm(props) {
-    const {tracks, handleDeleteTrack, handleRecordTrack} = props;
+    const { tracks, handleDeleteTrack, handleRecordTrack } = props;
 
     return <div className="track-container">
         <div className="track-list">
-            {tracks.map(track => <div key={track.link} className="track level">
+            {tracks.map(track => <div key={track.url} className="track level">
                 <div>
                     <audio
                         className="level-left"
                         controls
-                        src={track.link}>
+                        src={track.url}>
                         Your browser does not support the
                         <code>audio</code>
                         element.
@@ -37,7 +37,11 @@ function renderRecorder(handleRecordTrack) {
 }
 
 TrackSectionForm.propTypes = {
-    tracks: PropTypes.arrayOf(PropTypes.object).isRequired,
+    tracks: PropTypes.arrayOf(PropTypes.shape({
+        // Can be either number (real id) or string (url - temporary id) - TODO Do it in a better way
+        id: PropTypes.isRequired,
+        url: PropTypes.string.isRequired
+    })).isRequired,
     handleDeleteTrack: PropTypes.func.isRequired,
     handleRecordTrack: PropTypes.func.isRequired
-}
+};

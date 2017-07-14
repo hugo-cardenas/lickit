@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import './TrackSection.css';
 
@@ -10,7 +11,7 @@ function TrackSectionView(props) {
                 <audio
                     className="level-left"
                     controls
-                    src={track.link}>
+                    src={track.url}>
                     Your browser does not support the
                     <code>audio</code>
                     element.
@@ -21,3 +22,10 @@ function TrackSectionView(props) {
 }
 
 export default TrackSectionView;
+
+TrackSectionView.propTypes = {
+    tracks: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        url: PropTypes.string.isRequired
+    })).isRequired
+};
