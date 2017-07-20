@@ -1,6 +1,9 @@
 const electron = require('electron');
 // Module to control application life.
 const app = electron.app;
+const Menu = electron.Menu;
+const createMenuTemplate = require('./electron/menuTemplate');
+
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
 
@@ -53,6 +56,8 @@ function createWindow() {
         // when you should delete the corresponding element.
         mainWindow = null;
     });
+
+    Menu.setApplicationMenu(Menu.buildFromTemplate(createMenuTemplate(app)));
 }
 
 // TODO Check this
