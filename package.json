@@ -1,5 +1,5 @@
 {
-  "name": "jazzroutine-frontend",
+  "name": "lickit",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -51,8 +51,8 @@
     "start": "concurrently 'npm run start-react' 'wait-on --config wait-on.config.json http://localhost:3000 && npm run start-electron'",
     "build": "npm run build-bundle && npm run build-package && npm run build-dmg",
     "build-bundle": "webpack --config ./config/webpack.config.electron.js",
-    "build-package": "electron-packager . jazz-routine --platform=darwin --arch=x64 --overwrite --osxSign=true --out=./pkg --ignore='.babelrc|.gitignore|.jsbeautifyrc|config|coverage|LICENSE|node_modules|public|README.md|src|test'",
-    "build-dmg": "electron-installer-dmg ./pkg/jazz-routine-darwin-x64/jazz-routine.app ./pkg/jazz-routine --overwrite",
+    "build-package": "electron-packager . Lickit --platform=darwin --arch=x64 --overwrite --osxSign=true --out=./pkg --ignore='.babelrc|.gitignore|.jsbeautifyrc|config|coverage|LICENSE|node_modules|public|README.md|src|test'",
+    "build-dmg": "electron-installer-dmg ./pkg/Lickit-darwin-x64/Lickit.app ./pkg/Lickit --overwrite",
     "test": "NODE_PATH=. jest --config=./test/jest.config.json",
     "test-ci": "npm test -- --coverage && codecov"
   }
