@@ -2,7 +2,8 @@ import VError from 'verror';
 import {
     LICK_CREATE,
     LICK_UPDATE,
-    LICK_DELETE
+    LICK_DELETE,
+    LICK_CHANGE_MODE
 } from '../types';
 
 export default function getActions(trackStorage) {
@@ -68,7 +69,11 @@ export default function getActions(trackStorage) {
         };
     }
 
-    return { createLick, updateLick, deleteLick };
+    function changeLickMode(id, mode) {
+        return { type: LICK_CHANGE_MODE, id, mode };
+    }
+
+    return { createLick, updateLick, deleteLick, changeLickMode };
 }
 
 // TODO May write a Redux selector for this http://redux.js.org/docs/recipes/ComputingDerivedData.html

@@ -1,11 +1,24 @@
 import _ from 'lodash';
 import VError from 'verror';
+import { assertErrorContainsString } from '../../helper/assertionHelper';
 import lickReducer from 'src/state/reducers/lick';
 import {
     LICK_CREATE,
     LICK_UPDATE,
-    LICK_DELETE
+    LICK_DELETE,
+    LICK_CHANGE_MODE
 } from 'src/state/actions/types';
+import {
+    LICK_MODE_EDIT,
+    LICK_MODE_VIEW
+} from 'src/state/actions/lick/modes';
+import { changeLickMode } from 'src/state/actions/lick';
+
+jest.mock('electron', () => {
+    return {
+        app: { getPath: () => 'foobar' }
+    };
+});
 
 it('define default state', () => {
     const expectedState = [];
@@ -129,10 +142,10 @@ invalidLicks.forEach((entry, i) => {
             lickReducer(state, { type: LICK_UPDATE, lick });
             throw new Error();
         } catch (error) {
-            expect(error.message).toEqual(expect.stringContaining('Unable to reduce ' + LICK_UPDATE));
-            expect(error.message).toEqual(expect.stringContaining(JSON.stringify(lick)));
+            assertErrorContainsString(error, 'Unable to reduce ' + LICK_UPDATE);
+            assertErrorContainsString(error, JSON.stringify(lick));
             invalidProperties.forEach(property => {
-                expect(VError.cause(error).message).toEqual(expect.stringContaining(property));
+                assertErrorContainsString(error, property);
             });
         }
     });
@@ -155,9 +168,9 @@ it('update lick, id not found', () => {
         lickReducer(state, { type: LICK_UPDATE, lick });
         throw new Error();
     } catch (error) {
-        expect(error.message).toEqual(expect.stringContaining('Unable to reduce ' + LICK_UPDATE));
-        expect(error.message).toEqual(expect.stringContaining(JSON.stringify(lick)));
-        expect(error.message).toEqual(expect.stringContaining('Id 20 not found'));
+        assertErrorContainsString(error, 'Unable to reduce ' + LICK_UPDATE);
+        assertErrorContainsString(error, JSON.stringify(lick));
+        assertErrorContainsString(error, 'Id 20 not found');
     }
 });
 
@@ -187,7 +200,54 @@ it('delete lick, id not found', () => {
         lickReducer(state, { type: LICK_DELETE, id: 999 });
         throw new Error();
     } catch (error) {
-        expect(error.message).toEqual(expect.stringContaining('Unable to reduce ' + LICK_DELETE));
-        expect(error.message).toEqual(expect.stringContaining('Id 999 not found'));
+        assertErrorContainsString(error, 'Unable to reduce ' + LICK_DELETE);
+        assertErrorContainsString(error, 'Id 999 not found');
+    }
+});
+
+const validModes = [LICK_MODE_EDIT, LICK_MODE_VIEW];
+
+validModes.forEach((mode, i) => {
+    it('change lick mode, success #' + i, () => {
+        const state = Object.freeze([
+            { lick: { id: 5 } },
+            { lick: { id: 10 }, mode: 'irrelevant' }
+        ]);
+        const newState = lickReducer(state, changeLickMode(10, mode));
+        expect(newState).toEqual([
+            { lick: { id: 5 } },
+            { lick: { id: 10 }, mode }
+        ]);
+    });
+});
+
+it('change lick mode, invalid mode', () => {
+    const mode = 'modeFooInvalid';
+    const state = Object.freeze([
+        { lick: { id: 5 } },
+        { lick: { id: 10 }, mode: 'foo' }
+    ]);
+    try {
+        lickReducer(state, changeLickMode(10, mode));
+        throw new Error();
+    } catch (error) {
+        assertErrorContainsString(error, 'Unable to reduce ' + LICK_CHANGE_MODE);
+        assertErrorContainsString(error, 'Invalid mode');
+        assertErrorContainsString(error, mode);
+        assertErrorContainsString(error, validModes.join(', '));
+    }
+});
+
+it('change lick mode, id not found', () => {
+    const state = Object.freeze([
+        { lick: { id: 5 } },
+        { lick: { id: 10 }, mode: 'foo' }
+    ]);
+    try {
+        lickReducer(state, changeLickMode(15, LICK_MODE_EDIT));
+        throw new Error();
+    } catch (error) {
+        assertErrorContainsString(error, 'Unable to reduce ' + LICK_CHANGE_MODE);
+        assertErrorContainsString(error, 'Id 15 not found');
     }
 });
