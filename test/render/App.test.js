@@ -46,6 +46,7 @@ function getProps() {
         licks: [],
         handleCreate: () => {},
         handleSave: () => {},
-        handleDelete: () => {}
+        handleDelete: () => {},
+        changeLickMode: () => {}
     };
 }

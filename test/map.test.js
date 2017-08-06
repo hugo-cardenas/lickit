@@ -1,5 +1,5 @@
 import { mapStateToProps, mapDispatchToProps } from 'src/map';
-import { updateLick, deleteLick } from 'src/state/actions/lick';
+import { updateLick, deleteLick, changeLickMode } from 'src/state/actions/lick';
 import { LICK_CREATE } from 'src/state/actions/types';
 
 // Mock the call electron.app.getPath('userData') - TODO extract to common
@@ -17,7 +17,9 @@ jest.mock('electron', () => {
 });
 
 it('map state to props', () => {
+    const error = new Error('foo');
     const state = {
+        error,
         licks: [
             {
                 mode: 'edit',
@@ -32,6 +34,7 @@ it('map state to props', () => {
     };
 
     const expectedProps = {
+        error,
         licks: [
             {
                 mode: 'edit',
@@ -78,4 +81,13 @@ it('map dispatch to props - delete lick', async() => {
     expect(dispatch).toHaveBeenCalledTimes(1);
     // Tricky thing - as updateLick returns a thunk, we just compare the functions returned
     expect(dispatch.mock.calls[0][0].toString()).toEqual(deleteLick(dispatch).toString());
+});
+
+it('map dispatch to props - change lick mode', async() => {
+    const dispatch = jest.fn();
+    const props = mapDispatchToProps(dispatch);
+
+    props.changeLickMode(42, 'modeFoo');
+    expect(dispatch).toHaveBeenCalledTimes(1);
+    expect(dispatch).toHaveBeenCalledWith(changeLickMode(42, 'modeFoo'));
 });

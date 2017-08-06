@@ -1,8 +1,9 @@
-import { createLick, updateLick, deleteLick } from './state/actions/lick';
+import { createLick, updateLick, deleteLick, changeLickMode } from './state/actions/lick';
 import { getUrlResolver } from './track/urlResolver';
 
 function mapStateToProps(state) {
     return {
+        error: state.error,
         licks: state.licks.map(mapLickStateToProps)
     };
 }
@@ -28,7 +29,8 @@ function mapDispatchToProps(dispatch) {
         // TODO Change to handleCreateLick, etc
         handleCreate: () => dispatch(createLick()),
         handleSave: (lick) => dispatch(updateLick(lick)),
-        handleDelete: (id) => dispatch(deleteLick(id))
+        handleDelete: (id) => dispatch(deleteLick(id)),
+        changeLickMode: (id, mode) => dispatch(changeLickMode(id, mode))
     };
 }
 

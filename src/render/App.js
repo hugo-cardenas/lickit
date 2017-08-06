@@ -5,15 +5,17 @@ import Lick from './Lick/Lick';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-function renderLick(lickState, handleDelete, handleSave) {
+function renderLick(lickState, handleDelete, handleSave, changeLickMode) {
     return <Lick
         lick={lickState.lick}
+        mode={lickState.mode}
         handleDelete={handleDelete}
         handleSave={handleSave}
-        mode={lickState.mode}/>;
+        changeLickMode={changeLickMode}
+        />;
 }
 
-function renderRow(chunk, handleDelete, handleSave) {
+function renderRow(chunk, handleDelete, handleSave, changeLickMode) {
     const chunkKey = chunk
         .map(lickState => lickState.lick.id)
         .join('-');
@@ -23,7 +25,7 @@ function renderRow(chunk, handleDelete, handleSave) {
               return <div 
                   key={lickState.lick.id} 
                   className="column is-one-third">
-                      {renderLick(lickState, handleDelete, handleSave)}
+                      {renderLick(lickState, handleDelete, handleSave, changeLickMode)}
               </div>;
             })}
         </div>
@@ -37,7 +39,8 @@ class App extends Component {
             licks,
             handleDelete,
             handleSave,
-            handleCreate
+            handleCreate,
+            changeLickMode
         } = this.props;
 
         if (error instanceof Error) {
@@ -61,7 +64,7 @@ class App extends Component {
                         </a>
                     </div>
                     <div className="lick-list">
-                        {chunks.map(chunk => renderRow(chunk, handleDelete, handleSave))}
+                        {chunks.map(chunk => renderRow(chunk, handleDelete, handleSave, changeLickMode))}
                     </div>
                 </div>
             </div>
@@ -76,5 +79,6 @@ App.propTypes = {
     licks: PropTypes.arrayOf(PropTypes.object).isRequired,
     handleCreate: PropTypes.func.isRequired,
     handleSave: PropTypes.func.isRequired,
-    handleDelete: PropTypes.func.isRequired
+    handleDelete: PropTypes.func.isRequired,
+    changeLickMode: PropTypes.func.isRequired
 };

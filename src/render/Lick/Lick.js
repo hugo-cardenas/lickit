@@ -1,52 +1,38 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import './Lick.css';
 import LickForm from './LickForm';
 import LickView from './LickView';
+import { LICK_MODE_EDIT, LICK_MODE_VIEW } from '../../state/actions/lick/modes';
 
-class Lick extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            mode: this.props.mode || 'view'
-        };
+function Lick(props) {
+    const { lick, mode, handleSave, handleDelete, changeLickMode } = props;
+    switch (mode) {
+        case LICK_MODE_EDIT:
+            return renderForm(lick, handleSave, changeLickMode, handleDelete);
+        case LICK_MODE_VIEW:
+        default:
+            return renderView(lick, changeLickMode, handleDelete);
     }
+}
 
-    render() {
-        switch (this.state.mode) {
-            case 'edit':
-                return this.renderForm();
-            case 'view':
-            default:
-                return this.renderView();
-        }
-    }
+function renderView(lick, changeLickMode, handleDelete) {
+    const props = {
+        lick,
+        handleEdit: () => changeLickMode(lick.id, LICK_MODE_EDIT),
+        handleDelete
+    };
+    return <LickView {...props}/>;
+}
 
-    renderView() {
-        const props = {
-            lick: this.props.lick,
-            handleEdit: () => this.setMode('edit'),
-            handleDelete: this.props.handleDelete
-        }
-        return <LickView {...props}/>;
-    }
-
-    renderForm() {
-        const props = {
-            lick: this.props.lick,
-            handleSave: (lick) => {
-                this.props.handleSave(lick);
-                this.setMode('view');
-            },
-            handleCancel: () => this.setMode('view'),
-            handleDelete: this.props.handleDelete
-        };
-        return <LickForm {...props}/>;
-    }
-
-    setMode(mode) {
-        this.setState({mode});
-    }
+function renderForm(lick, handleSave, changeLickMode, handleDelete) {
+    const props = {
+        lick,
+        handleSave,
+        handleCancel: () => changeLickMode(lick.id, LICK_MODE_VIEW),
+        handleDelete
+    };
+    return <LickForm {...props}/>;
 }
 
 export default Lick;
@@ -60,5 +46,6 @@ Lick.propTypes = {
     }).isRequired,
     handleSave: PropTypes.func.isRequired,
     handleDelete: PropTypes.func.isRequired,
-    mode: PropTypes.oneOf(['edit', 'view'])
+    changeLickMode: PropTypes.func.isRequired,
+    mode: PropTypes.oneOf([LICK_MODE_EDIT, LICK_MODE_VIEW])
 };
