@@ -36,7 +36,8 @@ function createLick(state) {
                 id: state.length ? Math.max(...state.map(lickState => lickState.lick.id)) + 1 : 1,
                 description: '',
                 tracks: [],
-                tags: []
+                tags: [],
+                createdAt: Date.now() // TODO Not so pure - maybe move to action?
             },
             mode: 'edit'
         },
@@ -44,15 +45,21 @@ function createLick(state) {
     ];
 }
 
-function updateLick(state, lick) {
+function updateLick(state, newLick) {
     try {
-        validateLick(lick);
-        var index = findLickIndex(state, lick.id);
+        validateLick(newLick);
+        var index = findLickIndex(state, newLick.id);
     } catch (error) {
-        throw new VError(error, 'Unable to reduce %s with lick %s', LICK_UPDATE, JSON.stringify(lick));
+        throw new VError(error, 'Unable to reduce %s with lick %s', LICK_UPDATE, JSON.stringify(newLick));
     }
+    const { id, description, tracks, tags } = newLick;
+
     const newState = [...state];
-    newState[index] = { mode: 'view', lick };
+    newState[index] = {
+        ...state[index],
+        lick: { ...state[index].lick, id, description, tracks, tags },
+        mode: 'view'
+    };
     return newState;
 }
 

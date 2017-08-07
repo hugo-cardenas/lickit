@@ -34,6 +34,8 @@ it('reduce unknown action', () => {
 });
 
 it('create lick', () => {
+    const initialTimestamp = Date.now();
+
     const state = Object.freeze([{ lick: { id: 10 } }]);
     const newState = lickReducer(state, { type: LICK_CREATE });
     expect(newState).toHaveLength(2);
@@ -44,6 +46,8 @@ it('create lick', () => {
     expect(newState[0].lick.description).toBe('');
     expect(newState[0].lick.tracks).toEqual([]);
     expect(newState[0].lick.tags).toEqual([]);
+    expect(newState[0].lick.createdAt).toBeGreaterThanOrEqual(initialTimestamp);
+    expect(newState[0].lick.createdAt).toBeLessThan(Date.now());
 
     expect(newState[1]).toEqual({ lick: { id: 10 } });
 });
@@ -84,7 +88,8 @@ validLicks.forEach((lick, i) => {
                     id: 20,
                     description: 'foo',
                     tracks: [{ id: 100 }, { id: 200 }],
-                    tags: ['foo', 'bar']
+                    tags: ['foo', 'bar'],
+                    createdAt: 12500
                 },
                 mode: 'edit'
             },
@@ -93,7 +98,13 @@ validLicks.forEach((lick, i) => {
 
         const expectedState = [
             { lick: { id: 10 } },
-            { lick: lick, mode: 'view' },
+            {
+                lick: {
+                    ...lick,
+                    createdAt: 12500
+                },
+                mode: 'view'
+            },
             { lick: { id: 30 } }
         ];
 
@@ -126,7 +137,11 @@ const invalidLicks = [
     // [Object.assign({}, validLick, {tracks: [{id: 200}, 'foo']}), ['tracks']], // TODO ENABLE
 
     [Object.assign({}, validLick, { tags: 42 }), ['tags']],
-    [Object.assign({}, validLick, { tags: ['foo', 42] }), ['tags']]
+    [Object.assign({}, validLick, { tags: ['foo', 42] }), ['tags']],
+
+    // Extra fields not allowed
+    [Object.assign({}, validLick, { createdAt: 12500 }), ['createdAt']],
+    [Object.assign({}, validLick, { foobar: 123 }), ['foobar']],
 ];
 
 invalidLicks.forEach((entry, i) => {
