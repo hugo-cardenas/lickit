@@ -53,6 +53,28 @@ test('render tags', () => {
     expect(tags).toEqual(expect.arrayContaining(expectedTags));
 });
 
+test('edit lick', () => {
+    let props = getTestProps();
+    props.editLick = jest.fn();
+
+    const component = shallow(<LickView {...props}/>);
+    component.find('.lick-edit').simulate('click');
+
+    expect(props.editLick).toHaveBeenCalledTimes(1);
+    expect(props.editLick).toBeCalledWith(props.lick.id);
+});
+
+test('delete lick', () => {
+    let props = getTestProps();
+    props.deleteLick = jest.fn();
+
+    const component = shallow(<LickView {...props}/>);
+    component.find('.lick-delete').simulate('click');
+
+    expect(props.deleteLick).toHaveBeenCalledTimes(1);
+    expect(props.deleteLick).toBeCalledWith(props.lick.id);
+});
+
 function getTags(component) {
     return component
         .find('.tag')
@@ -67,7 +89,7 @@ function getTestProps() {
             tracks: [{ id: 10, url: 'foo.abc' }, { id: 20, url: 'bar.abc' }],
             tags: ['foo', 'bar', 'baz']
         },
-        handleEdit: () => {},
-        handleDelete: () => {}
+        editLick: () => {},
+        deleteLick: () => {}
     };
 }

@@ -4,7 +4,7 @@ import {linkifier} from 'react-linkifier';
 import TrackSectionView from './Track/TrackSectionView';
 
 function LickView(props) {
-    const {lick, handleEdit, handleDelete} = props;
+    const {lick, editLick, deleteLick} = props;
     const {id, description, tracks, tags} = lick;
 
     return (
@@ -14,7 +14,7 @@ function LickView(props) {
                 <TrackSectionView tracks={tracks}/> 
                 {renderTags(tags)}
             </div>
-            {renderFooter(id, handleEdit, handleDelete)}
+            {renderFooter(id, editLick, deleteLick)}
         </div>
     );
 }
@@ -34,14 +34,14 @@ function renderTags(tags) {
     </div>;
 }
 
-function renderFooter(id, handleEdit, handleDelete) {
+function renderFooter(id, editLick, deleteLick) {
     return <footer className="card-footer">
-        <a className="card-footer-item lick-edit" onClick={() => handleEdit()}>
+        <a className="card-footer-item lick-edit" onClick={() => editLick(id)}>
             <span className="icon is-small">
                 <i className="fa fa-pencil-square-o"></i>
             </span>
         </a>
-        <a className="card-footer-item lick-delete" onClick={() => handleDelete(id)}>
+        <a className="card-footer-item lick-delete" onClick={() => deleteLick(id)}>
             <span className="icon is-small">
                 <i className="fa fa-trash"></i>
             </span>
@@ -56,6 +56,6 @@ LickView.propTypes = {
         tracks: PropTypes.arrayOf(PropTypes.object).isRequired,
         tags: PropTypes.arrayOf(PropTypes.string).isRequired
     }).isRequired,
-    handleEdit: PropTypes.func.isRequired,
-    handleDelete: PropTypes.func.isRequired
+    editLick: PropTypes.func.isRequired,
+    deleteLick: PropTypes.func.isRequired
 };

@@ -6,31 +6,31 @@ import LickView from './LickView';
 import { LICK_MODE_EDIT, LICK_MODE_VIEW } from '../../state/actions/lick/modes';
 
 function Lick(props) {
-    const { lick, mode, handleSave, handleDelete, changeLickMode } = props;
+    const { lick, mode, saveLick, deleteLick, changeLickMode } = props;
     switch (mode) {
         case LICK_MODE_EDIT:
-            return renderForm(lick, handleSave, changeLickMode, handleDelete);
+            return renderForm(lick, saveLick, changeLickMode, deleteLick);
         case LICK_MODE_VIEW:
         default:
-            return renderView(lick, changeLickMode, handleDelete);
+            return renderView(lick, changeLickMode, deleteLick);
     }
 }
 
-function renderView(lick, changeLickMode, handleDelete) {
+function renderView(lick, changeLickMode, deleteLick) {
     const props = {
         lick,
-        handleEdit: () => changeLickMode(lick.id, LICK_MODE_EDIT),
-        handleDelete
+        editLick: id => changeLickMode(id, LICK_MODE_EDIT),
+        deleteLick
     };
     return <LickView {...props}/>;
 }
 
-function renderForm(lick, handleSave, changeLickMode, handleDelete) {
+function renderForm(lick, saveLick, changeLickMode, deleteLick) {
     const props = {
         lick,
-        handleSave,
-        handleCancel: () => changeLickMode(lick.id, LICK_MODE_VIEW),
-        handleDelete
+        saveLick,
+        cancelLickEditor: id => changeLickMode(id, LICK_MODE_VIEW),
+        deleteLick
     };
     return <LickForm {...props}/>;
 }
@@ -44,8 +44,8 @@ Lick.propTypes = {
         tracks: PropTypes.arrayOf(PropTypes.object).isRequired,
         tags: PropTypes.arrayOf(PropTypes.string).isRequired
     }).isRequired,
-    handleSave: PropTypes.func.isRequired,
-    handleDelete: PropTypes.func.isRequired,
+    saveLick: PropTypes.func.isRequired,
+    deleteLick: PropTypes.func.isRequired,
     changeLickMode: PropTypes.func.isRequired,
     mode: PropTypes.oneOf([LICK_MODE_EDIT, LICK_MODE_VIEW])
 };

@@ -164,7 +164,7 @@ test('input duplicate tag', () => {
 
 test('save lick', () => {
     let props = getTestProps();
-    props.handleSave = jest.fn();
+    props.saveLick = jest.fn();
 
     const expectedLick = {
         id: props.lick.id,
@@ -176,8 +176,30 @@ test('save lick', () => {
     const component = shallow(<LickForm {...props}/>);
     component.find('.lick-save').simulate('click');
 
-    expect(props.handleSave).toHaveBeenCalledTimes(1);
-    expect(props.handleSave).toBeCalledWith(expectedLick);
+    expect(props.saveLick).toHaveBeenCalledTimes(1);
+    expect(props.saveLick).toBeCalledWith(expectedLick);
+});
+
+test('cancel lick editor', () => {
+    let props = getTestProps();
+    props.cancelLickEditor = jest.fn();
+
+    const component = shallow(<LickForm {...props}/>);
+    component.find('.lick-cancel').simulate('click');
+
+    expect(props.cancelLickEditor).toHaveBeenCalledTimes(1);
+    expect(props.cancelLickEditor).toBeCalledWith(props.lick.id);
+});
+
+test('delete lick', () => {
+    let props = getTestProps();
+    props.deleteLick = jest.fn();
+
+    const component = shallow(<LickForm {...props}/>);
+    component.find('.lick-delete').simulate('click');
+
+    expect(props.deleteLick).toHaveBeenCalledTimes(1);
+    expect(props.deleteLick).toBeCalledWith(props.lick.id);
 });
 
 function getTags(component) {
@@ -204,8 +226,8 @@ function getTestProps() {
               'foo', 'bar', 'baz'
             ]
         },
-        handleSave: () => {},
-        handleCancel: () => {},
-        handleDelete: () => {}
+        saveLick: () => {},
+        cancelLickEditor: () => {},
+        deleteLick: () => {}
     };
 }

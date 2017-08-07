@@ -38,7 +38,7 @@ class LickForm extends Component {
     render() {
         const {lick, tagInput} = this.state;
         const {id, description, tracks, tags} = lick;
-        const {handleCancel, handleDelete} = this.props;
+        const {cancelLickEditor, deleteLick} = this.props;
 
         const trackSectionState = {
             tracks,
@@ -53,7 +53,7 @@ class LickForm extends Component {
                     <TrackSectionForm {...trackSectionState}/> 
                     {this.renderTags(tags, tagInput)}
                 </div>
-                {this.renderFooter(id, handleCancel, handleDelete)}
+                {this.renderFooter(id, cancelLickEditor, deleteLick)}
             </div>
         );
     }
@@ -93,19 +93,19 @@ class LickForm extends Component {
         </p>;
     }
 
-    renderFooter(id, handleCancel, handleDelete) {
+    renderFooter(id, cancelLickEditor, deleteLick) {
         return <footer className="card-footer">
             <a className="card-footer-item lick-save" onClick={this.handleSave.bind(this)}>
                 <span className="icon is-small">
                     <i className="fa fa-floppy-o"></i>
                 </span>
             </a>
-            <a className="card-footer-item lick-cancel" onClick={() => handleCancel()}>
+            <a className="card-footer-item lick-cancel" onClick={() => cancelLickEditor(id)}>
                 <span className="icon is-small">
                     <i className="fa fa-undo"></i>
                 </span>
             </a>
-            <a className="card-footer-item lick-delete" onClick={() => handleDelete(id)}>
+            <a className="card-footer-item lick-delete" onClick={() => deleteLick(id)}>
                 <span className="icon is-small">
                     <i className="fa fa-trash"></i>
                 </span>
@@ -168,7 +168,7 @@ class LickForm extends Component {
     }
 
     handleSave() {
-        this.props.handleSave(this.getLickState());
+        this.props.saveLick(this.getLickState());
     }
 
     getLickState(){
@@ -191,7 +191,7 @@ LickForm.propTypes = {
         tracks: PropTypes.arrayOf(PropTypes.object).isRequired,
         tags: PropTypes.arrayOf(PropTypes.string).isRequired
     }).isRequired,
-    handleSave: PropTypes.func.isRequired,
-    handleCancel: PropTypes.func.isRequired,
-    handleDelete: PropTypes.func.isRequired
+    saveLick: PropTypes.func.isRequired,
+    cancelLickEditor: PropTypes.func.isRequired,
+    deleteLick: PropTypes.func.isRequired
 };

@@ -5,17 +5,17 @@ import Lick from './Lick/Lick';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-function renderLick(lickState, handleDelete, handleSave, changeLickMode) {
+function renderLick(lickState, deleteLick, saveLick, changeLickMode) {
     return <Lick
         lick={lickState.lick}
         mode={lickState.mode}
-        handleDelete={handleDelete}
-        handleSave={handleSave}
+        deleteLick={deleteLick}
+        saveLick={saveLick}
         changeLickMode={changeLickMode}
         />;
 }
 
-function renderRow(chunk, handleDelete, handleSave, changeLickMode) {
+function renderRow(chunk, deleteLick, saveLick, changeLickMode) {
     const chunkKey = chunk
         .map(lickState => lickState.lick.id)
         .join('-');
@@ -25,7 +25,7 @@ function renderRow(chunk, handleDelete, handleSave, changeLickMode) {
               return <div 
                   key={lickState.lick.id} 
                   className="column is-one-third">
-                      {renderLick(lickState, handleDelete, handleSave, changeLickMode)}
+                      {renderLick(lickState, deleteLick, saveLick, changeLickMode)}
               </div>;
             })}
         </div>
@@ -37,9 +37,9 @@ class App extends Component {
         const {
             error,
             licks,
-            handleDelete,
-            handleSave,
-            handleCreate,
+            deleteLick,
+            saveLick,
+            createLick,
             changeLickMode
         } = this.props;
 
@@ -56,7 +56,7 @@ class App extends Component {
                 </header>
                 <div className="main-content">
                     <div className="lick-new">
-                        <a className="button" onClick={handleCreate}>
+                        <a className="button" onClick={createLick}>
                             <span className="icon">
                                 <i className="fa fa-plus-circle"></i>
                             </span>
@@ -64,7 +64,7 @@ class App extends Component {
                         </a>
                     </div>
                     <div className="lick-list">
-                        {chunks.map(chunk => renderRow(chunk, handleDelete, handleSave, changeLickMode))}
+                        {chunks.map(chunk => renderRow(chunk, deleteLick, saveLick, changeLickMode))}
                     </div>
                 </div>
             </div>
@@ -77,8 +77,8 @@ export default App;
 App.propTypes = {
     error: PropTypes.object,
     licks: PropTypes.arrayOf(PropTypes.object).isRequired,
-    handleCreate: PropTypes.func.isRequired,
-    handleSave: PropTypes.func.isRequired,
-    handleDelete: PropTypes.func.isRequired,
+    createLick: PropTypes.func.isRequired,
+    saveLick: PropTypes.func.isRequired,
+    deleteLick: PropTypes.func.isRequired,
     changeLickMode: PropTypes.func.isRequired
 };

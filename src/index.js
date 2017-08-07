@@ -12,8 +12,6 @@ import { mapStateToProps, mapDispatchToProps } from './map';
 
 const storage = pify(jsonStorage);
 
-// TODO Handle errors
-
 const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App);
 
 storage.get('state')

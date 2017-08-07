@@ -26,10 +26,9 @@ function mapLickStateToProps(lickState) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        // TODO Change to handleCreateLick, etc
-        handleCreate: () => dispatch(createLick()),
-        handleSave: (lick) => dispatch(updateLick(lick)),
-        handleDelete: (id) => dispatch(deleteLick(id)),
+        createLick: () => dispatch(createLick()),
+        saveLick: (lick) => dispatch(updateLick(lick)),
+        deleteLick: (id) => dispatch(deleteLick(id)),
         changeLickMode: (id, mode) => dispatch(changeLickMode(id, mode))
     };
 }

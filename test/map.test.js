@@ -55,7 +55,7 @@ it('map dispatch to props - create lick', () => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
-    props.handleCreate();
+    props.createLick();
     expect(dispatch).toHaveBeenCalledTimes(1);
     expect(dispatch).toHaveBeenCalledWith({type: LICK_CREATE});
 });
@@ -65,7 +65,7 @@ it('map dispatch to props - update lick', async() => {
     const props = mapDispatchToProps(dispatch);
 
     const lick = { foo: 'bar' };
-    await (props.handleSave(lick));
+    await (props.saveLick(lick));
 
     expect(dispatch).toHaveBeenCalledTimes(1);
     // Tricky thing - as updateLick returns a thunk, we just compare the functions returned
@@ -76,7 +76,7 @@ it('map dispatch to props - delete lick', async() => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
-    await (props.handleDelete(42));
+    await (props.deleteLick(42));
 
     expect(dispatch).toHaveBeenCalledTimes(1);
     // Tricky thing - as updateLick returns a thunk, we just compare the functions returned

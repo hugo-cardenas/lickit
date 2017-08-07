@@ -12,9 +12,9 @@ test('render form due to mode prop', () => {
     expect(component.find('LickView')).toHaveLength(0);
 
     // Check cancel button
-    const handleCancel = component.find('LickForm').prop('handleCancel');
-    handleCancel();
-    expect(props.changeLickMode).toBeCalledWith(42, 'view');
+    const cancelLickEditor = component.find('LickForm').prop('cancelLickEditor');
+    cancelLickEditor(44);
+    expect(props.changeLickMode).toBeCalledWith(44, 'view');
 });
 
 test('render view due to mode prop', () => {
@@ -27,9 +27,9 @@ test('render view due to mode prop', () => {
     expect(component.find('LickView')).toHaveLength(1);
 
     // Check edit button
-    const handleEdit = component.find('LickView').prop('handleEdit');
-    handleEdit();
-    expect(props.changeLickMode).toBeCalledWith(42, 'edit');
+    const editLick = component.find('LickView').prop('editLick');
+    editLick(44);
+    expect(props.changeLickMode).toBeCalledWith(44, 'edit');
 });
 
 test('render view by default', () => {
@@ -50,8 +50,8 @@ function getTestProps() {
                 'foo', 'bar', 'baz'
             ],
         },
-        handleSave: () => {},
-        handleDelete: () => {},
+        saveLick: () => {},
+        deleteLick: () => {},
         changeLickMode: () => {}
     };
 }

@@ -44,9 +44,9 @@ it('renders without crashing', () => {
 function getProps() {
     return {
         licks: [],
-        handleCreate: () => {},
-        handleSave: () => {},
-        handleDelete: () => {},
+        createLick: () => {},
+        saveLick: () => {},
+        deleteLick: () => {},
         changeLickMode: () => {}
     };
 }
