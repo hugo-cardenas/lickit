@@ -5,19 +5,19 @@ import { assertErrorContainsString } from '../../helper/assertionHelper';
 it('update lick - success', async() => {
     const state = {
         licks: [
-            { lick: { id: 512 } },
+            { lick: { id: 'c512' } },
             {
                 lick: {
-                    id: 1024,
+                    id: 'c1024',
                     tracks: [
-                        { id: 40 }, // To be deleted
-                        { id: 42 },
-                        { id: 44 }, // To be deleted
-                        { id: 46 },
+                        { id: 'c40' }, // To be deleted
+                        { id: 'c42' },
+                        { id: 'c44' }, // To be deleted
+                        { id: 'c46' },
                     ]
                 }
             },
-            { lick: { id: 2048 } }
+            { lick: { id: 'c2048' } }
         ]
     };
 
@@ -25,19 +25,19 @@ it('update lick - success', async() => {
     const blob2 = new Blob(['bar']);
 
     const lick = {
-        id: 1024,
+        id: 'c1024',
         tracks: [
-            { id: 42 },
+            { id: 'c42' },
             { blob: blob1 }, // To be created
-            { id: 46 },
+            { id: 'c46' },
             { blob: blob2 }, // To be created
         ]
     };
 
     const storage = {
         saveBlob: jest.fn()
-            .mockReturnValueOnce(Promise.resolve(100))
-            .mockReturnValueOnce(Promise.resolve(200)),
+            .mockReturnValueOnce(Promise.resolve('c100'))
+            .mockReturnValueOnce(Promise.resolve('c200')),
         deleteTrack: jest.fn()
             .mockReturnValueOnce(Promise.resolve())
             .mockReturnValueOnce(Promise.resolve())
@@ -50,12 +50,12 @@ it('update lick - success', async() => {
     await action(dispatch, getState);
 
     const expectedLick = {
-        id: 1024,
+        id: 'c1024',
         tracks: [
-            { id: 42 },
-            { id: 100 },
-            { id: 46 },
-            { id: 200 }
+            { id: 'c42' },
+            { id: 'c100' },
+            { id: 'c46' },
+            { id: 'c200' }
         ]
     };
 
@@ -64,8 +64,8 @@ it('update lick - success', async() => {
     expect(storage.saveBlob).toHaveBeenCalledWith(blob2);
 
     expect(storage.deleteTrack).toHaveBeenCalledTimes(2);
-    expect(storage.deleteTrack).toHaveBeenCalledWith(40);
-    expect(storage.deleteTrack).toHaveBeenCalledWith(44);
+    expect(storage.deleteTrack).toHaveBeenCalledWith('c40');
+    expect(storage.deleteTrack).toHaveBeenCalledWith('c44');
 
     expect(dispatch).toHaveBeenCalledTimes(1);
     expect(dispatch).toHaveBeenCalledWith({
@@ -77,14 +77,14 @@ it('update lick - success', async() => {
 it('update lick - async save fails', async() => {
     const state = {
         licks: [
-            { lick: { id: 512 } },
+            { lick: { id: 'c512' } },
             {
                 lick: {
-                    id: 1024,
-                    tracks: [{ id: 42 }]
+                    id: 'c1024',
+                    tracks: [{ id: 'c42' }]
                 }
             },
-            { lick: { id: 2048 } }
+            { lick: { id: 'c2048' } }
         ]
     };
 
@@ -92,9 +92,9 @@ it('update lick - async save fails', async() => {
     const blob2 = new Blob(['bar']);
 
     const lick = {
-        id: 1024,
+        id: 'c1024',
         tracks: [
-            { id: 42 },
+            { id: 'c42' },
             { blob: blob1 }, // To be created, will succeed
             { blob: blob2 }, // To be created, will fail
         ]
@@ -128,22 +128,22 @@ it('update lick - async save fails', async() => {
 it('update lick - async delete fails, still creates action', async() => {
     const state = {
         licks: [
-            { lick: { id: 512 } },
+            { lick: { id: 'c512' } },
             {
                 lick: {
-                    id: 1024,
+                    id: 'c1024',
                     tracks: [
-                        { id: 40 }, // To be deleted, will succeed
-                        { id: 42 } // To be deleted, will fail  
+                        { id: 'c40' }, // To be deleted, will succeed
+                        { id: 'c42' } // To be deleted, will fail  
                     ]
                 }
             },
-            { lick: { id: 2048 } }
+            { lick: { id: 'c2048' } }
         ]
     };
 
     const lick = {
-        id: 1024,
+        id: 'c1024',
         tracks: []
     };
 
@@ -161,13 +161,13 @@ it('update lick - async delete fails, still creates action', async() => {
     await action(dispatch, getState);
 
     const expectedLick = {
-        id: 1024,
+        id: 'c1024',
         tracks: []
     };
 
     expect(storage.deleteTrack).toHaveBeenCalledTimes(2);
-    expect(storage.deleteTrack).toHaveBeenCalledWith(40);
-    expect(storage.deleteTrack).toHaveBeenCalledWith(42);
+    expect(storage.deleteTrack).toHaveBeenCalledWith('c40');
+    expect(storage.deleteTrack).toHaveBeenCalledWith('c42');
 
     expect(dispatch).toHaveBeenCalledTimes(1);
     expect(dispatch).toHaveBeenCalledWith({
@@ -179,21 +179,21 @@ it('update lick - async delete fails, still creates action', async() => {
 it('delete lick - success', async() => {
     const state = {
         licks: [
-            { lick: { id: 512 } },
+            { lick: { id: 'c512' } },
             {
                 lick: {
-                    id: 1024,
+                    id: 'c1024',
                     tracks: [
-                        { id: 40 }, // To be deleted
-                        { id: 42 } // To be deleted
+                        { id: 'c40' }, // To be deleted
+                        { id: 'c42' } // To be deleted
                     ]
                 }
             },
-            { lick: { id: 2048 } }
+            { lick: { id: 'c2048' } }
         ]
     };
 
-    const lickId = 1024;
+    const lickId = 'c1024';
 
     const storage = {
         deleteTrack: jest.fn()
@@ -208,8 +208,8 @@ it('delete lick - success', async() => {
     await action(dispatch, getState);
 
     expect(storage.deleteTrack).toHaveBeenCalledTimes(2);
-    expect(storage.deleteTrack).toHaveBeenCalledWith(40);
-    expect(storage.deleteTrack).toHaveBeenCalledWith(42);
+    expect(storage.deleteTrack).toHaveBeenCalledWith('c40');
+    expect(storage.deleteTrack).toHaveBeenCalledWith('c42');
 
     expect(dispatch).toHaveBeenCalledTimes(1);
     expect(dispatch).toHaveBeenCalledWith({
@@ -221,21 +221,21 @@ it('delete lick - success', async() => {
 it('delete lick - async delete fails, still creates action', async() => {
     const state = {
         licks: [
-            { lick: { id: 512 } },
+            { lick: { id: 'c512' } },
             {
                 lick: {
-                    id: 1024,
+                    id: 'c1024',
                     tracks: [
-                        { id: 40 }, // To be deleted, will succeed
-                        { id: 42 } // To be deleted, will fail
+                        { id: 'c40' }, // To be deleted, will succeed
+                        { id: 'c42' } // To be deleted, will fail
                     ]
                 }
             },
-            { lick: { id: 2048 } }
+            { lick: { id: 'c2048' } }
         ]
     };
 
-    const lickId = 1024;
+    const lickId = 'c1024';
 
     const errorMessage = 'Failed to delete track 42';
     const storage = {
@@ -251,8 +251,8 @@ it('delete lick - async delete fails, still creates action', async() => {
     await action(dispatch, getState);
 
     expect(storage.deleteTrack).toHaveBeenCalledTimes(2);
-    expect(storage.deleteTrack).toHaveBeenCalledWith(40);
-    expect(storage.deleteTrack).toHaveBeenCalledWith(42);
+    expect(storage.deleteTrack).toHaveBeenCalledWith('c40');
+    expect(storage.deleteTrack).toHaveBeenCalledWith('c42');
 
     expect(dispatch).toHaveBeenCalledTimes(1);
     expect(dispatch).toHaveBeenCalledWith({

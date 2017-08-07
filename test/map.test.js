@@ -24,10 +24,11 @@ it('map state to props', () => {
             {
                 mode: 'edit',
                 lick: {
-                    id: 42,
+                    id: 'c42',
                     description: 'Foo bar 42',
                     tracks: [{ id: 10 }, { id: 20 }],
-                    tags: ['foo', 'bar']
+                    tags: ['foo', 'bar'],
+                    createdAt: 12500
                 }
             }
         ]
@@ -39,7 +40,7 @@ it('map state to props', () => {
             {
                 mode: 'edit',
                 lick: {
-                    id: 42,
+                    id: 'c42',
                     description: 'Foo bar 42',
                     tracks: [{ id: 10, url: 'file:///tmp/foo/tracks/10.wav' }, { id: 20, url: 'file:///tmp/foo/tracks/20.wav' }],
                     tags: ['foo', 'bar']

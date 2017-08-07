@@ -13,8 +13,8 @@ test('render form due to mode prop', () => {
 
     // Check cancel button
     const cancelLickEditor = component.find('LickForm').prop('cancelLickEditor');
-    cancelLickEditor(44);
-    expect(props.changeLickMode).toBeCalledWith(44, 'view');
+    cancelLickEditor('c44');
+    expect(props.changeLickMode).toBeCalledWith('c44', 'view');
 });
 
 test('render view due to mode prop', () => {
@@ -28,8 +28,8 @@ test('render view due to mode prop', () => {
 
     // Check edit button
     const editLick = component.find('LickView').prop('editLick');
-    editLick(44);
-    expect(props.changeLickMode).toBeCalledWith(44, 'edit');
+    editLick('c44');
+    expect(props.changeLickMode).toBeCalledWith('c44', 'edit');
 });
 
 test('render view by default', () => {
@@ -43,7 +43,7 @@ test('render view by default', () => {
 function getTestProps() {
     return {
         lick: {
-            id: 42,
+            id: 'c42',
             description: 'Foobar baz',
             tracks: [{ id: 10, url: 'http://foo.mp3' }, { id: 20, url: 'http://bar.mp3' }],
             tags: [

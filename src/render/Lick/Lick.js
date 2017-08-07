@@ -39,7 +39,7 @@ export default Lick;
 
 Lick.propTypes = {
     lick: PropTypes.shape({
-        id: PropTypes.number.isRequired,
+        id: PropTypes.string.isRequired,
         description: PropTypes.string.isRequired,
         tracks: PropTypes.arrayOf(PropTypes.object).isRequired,
         tags: PropTypes.arrayOf(PropTypes.string).isRequired

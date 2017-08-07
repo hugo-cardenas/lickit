@@ -9,11 +9,14 @@ function mapStateToProps(state) {
 }
 
 function mapLickStateToProps(lickState) {
+    const lick = lickState.lick;
     return {
         mode: lickState.mode ? lickState.mode : undefined,
         lick: {
-            ...lickState.lick,
-            tracks: lickState.lick.tracks.map(track => {
+            id: lick.id,
+            description: lick.description,
+            tags: lick.tags,
+            tracks: lick.tracks.map(track => {
                 return {
                     ...track,
                     // Calculate track urls to filesystem from their id

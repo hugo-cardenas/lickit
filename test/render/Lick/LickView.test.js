@@ -84,7 +84,7 @@ function getTags(component) {
 function getTestProps() {
     return {
         lick: {
-            id: 42,
+            id: 'c42',
             description: 'Foobar baz',
             tracks: [{ id: 10, url: 'foo.abc' }, { id: 20, url: 'bar.abc' }],
             tags: ['foo', 'bar', 'baz']

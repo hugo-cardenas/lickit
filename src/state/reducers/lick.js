@@ -1,5 +1,6 @@
 import VError from 'verror';
 import Joi from 'joi-browser';
+import cuid from 'cuid';
 import {
     LICK_CREATE,
     LICK_UPDATE,
@@ -31,9 +32,7 @@ function createLick(state) {
     return [
         {
             lick: {
-                // TODO Add field createdAt
-                // TODO Refactor this hack, generate ids in a proper way
-                id: state.length ? Math.max(...state.map(lickState => lickState.lick.id)) + 1 : 1,
+                id: cuid(), // TODO Not so pure - maybe move to action?
                 description: '',
                 tracks: [],
                 tags: [],
@@ -91,7 +90,7 @@ function changeLickMode(state, id, mode) {
 
 function validateLick(lick) {
     const schema = Joi.object().keys({
-        id: Joi.number().min(1).required(),
+        id: Joi.string().required(),
         description: Joi.string().allow('').required(),
         tracks: Joi.array().required(), // TODO Validate nested track objects
         tags: Joi.array().items(Joi.string()).required()
