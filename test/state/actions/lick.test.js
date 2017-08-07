@@ -1,7 +1,6 @@
 import { LICK_UPDATE, LICK_DELETE } from 'src/state/actions/types';
 import getActions from 'src/state/actions/lick/lick';
-
-// TODO Test error
+import { assertErrorContainsString } from '../../helper/assertionHelper';
 
 it('update lick - success', async() => {
     const state = {
@@ -116,10 +115,10 @@ it('update lick - async save fails', async() => {
         await action(dispatch, getState);
         throw new Error();
     } catch (error) {
-        assertErrorContainsMessage(error, 'Unable to create action');
-        assertErrorContainsMessage(error, LICK_UPDATE);
-        assertErrorContainsMessage(error, JSON.stringify(lick));
-        assertErrorContainsMessage(error, errorMessage);
+        assertErrorContainsString(error, 'Unable to create action');
+        assertErrorContainsString(error, LICK_UPDATE);
+        assertErrorContainsString(error, JSON.stringify(lick));
+        assertErrorContainsString(error, errorMessage);
         expect(storage.saveBlob).toHaveBeenCalledTimes(2);
         expect(storage.saveBlob).toHaveBeenCalledWith(blob1);
         expect(storage.saveBlob).toHaveBeenCalledWith(blob2);
@@ -261,8 +260,3 @@ it('delete lick - async delete fails, still creates action', async() => {
         id: lickId
     });
 });
-
-// TODO Extract to test helper
-function assertErrorContainsMessage(error, message) {
-    expect(error.message).toEqual(expect.stringContaining(message));
-}
