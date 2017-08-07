@@ -13,11 +13,9 @@ export default function getActions(trackStorage) {
 
     function updateLick(lick) {
         return async(dispatch, getState) => {
-            // TODO Validate lick here? - NO. Validate only the required part for saving tracks
-
             const storedTracks = getStoredTracks(getState(), lick.id);
-
             let tracks;
+            
             try {
                 // Handle all new tracks submitted in form
                 tracks = await Promise.all(lick.tracks.map(track => handleTrack(track)));
@@ -47,9 +45,13 @@ export default function getActions(trackStorage) {
             // Save new track
             const id = await trackStorage.saveBlob(track.blob);
             return { id };
+        } else if (track.id) {
+            // Already stored
+            return track;
+        } else {
+            throw new VError('Invalid track %s, should contain id or blob', JSON.stringify(track));
         }
-        // Already stored
-        return track;
+        
     }
 
     async function deleteTrack(id) {

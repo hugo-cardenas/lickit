@@ -74,6 +74,40 @@ it('update lick - success', async() => {
     });
 });
 
+it('update lick - invalid action data', async() => {
+    const state = {
+        licks: [
+            {
+                lick: {
+                    id: 'c1024',
+                    tracks: []
+                }
+            }
+        ]
+    };
+    const invalidTrack = { foo: 'bar' }; // Missing id or blob
+    const lick = {
+        id: 'c1024',
+        tracks: [invalidTrack]
+    };
+
+    const storage = {};
+    const { updateLick } = getActions(storage);
+
+    const action = updateLick(lick);
+    const dispatch = jest.fn();
+    const getState = jest.fn().mockReturnValueOnce(state);
+    try {
+        await action(dispatch, getState);
+        throw new Error();
+    } catch (error) {
+        assertErrorContainsString(error, 'Unable to create action');
+        assertErrorContainsString(error, LICK_UPDATE);
+        assertErrorContainsString(error, JSON.stringify(lick));
+        assertErrorContainsString(error, `Invalid track ${JSON.stringify(invalidTrack)}, should contain id or blob`);
+    }
+});
+
 it('update lick - async save fails', async() => {
     const state = {
         licks: [
