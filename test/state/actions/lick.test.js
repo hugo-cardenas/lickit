@@ -10,10 +10,10 @@ it('update lick - success', async() => {
                 lick: {
                     id: 'c1024',
                     tracks: [
-                        { id: 'c40' }, // To be deleted
-                        { id: 'c42' },
-                        { id: 'c44' }, // To be deleted
-                        { id: 'c46' },
+                        { id: 'c40', url: 'foo1' }, // To be deleted
+                        { id: 'c42', url: 'foo2'},
+                        { id: 'c44', url: 'foo3' }, // To be deleted
+                        { id: 'c46', url: 'foo4' },
                     ]
                 }
             },
@@ -27,10 +27,10 @@ it('update lick - success', async() => {
     const lick = {
         id: 'c1024',
         tracks: [
-            { id: 'c42' },
-            { blob: blob1 }, // To be created
-            { id: 'c46' },
-            { blob: blob2 }, // To be created
+            { id: 'c42', url: 'foo2' },
+            { blob: blob1, url: 'bar10' }, // To be created
+            { id: 'c46', url: 'foo4' },
+            { blob: blob2, url: 'bar20' }, // To be created
         ]
     };
 
