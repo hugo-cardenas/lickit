@@ -82,7 +82,7 @@ function changeLickMode(state, id, mode) {
         const index = findLickIndex(state, id);
         const newState = [...state];
         newState[index] = { ...newState[index], mode };
-        return newState;        
+        return newState;
     } catch (error) {
         throw new VError(error, 'Unable to reduce %s with id %s and mode %s', LICK_CHANGE_MODE, id, mode);
     }
@@ -92,7 +92,9 @@ function validateLick(lick) {
     const schema = Joi.object().keys({
         id: Joi.string().required(),
         description: Joi.string().allow('').required(),
-        tracks: Joi.array().required(), // TODO Validate nested track objects
+        tracks: Joi.array().items(Joi.object().keys({
+            id: Joi.string().required()
+        })).required(),
         tags: Joi.array().items(Joi.string()).required()
     });
 

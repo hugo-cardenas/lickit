@@ -129,13 +129,14 @@ const invalidLicks = [
     [_.pick(validLick, ['id', 'tracks']), ['description', 'tags']],
 
     // Invalid values
-    [Object.assign({}, validLick, { id: 'foo' }), ['id']],
+    [Object.assign({}, validLick, { id: true }), ['id']],
     [Object.assign({}, validLick, { id: -1 }), ['id']],
 
     [Object.assign({}, validLick, { description: 42 }), ['description']],
 
     [Object.assign({}, validLick, { tracks: 42 }), ['tracks']],
-    // [Object.assign({}, validLick, {tracks: [{id: 200}, 'foo']}), ['tracks']], // TODO ENABLE
+    [Object.assign({}, validLick, { tracks: [{ id: 'abc200' }, 999] }), ['tracks']],
+    [Object.assign({}, validLick, { tracks: [{ id: 'abc200' }, { id: true }] }), ['tracks']],
 
     [Object.assign({}, validLick, { tags: 42 }), ['tags']],
     [Object.assign({}, validLick, { tags: ['foo', 42] }), ['tags']],
@@ -149,9 +150,9 @@ invalidLicks.forEach((entry, i) => {
     it('update lick, invalid data #' + i, () => {
         const [lick, invalidProperties] = entry;
         const state = Object.freeze([
-            { id: 'c10' },
-            { id: 'c20' },
-            { id: 'c30' }
+            { lick: { id: 'c10' } },
+            { lick: { id: 'c20' } },
+            { lick: { id: 'c30' } }
         ]);
 
         try {
@@ -161,7 +162,7 @@ invalidLicks.forEach((entry, i) => {
             assertErrorContainsString(error, 'Unable to reduce ' + LICK_UPDATE);
             assertErrorContainsString(error, JSON.stringify(lick));
             invalidProperties.forEach(property => {
-                assertErrorContainsString(error, property);
+                assertErrorContainsString(error, ` "${property}" `); // As part of the error message, not the object JSON
             });
         }
     });
