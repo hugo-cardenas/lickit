@@ -82,7 +82,7 @@ function changeLickMode(state, id, mode) {
         const index = findLickIndex(state, id);
         const newState = [...state];
         newState[index] = { ...newState[index], mode };
-        return newState;
+        return newState;        
     } catch (error) {
         throw new VError(error, 'Unable to reduce %s with id %s and mode %s', LICK_CHANGE_MODE, id, mode);
     }

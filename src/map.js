@@ -15,7 +15,7 @@ function mapLickStateToProps(lickState) {
         lick: {
             id: lick.id,
             description: lick.description,
-            tags: lick.tags,
+            tags: [...lick.tags], // TODO Fix in a better way this reference problem - state modified as react state
             tracks: lick.tracks.map(track => {
                 return {
                     ...track,

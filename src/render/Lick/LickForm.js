@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import TrackSectionForm from './Track/TrackSectionForm';
@@ -11,7 +11,7 @@ class LickForm extends Component {
             tagInput: ''
         };
         this.bindHandlers();
-        
+
     }
 
     bindHandlers() {
@@ -36,9 +36,9 @@ class LickForm extends Component {
     }
 
     render() {
-        const {lick, tagInput} = this.state;
-        const {id, description, tracks, tags} = lick;
-        const {cancelLickEditor, deleteLick} = this.props;
+        const { lick, tagInput } = this.state;
+        const { id, description, tracks, tags } = lick;
+        const { cancelLickEditor, deleteLick } = this.props;
 
         const trackSectionState = {
             tracks,
@@ -115,16 +115,17 @@ class LickForm extends Component {
 
     handleInputChange(event) {
         const target = event.target;
-        const value = target.type === 'checkbox'
-            ? target.checked
-            : target.value;
+        const value = target.type === 'checkbox' ?
+            target.checked :
+            target.value;
         const name = target.name;
 
-        this.setState({[name]: value});
+        this.setState({
+            [name]: value });
     }
 
     handleInputDescription(event) {
-        this.setLickState({description: event.target.value});
+        this.setLickState({ description: event.target.value });
     }
 
     handleInputTag(event) {
@@ -135,7 +136,7 @@ class LickForm extends Component {
 
     handleDeleteTrack(id) {
         const tracks = this.getLickState().tracks.filter(track => track.id !== id);
-        this.setLickState({tracks});
+        this.setLickState({ tracks });
     }
 
     handleRecordTrack(blob) {
@@ -143,8 +144,8 @@ class LickForm extends Component {
         let tracks = [...this.getLickState().tracks];
         // TODO Do in a better way
         // Set temporarily url as id until it gets saved (in order to be able to delete unsaved tracks)
-        tracks.push({blob, id: url, url: url});
-        this.setLickState({tracks});
+        tracks.push({ blob, id: url, url: url });
+        this.setLickState({ tracks });
     }
 
     handleDeleteTag(tag) {
@@ -158,12 +159,12 @@ class LickForm extends Component {
         if (event.key !== 'Enter' || tag === '') {
             return;
         }
-        
+
         let tags = this.getLickState().tags;
         tags.push(tag);
         this.setState({
             tagInput: '',
-            lick: {...this.getLickState(), tags: _.uniq(tags)}
+            lick: { ...this.getLickState(), tags: _.uniq(tags) }
         });
     }
 
@@ -171,13 +172,13 @@ class LickForm extends Component {
         this.props.saveLick(this.getLickState());
     }
 
-    getLickState(){
+    getLickState() {
         return this.state.lick;
     }
 
-    setLickState(state){
+    setLickState(state) {
         this.setState({
-            lick: {...this.getLickState(), ...state}
+            lick: { ...this.getLickState(), ...state }
         });
     }
 }
