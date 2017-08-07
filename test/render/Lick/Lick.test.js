@@ -45,7 +45,7 @@ function getTestProps() {
         lick: {
             id: 'c42',
             description: 'Foobar baz',
-            tracks: [{ id: 10, url: 'http://foo.mp3' }, { id: 20, url: 'http://bar.mp3' }],
+            tracks: [{ id: 'a10', url: 'http://foo.mp3' }, { id: 'a20', url: 'http://bar.mp3' }],
             tags: [
                 'foo', 'bar', 'baz'
             ],

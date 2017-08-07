@@ -4,9 +4,9 @@ import TrackSectionView from 'src/render/Lick/Track/TrackSectionView';
 
 test('render tracks', () => {
   const tracks = [
-    {id: 1, url: 'http://foo.mp3'},
-    {id: 2, url: 'http://bar.mp3'},
-    {id: 3, url: 'http://baz.mp3'},
+    {id: 'a1', url: 'http://foo.mp3'},
+    {id: 'a2', url: 'http://bar.mp3'},
+    {id: 'a3', url: 'http://baz.mp3'},
   ];
   const props = {tracks};
   const component = shallow(<TrackSectionView {...props}/>);

@@ -11,7 +11,6 @@ class LickForm extends Component {
             tagInput: ''
         };
         this.bindHandlers();
-
     }
 
     bindHandlers() {

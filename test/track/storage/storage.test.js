@@ -16,11 +16,15 @@ it('save blob - success, create dir if does not exist', async() => {
     const resolveUrl = jest.fn().mockReturnValueOnce(trackPath);
 
     const storage = createStorage(resolveUrl);
-    await storage.saveBlob(blob);
+    const id = await storage.saveBlob(blob);
+
+    expect(typeof id).toBe('string');
+    expect(id.length).toBeGreaterThan(10);
+    expect(id.length).toBeLessThan(30);
 
     expect((await fs.readFile(trackPath)).toString()).toBe(content);
     expect(resolveUrl).toHaveBeenCalledTimes(1);
-    expect(resolveUrl.mock.calls[0][0]).toBeGreaterThan(0);
+    expect(resolveUrl.mock.calls[0][0]).toBe(id);
 });
 
 // TODO Impossible to test like this.
@@ -71,18 +75,18 @@ it('save blob - fail writing file', async() => {
         expect(error.message).toEqual(expect.stringContaining('permission denied'));
         expect(error.message).toEqual(expect.stringContaining('open'));
         expect(resolveUrl).toHaveBeenCalledTimes(1);
-        expect(resolveUrl.mock.calls[0][0]).toBeGreaterThan(0);
+        expect(resolveUrl.mock.calls[0][0].length).toBeGreaterThan(10);
     }
 });
 
 it('delete track - success', async() => {
     const tmpDir = await tmp.dir({ unsafeCleanup: true });
-    const trackPath = path.join(tmpDir, '42.wav');
+    const trackPath = path.join(tmpDir, 'abc42.wav');
     await fs.writeFile(trackPath, 'foobar');
     const resolveUrl = jest.fn().mockReturnValueOnce(trackPath);
 
     const storage = createStorage(resolveUrl);
-    await storage.deleteTrack(42);
+    await storage.deleteTrack('abc42');
 
     try {
         await fs.access(trackPath);
@@ -90,24 +94,24 @@ it('delete track - success', async() => {
     } catch (error) {
         expect(error.code).toBe('ENOENT');
         expect(resolveUrl).toHaveBeenCalledTimes(1);
-        expect(resolveUrl).toHaveBeenCalledWith(42);
+        expect(resolveUrl).toHaveBeenCalledWith('abc42');
     }
 });
 
 it('delete track - not found', async() => {
     const tmpDir = await tmp.dir({ unsafeCleanup: true });
-    const trackPath = path.join(tmpDir, '42.wav');
+    const trackPath = path.join(tmpDir, 'abc42.wav');
     const resolveUrl = jest.fn().mockReturnValueOnce(trackPath);
 
     const storage = createStorage(resolveUrl);
     try {
-        await storage.deleteTrack(42);
+        await storage.deleteTrack('abc42');
         throw new Error();
     } catch (error) {
-        expect(error.message).toEqual(expect.stringContaining('Unable to delete track with id 42'));
+        expect(error.message).toEqual(expect.stringContaining('Unable to delete track with id abc42'));
         expect(error.message).toEqual(expect.stringContaining('ENOENT'));
         expect(resolveUrl).toHaveBeenCalledTimes(1);
-        expect(resolveUrl).toHaveBeenCalledWith(42);
+        expect(resolveUrl).toHaveBeenCalledWith('abc42');
     }
 });
 
@@ -123,12 +127,12 @@ it('delete track - fail deleting file', async() => {
 
     const storage = createStorage(resolveUrl);
     try {
-        await storage.deleteTrack(42);
+        await storage.deleteTrack('abc42');
         throw new Error();
     } catch (error) {
-        expect(error.message).toEqual(expect.stringContaining('Unable to delete track with id 42'));
+        expect(error.message).toEqual(expect.stringContaining('Unable to delete track with id abc42'));
         expect(error.message).toEqual(expect.stringContaining('EACCES'));
         expect(resolveUrl).toHaveBeenCalledTimes(1);
-        expect(resolveUrl).toHaveBeenCalledWith(42);
+        expect(resolveUrl).toHaveBeenCalledWith('abc42');
     }
 });

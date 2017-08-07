@@ -57,13 +57,13 @@ const validLicks = [
     {
         id: 'c20',
         description: 'bar baz',
-        tracks: [{ id: 200 }],
+        tracks: [{ id: 'abc200' }],
         tags: ['foo', 'baz']
     },
     {
         id: 'c20',
         description: '',
-        tracks: [{ id: 200 }],
+        tracks: [{ id: 'abc200' }],
         tags: ['foo', 'baz']
     },
     {
@@ -75,7 +75,7 @@ const validLicks = [
     {
         id: 'c20',
         description: 'bar baz',
-        tracks: [{ id: 200 }],
+        tracks: [{ id: 'abc200' }],
         tags: []
     }
 ];
@@ -88,7 +88,7 @@ validLicks.forEach((lick, i) => {
                 lick: {
                     id: 'c20',
                     description: 'foo',
-                    tracks: [{ id: 100 }, { id: 200 }],
+                    tracks: [{ id: 'abc200' }, { id: 'abc200' }],
                     tags: ['foo', 'bar'],
                     createdAt: 12500
                 },
@@ -116,7 +116,7 @@ validLicks.forEach((lick, i) => {
 const validLick = {
     id: 'c20',
     description: 'bar baz',
-    tracks: [{ id: 200 }],
+    tracks: [{ id: 'abc200' }],
     tags: ['foo', 'baz']
 };
 
@@ -176,7 +176,7 @@ it('update lick, id not found', () => {
     const lick = {
         id: 'c20',
         description: 'bar baz',
-        tracks: [{ id: 200 }],
+        tracks: [{ id: 'abc200' }],
         tags: ['foo', 'baz']
     };
 

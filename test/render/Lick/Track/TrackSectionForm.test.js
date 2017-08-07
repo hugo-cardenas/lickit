@@ -44,15 +44,15 @@ test('delete track', () => {
 
   // Assert that the delete handler gets called with the correct track id
   expect(props.handleDeleteTrack).toHaveBeenCalledTimes(1);
-  expect(props.handleDeleteTrack).toBeCalledWith(20);
+  expect(props.handleDeleteTrack).toBeCalledWith('abc20');
 });
 
 function getProps(){
   return {
     tracks: [
-      {id: 10, url: 'http://foo.mp3'},
-      {id: 20, url: 'http://bar.mp3'},
-      {id: 30, url: 'http://baz.mp3'},
+      {id: 'abc10', url: 'http://foo.mp3'},
+      {id: 'abc20', url: 'http://bar.mp3'},
+      {id: 'abc30', url: 'http://baz.mp3'},
     ],
     handleDeleteTrack: () => {},
     handleRecordTrack: () => {},

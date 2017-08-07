@@ -26,7 +26,7 @@ it('map state to props', () => {
                 lick: {
                     id: 'c42',
                     description: 'Foo bar 42',
-                    tracks: [{ id: 10 }, { id: 20 }],
+                    tracks: [{ id: 'abc10' }, { id: 'abc20' }],
                     tags: ['foo', 'bar'],
                     createdAt: 12500
                 }
@@ -42,7 +42,7 @@ it('map state to props', () => {
                 lick: {
                     id: 'c42',
                     description: 'Foo bar 42',
-                    tracks: [{ id: 10, url: 'file:///tmp/foo/tracks/10.wav' }, { id: 20, url: 'file:///tmp/foo/tracks/20.wav' }],
+                    tracks: [{ id: 'abc10', url: 'file:///tmp/foo/tracks/abc10.wav' }, { id: 'abc20', url: 'file:///tmp/foo/tracks/abc20.wav' }],
                     tags: ['foo', 'bar']
                 }
             }
@@ -77,7 +77,7 @@ it('map dispatch to props - delete lick', async() => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
-    await (props.deleteLick(42));
+    await (props.deleteLick('a42'));
 
     expect(dispatch).toHaveBeenCalledTimes(1);
     // Tricky thing - as updateLick returns a thunk, we just compare the functions returned
@@ -88,7 +88,7 @@ it('map dispatch to props - change lick mode', async() => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
-    props.changeLickMode(42, 'modeFoo');
+    props.changeLickMode('a42', 'modeFoo');
     expect(dispatch).toHaveBeenCalledTimes(1);
-    expect(dispatch).toHaveBeenCalledWith(changeLickMode(42, 'modeFoo'));
+    expect(dispatch).toHaveBeenCalledWith(changeLickMode('a42', 'modeFoo'));
 });

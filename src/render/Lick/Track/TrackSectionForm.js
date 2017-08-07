@@ -38,8 +38,7 @@ function renderRecorder(handleRecordTrack) {
 
 TrackSectionForm.propTypes = {
     tracks: PropTypes.arrayOf(PropTypes.shape({
-        // Can be either number (real id) or string (url - temporary id) - TODO Do it in a better way
-        id: PropTypes.isRequired,
+        id: PropTypes.string.isRequired,
         url: PropTypes.string.isRequired
     })).isRequired,
     handleDeleteTrack: PropTypes.func.isRequired,

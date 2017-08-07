@@ -25,7 +25,7 @@ export default TrackSectionView;
 
 TrackSectionView.propTypes = {
     tracks: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number.isRequired,
+        id: PropTypes.string.isRequired,
         url: PropTypes.string.isRequired
     })).isRequired
 };

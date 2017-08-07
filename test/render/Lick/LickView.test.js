@@ -86,7 +86,7 @@ function getTestProps() {
         lick: {
             id: 'c42',
             description: 'Foobar baz',
-            tracks: [{ id: 10, url: 'foo.abc' }, { id: 20, url: 'bar.abc' }],
+            tracks: [{ id: 'a10', url: 'foo.abc' }, { id: 'a20', url: 'bar.abc' }],
             tags: ['foo', 'bar', 'baz']
         },
         editLick: () => {},

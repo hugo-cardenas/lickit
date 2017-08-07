@@ -4,18 +4,14 @@ import libToBuffer from 'blob-to-buffer';
 import makeDir from 'make-dir';
 import path from 'path';
 import pify from 'pify';
+import cuid from 'cuid';
 
 const fs = pify(libFs);
 const toBuffer = pify(libToBuffer);
 
-function rand(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
 export default function createTrackStorage(resolveUrl) {
     async function saveBlob(blob) {
-        // TODO Hack, Generate proper id
-        const id = rand(1, 9999999999999);
+        const id = cuid();
         try {
             const buffer = await toBuffer(blob);
             const path = resolveUrl(id);
@@ -31,7 +27,7 @@ export default function createTrackStorage(resolveUrl) {
         try {
             await fs.unlink(path);
         } catch (error) {
-            throw new VError(error, 'Unable to delete track with id %d', id);
+            throw new VError(error, 'Unable to delete track with id %s', id);
         }
     }
 
