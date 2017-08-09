@@ -6,3 +6,5 @@
 Desktop application for storing and classifying music licks.
 
 > A lick is "a stock pattern or phrase" consisting of a short series of notes that is used in solos and melodic lines and accompaniment - Wikipedia
+
+Built using React, Redux and Electron.
