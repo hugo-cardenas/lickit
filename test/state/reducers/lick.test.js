@@ -44,6 +44,7 @@ it('create lick', () => {
     expect(newState[0].lick.id.length).toBeGreaterThan(10);
     expect(newState[0].lick.id.length).toBeLessThan(30);
     expect(newState[0].lick.id).not.toBe('10abc');
+    expect(newState[0].lick.artist).toBe('');
     expect(newState[0].lick.description).toBe('');
     expect(newState[0].lick.tracks).toEqual([]);
     expect(newState[0].lick.tags).toEqual([]);
@@ -136,7 +137,7 @@ const validLick = {
 const invalidLicks = [
     // Missing fields
     [_.pick(validLick, ['artist', 'description', 'tracks', 'tags']), ['id']],
-    [_.pick(validLick, ['id', 'description', 'tracks', 'tags']), ['id']],
+    [_.pick(validLick, ['id', 'description', 'tracks', 'tags']), ['artist']],
     [_.pick(validLick, ['id', 'artist', 'tracks', 'tags']), ['description']],
     [_.pick(validLick, ['id', 'artist', 'description', 'tags']), ['tracks']],
     [_.pick(validLick, ['id', 'artist', 'description', 'tracks']), ['tags']],

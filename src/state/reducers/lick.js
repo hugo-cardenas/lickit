@@ -33,6 +33,7 @@ function createLick(state) {
         {
             lick: {
                 id: cuid(), // TODO Not so pure - maybe move to action?
+                artist: '',
                 description: '',
                 tracks: [],
                 tags: [],
@@ -51,12 +52,12 @@ function updateLick(state, newLick) {
     } catch (error) {
         throw new VError(error, 'Unable to reduce %s with lick %s', LICK_UPDATE, JSON.stringify(newLick));
     }
-    const { id, description, tracks, tags } = newLick;
+    const { id, artist, description, tracks, tags } = newLick;
 
     const newState = [...state];
     newState[index] = {
         ...state[index],
-        lick: { ...state[index].lick, id, description, tracks, tags },
+        lick: { ...state[index].lick, id, artist, description, tracks, tags },
         mode: 'view'
     };
     return newState;
@@ -91,7 +92,7 @@ function changeLickMode(state, id, mode) {
 function validateLick(lick) {
     const schema = Joi.object().keys({
         id: Joi.string().required(),
-        id: Joi.string().required(),
+        artist: Joi.string().allow('').required(),
         description: Joi.string().allow('').required(),
         tracks: Joi.array().items(Joi.object().keys({
             id: Joi.string().required()
