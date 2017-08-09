@@ -55,6 +55,8 @@ class App extends Component {
                     <header className="main-header">
                         <h5 className="title is-5">Lickit</h5>
                     </header>
+                </div>
+                <div className="main-content">
                     <div className="lick-new">
                         <a className="button" onClick={createLick}>
                             <span className="icon">
@@ -63,8 +65,6 @@ class App extends Component {
                             <span>New lick</span>
                         </a>
                     </div>
-                </div>
-                <div className="main-content">
                     <div className="lick-list">
                         {chunks.map(chunk => renderRow(chunk, deleteLick, saveLick, changeLickMode))}
                     </div>

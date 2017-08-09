@@ -1,5 +1,3 @@
-
-
 html {
   -webkit-app-region: drag
 }
@@ -10,21 +8,18 @@ button, .lick-list {
 
 .top-container {
   width: 100%;
+  height: 160px;
+  position: fixed; 
   top: 0px;
+  z-index: 10;
   padding-top: 10px;
   padding-left: 50px;
   padding-right: 50px;
-  /* margin-top: 10px; */
-  position: fixed; 
-  z-index: 10;
-  background-color: #fff;  
-  /* background-color: lightblue; */
-  /* border-bottom: 1px solid lightgrey; */
-  
+  background-color: #fff;       
 }
 
 header {
-   text-align: center; 
+  text-align: center; 
 }
 
 .main-header {
@@ -32,18 +27,18 @@ header {
 }
 
 .main-content {
-  margin-top: 150px;
-  margin-left: 50px;
-  margin-right: 50px;
+  width: 900px;
+  margin: 0 auto;
+  margin-top: 170px;
 }
 
 .lick-new {
+  margin-top: -70px;
   margin-bottom: 20px;
+  position: fixed;
+  z-index: 10;
 }
 
 .lick-list .column {
-  /*float: left;*/
-  /*margin-right: 35px;*/
-  /*margin-bottom: 35px;*/
   width: 300px;
 }
