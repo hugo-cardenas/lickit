@@ -91,6 +91,7 @@ function changeLickMode(state, id, mode) {
 function validateLick(lick) {
     const schema = Joi.object().keys({
         id: Joi.string().required(),
+        id: Joi.string().required(),
         description: Joi.string().allow('').required(),
         tracks: Joi.array().items(Joi.object().keys({
             id: Joi.string().required()
