@@ -50,11 +50,11 @@ class App extends Component {
         const chunks = _.chunk(licks, 3);
 
         return (
-            <div className="container main-container">
-                <header className="main-header">
-                    <h1 className="title">Lickit</h1>
-                </header>
-                <div className="main-content">
+            <div className="main-container">
+                <div className="top-container">
+                    <header className="main-header">
+                        <h5 className="title is-5">Lickit</h5>
+                    </header>
                     <div className="lick-new">
                         <a className="button" onClick={createLick}>
                             <span className="icon">
@@ -63,6 +63,8 @@ class App extends Component {
                             <span>New lick</span>
                         </a>
                     </div>
+                </div>
+                <div className="main-content">
                     <div className="lick-list">
                         {chunks.map(chunk => renderRow(chunk, deleteLick, saveLick, changeLickMode))}
                     </div>

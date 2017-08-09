@@ -19,6 +19,13 @@ module.exports = function createMenuTemplate(app) {
                 { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
                 { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
             ]
+        },
+        {
+            label: 'View',
+            submenu: [
+                { role: 'reload' },
+                { role: 'toggledevtools' }
+            ]
         }
     ];
 };

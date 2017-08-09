@@ -21,13 +21,16 @@ function isDev() {
 function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({
-        width: 800,
+        width: 1000,
         height: 600,
+        minWidth: 1000,
+        minHeight: 600,
+        titleBarStyle: 'hidden-inset',
         webPreferences: {
             webSecurity: false
         }
     });
-    mainWindow.maximize();
+    // mainWindow.maximize();
 
     // TODO Clean this
     let appUrl;
@@ -46,7 +49,7 @@ function createWindow() {
 
     // Open the DevTools.
     if (isDev()) {
-        mainWindow.webContents.openDevTools();
+        // mainWindow.webContents.openDevTools();
     }
 
     // Emitted when the window is closed.
