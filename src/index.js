@@ -32,12 +32,12 @@ storage.get('state')
     });
 
 
-const descriptions = [
-  'Django - Lady be good\nhttps://youtu.be/2Am48nza7JE?t=16s',
-  'Django - Blues clair',
-  'Django - Blues clair 2',
-  'Charlie Parker - Confirmation',
-  'Dizzy Gillespie - Perdido\nhttps://youtu.be/X8gCmtkuVgk?t=20s'
+const artists = [
+  ['Django', 'Lady be good\nhttps://youtu.be/2Am48nza7JE?t=16s'],
+  ['Django', 'Blues clair'],
+  ['Django', 'Blues clair 2'],
+  ['Charlie Parker', 'Confirmation'],
+  ['Dizzy Gillespie', 'Perdido\nhttps://youtu.be/X8gCmtkuVgk?t=20s']
 ];
 
 const tags = [
@@ -57,9 +57,11 @@ const getInitialState = (numItems) => {
     const licks = _
         .range(numItems)
         .map(i => {
+            const [artist, description] = artists[rand(0, artists.length - 1)];
             return {
                 id: `${i + 1}`,
-                description: descriptions[rand(0, descriptions.length - 1)],
+                artist,
+                description,
                 tracks: _.range(rand(0, 2)).map(i => {
                     return {
                         id: `${i}`,

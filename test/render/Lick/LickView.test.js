@@ -2,6 +2,13 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import LickView from 'src/render/Lick/LickView';
 
+test('render artist', () => {
+    const component = shallow(<LickView {...getTestProps()}/>);
+    const description = component.find('.artist');
+    expect(description.type()).toBe('p');
+    expect(description.text()).toBe('Charlie Foo');
+});
+
 test('render description', () => {
     const component = shallow(<LickView {...getTestProps()}/>);
     const description = component.find('.description');
@@ -85,6 +92,7 @@ function getTestProps() {
     return {
         lick: {
             id: 'c42',
+            artist: 'Charlie Foo',
             description: 'Foobar baz',
             tracks: [{ id: 'a10', url: 'foo.abc' }, { id: 'a20', url: 'bar.abc' }],
             tags: ['foo', 'bar', 'baz']

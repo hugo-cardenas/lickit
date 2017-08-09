@@ -14,6 +14,7 @@ function mapLickStateToProps(lickState) {
         mode: lickState.mode ? lickState.mode : undefined,
         lick: {
             id: lick.id,
+            artist: lick.artist,
             description: lick.description,
             tags: [...lick.tags], // TODO Fix in a better way this reference problem - state modified as react state
             tracks: lick.tracks.map(track => {

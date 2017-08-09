@@ -14,6 +14,9 @@ class LickForm extends Component {
     }
 
     bindHandlers() {
+        this.handleInputArtist = this
+            .handleInputArtist
+            .bind(this);
         this.handleInputDescription = this
             .handleInputDescription
             .bind(this);
@@ -22,9 +25,6 @@ class LickForm extends Component {
             .bind(this);
         this.setLickState = this
             .setLickState
-            .bind(this);
-        this.handleInputChange = this
-            .handleInputChange
             .bind(this);
         this.handleCreateTag = this
             .handleCreateTag
@@ -36,7 +36,7 @@ class LickForm extends Component {
 
     render() {
         const { lick, tagInput } = this.state;
-        const { id, description, tracks, tags } = lick;
+        const { id, artist, description, tracks, tags } = lick;
         const { cancelLickEditor, deleteLick } = this.props;
 
         const trackSectionState = {
@@ -48,6 +48,7 @@ class LickForm extends Component {
         return (
             <div className="card lick">
                 <div className="card-content">
+                    {this.renderArtist(artist)}
                     {this.renderDescription(description)}
                     <TrackSectionForm {...trackSectionState}/> 
                     {this.renderTags(tags, tagInput)}
@@ -55,6 +56,15 @@ class LickForm extends Component {
                 {this.renderFooter(id, cancelLickEditor, deleteLick)}
             </div>
         );
+    }
+
+    renderArtist(artist) {
+        return <input
+            name="artist"
+            className="input artist"
+            placeholder="Add artist name"
+            value={artist}
+            onChange={this.handleInputArtist}/>;
     }
 
     renderDescription(description) {
@@ -123,13 +133,35 @@ class LickForm extends Component {
             [name]: value });
     }
 
+    handleInputArtist(event) {
+        this.handleLickStateInput('artist', event);
+    }
+
     handleInputDescription(event) {
-        this.setLickState({ description: event.target.value });
+        this.handleLickStateInput('description', event);
+    }
+
+    handleLickStateInput(name, event) {
+        this.setLickState({ [name]: event.target.value });
     }
 
     handleInputTag(event) {
         this.setState({
             tagInput: event.target.value
+        });
+    }
+
+    handleCreateTag(event) {
+        const tag = event.target.value;
+        if (event.key !== 'Enter' || tag === '') {
+            return;
+        }
+
+        let tags = this.getLickState().tags;
+        tags.push(tag);
+        this.setState({
+            tagInput: '',
+            lick: { ...this.getLickState(), tags: _.uniq(tags) }
         });
     }
 
@@ -153,20 +185,6 @@ class LickForm extends Component {
         });
     }
 
-    handleCreateTag(event) {
-        const tag = event.target.value;
-        if (event.key !== 'Enter' || tag === '') {
-            return;
-        }
-
-        let tags = this.getLickState().tags;
-        tags.push(tag);
-        this.setState({
-            tagInput: '',
-            lick: { ...this.getLickState(), tags: _.uniq(tags) }
-        });
-    }
-
     handleSave() {
         this.props.saveLick(this.getLickState());
     }
@@ -187,6 +205,7 @@ export default LickForm;
 LickForm.propTypes = {
     lick: PropTypes.shape({
         id: PropTypes.string.isRequired,
+        artist: PropTypes.string.isRequired,
         description: PropTypes.string.isRequired,
         tracks: PropTypes.arrayOf(PropTypes.object).isRequired,
         tags: PropTypes.arrayOf(PropTypes.string).isRequired

@@ -1,15 +1,16 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {linkifier} from 'react-linkifier';
+import { linkifier } from 'react-linkifier';
 import TrackSectionView from './Track/TrackSectionView';
 
 function LickView(props) {
-    const {lick, editLick, deleteLick} = props;
-    const {id, description, tracks, tags} = lick;
+    const { lick, editLick, deleteLick } = props;
+    const { id, artist, description, tracks, tags } = lick;
 
     return (
         <div className="card lick">
             <div className="card-content">
+                {renderArtist(artist)}
                 {renderDescription(description)}
                 <TrackSectionView tracks={tracks}/> 
                 {renderTags(tags)}
@@ -20,6 +21,10 @@ function LickView(props) {
 }
 
 export default LickView;
+
+function renderArtist(artist) {
+    return <p className="artist">{artist}</p>;
+}
 
 function renderDescription(description) {
     // TODO Wrap long links
@@ -52,6 +57,7 @@ function renderFooter(id, editLick, deleteLick) {
 LickView.propTypes = {
     lick: PropTypes.shape({
         id: PropTypes.string.isRequired,
+        artist: PropTypes.string.isRequired,
         description: PropTypes.string.isRequired,
         tracks: PropTypes.arrayOf(PropTypes.object).isRequired,
         tags: PropTypes.arrayOf(PropTypes.string).isRequired

@@ -25,6 +25,7 @@ it('map state to props', () => {
                 mode: 'edit',
                 lick: {
                     id: 'c42',
+                    artist: 'Charlie Foo',
                     description: 'Foo bar 42',
                     tracks: [{ id: 'abc10' }, { id: 'abc20' }],
                     tags: ['foo', 'bar'],
@@ -41,6 +42,7 @@ it('map state to props', () => {
                 mode: 'edit',
                 lick: {
                     id: 'c42',
+                    artist: 'Charlie Foo',
                     description: 'Foo bar 42',
                     tracks: [{ id: 'abc10', url: 'file:///tmp/foo/tracks/abc10.wav' }, { id: 'abc20', url: 'file:///tmp/foo/tracks/abc20.wav' }],
                     tags: ['foo', 'bar']

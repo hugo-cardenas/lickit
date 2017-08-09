@@ -2,6 +2,35 @@ import React from 'react';
 import { mount, shallow } from 'enzyme';
 import LickForm from 'src/render/Lick/LickForm';
 
+test('render artist', () => {
+    const component = shallow(<LickForm {...getTestProps()}/>);
+    const description = component.find('.artist');
+    expect(description.type()).toBe('input');
+    expect(description.prop('name')).toBe('artist');
+    expect(description.prop('value')).toBe('Charlie Foo');
+});
+
+test('input artist', () => {
+    const component = shallow(<LickForm {...getTestProps()}/>);
+    const artist = component.find('.artist');
+
+    artist.simulate('change', {
+        target: {
+            name: 'artist',
+            value: 'foo'
+        }
+    });
+    expect(component.find('.artist').prop('value')).toBe('foo');
+
+    artist.simulate('change', {
+        target: {
+            name: 'artist',
+            value: 'bar'
+        }
+    });
+    expect(component.find('.artist').prop('value')).toBe('bar');
+});
+
 test('render description', () => {
     const component = shallow(<LickForm {...getTestProps()}/>);
     const description = component.find('.description');
@@ -168,6 +197,7 @@ test('save lick', () => {
 
     const expectedLick = {
         id: props.lick.id,
+        artist: props.lick.artist,
         description: props.lick.description,
         tracks: props.lick.tracks,
         tags: props.lick.tags
@@ -218,6 +248,7 @@ function getTestProps() {
     return {
         lick: {
             id: 'c42',
+            artist: 'Charlie Foo',
             description: 'Foobar baz',
             tracks: [
                 { id: 'abc10', url: 'foo.baz' }, { id: 'abc20', url: 'bar.baz' }

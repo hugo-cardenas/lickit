@@ -49,6 +49,7 @@ it('renders expected number of licks', () => {
         return {
             lick: {
                 id: 'c' + i,
+                artist: '',
                 description: '',
                 tracks: [],
                 tags: []
