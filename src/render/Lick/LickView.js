@@ -8,7 +8,7 @@ function LickView(props) {
     const { id, artist, description, tracks, tags } = lick;
 
     return (
-        <div className="card lick">
+        <div className="card lick lick-view">
             <div className="card-content">
                 {renderArtist(artist)}
                 {renderDescription(description)}

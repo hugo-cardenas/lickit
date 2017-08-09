@@ -46,7 +46,7 @@ class LickForm extends Component {
         };
 
         return (
-            <div className="card lick">
+            <div className="card lick lick-form">
                 <div className="card-content">
                     {this.renderArtist(artist)}
                     {this.renderDescription(description)}
@@ -71,7 +71,7 @@ class LickForm extends Component {
         return <textarea
             name="description"
             className="textarea description"
-            placeholder="Add some description"
+            placeholder="Add description"
             value={description}
             onChange={this.handleInputDescription}/>;
     }
