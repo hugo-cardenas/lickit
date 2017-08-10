@@ -40,7 +40,8 @@ test('render tracks', () => {
 });
 
 test('render tags', () => {
-    const expectedTags = ['foo', 'bar', 'baz'];
+    // Expect tags sorted alphabetically
+    const expectedTags = ['bar', 'baz', 'foo'];
 
     const component = shallow(<LickView {...getTestProps()}/>);
     const tagsParent = component.find('.tags');
@@ -54,10 +55,10 @@ test('render tags', () => {
     });
 
     const keys = tagElements.map(tagElement => tagElement.key());
-    expect(keys).toEqual(expect.arrayContaining(expectedTags));
+    expect(keys).toEqual(expectedTags);
 
     const tags = getTags(component);
-    expect(tags).toEqual(expect.arrayContaining(expectedTags));
+    expect(tags).toEqual(expectedTags);
 });
 
 test('edit lick', () => {
