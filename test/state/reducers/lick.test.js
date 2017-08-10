@@ -44,6 +44,7 @@ it('create lick', () => {
     expect(newState[0].lick.id.length).toBeGreaterThan(10);
     expect(newState[0].lick.id.length).toBeLessThan(30);
     expect(newState[0].lick.id).not.toBe('10abc');
+    expect(newState[0].lick.artist).toBe('');
     expect(newState[0].lick.description).toBe('');
     expect(newState[0].lick.tracks).toEqual([]);
     expect(newState[0].lick.tags).toEqual([]);
@@ -56,24 +57,35 @@ it('create lick', () => {
 const validLicks = [
     {
         id: 'c20',
+        artist: 'barbar',
         description: 'bar baz',
         tracks: [{ id: 'abc200' }],
         tags: ['foo', 'baz']
     },
     {
         id: 'c20',
+        artist: '',
+        description: 'bar baz',
+        tracks: [{ id: 'abc200' }],
+        tags: ['foo', 'baz']
+    },
+    {
+        id: 'c20',
+        artist: 'barbar',
         description: '',
         tracks: [{ id: 'abc200' }],
         tags: ['foo', 'baz']
     },
     {
         id: 'c20',
+        artist: 'barbar',
         description: 'bar baz',
         tracks: [],
         tags: ['foo', 'baz']
     },
     {
         id: 'c20',
+        artist: 'barbar',
         description: 'bar baz',
         tracks: [{ id: 'abc200' }],
         tags: []
@@ -87,6 +99,7 @@ validLicks.forEach((lick, i) => {
             {
                 lick: {
                     id: 'c20',
+                    artist: 'foofoo',
                     description: 'foo',
                     tracks: [{ id: 'abc200' }, { id: 'abc200' }],
                     tags: ['foo', 'bar'],
@@ -115,6 +128,7 @@ validLicks.forEach((lick, i) => {
 
 const validLick = {
     id: 'c20',
+    artist: 'foofoo',
     description: 'bar baz',
     tracks: [{ id: 'abc200' }],
     tags: ['foo', 'baz']
@@ -122,15 +136,18 @@ const validLick = {
 
 const invalidLicks = [
     // Missing fields
-    [_.pick(validLick, ['description', 'tracks', 'tags']), ['id']],
-    [_.pick(validLick, ['id', 'tracks', 'tags']), ['description']],
-    [_.pick(validLick, ['id', 'description', 'tags']), ['tracks']],
-    [_.pick(validLick, ['id', 'description', 'tracks']), ['tags']],
-    [_.pick(validLick, ['id', 'tracks']), ['description', 'tags']],
+    [_.pick(validLick, ['artist', 'description', 'tracks', 'tags']), ['id']],
+    [_.pick(validLick, ['id', 'description', 'tracks', 'tags']), ['artist']],
+    [_.pick(validLick, ['id', 'artist', 'tracks', 'tags']), ['description']],
+    [_.pick(validLick, ['id', 'artist', 'description', 'tags']), ['tracks']],
+    [_.pick(validLick, ['id', 'artist', 'description', 'tracks']), ['tags']],
+    [_.pick(validLick, ['id', 'artist', 'tracks']), ['description', 'tags']],
 
     // Invalid values
     [Object.assign({}, validLick, { id: true }), ['id']],
     [Object.assign({}, validLick, { id: -1 }), ['id']],
+
+    [Object.assign({}, validLick, { artist: 42 }), ['artist']],
 
     [Object.assign({}, validLick, { description: 42 }), ['description']],
 
@@ -176,6 +193,7 @@ it('update lick, id not found', () => {
 
     const lick = {
         id: 'c20',
+        artist: 'foofoo',
         description: 'bar baz',
         tracks: [{ id: 'abc200' }],
         tags: ['foo', 'baz']

@@ -44,6 +44,7 @@ function getTestProps() {
     return {
         lick: {
             id: 'c42',
+            artist: 'Charlie Foo',
             description: 'Foobar baz',
             tracks: [{ id: 'a10', url: 'http://foo.mp3' }, { id: 'a20', url: 'http://bar.mp3' }],
             tags: [
