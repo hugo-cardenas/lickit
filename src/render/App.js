@@ -5,7 +5,7 @@ import Lick from './Lick/Lick';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-function renderLick(lickState, deleteLick, saveLick, changeLickMode) {
+const renderLick = (lickState, deleteLick, saveLick, changeLickMode) => {
     return <Lick
         lick={lickState.lick}
         mode={lickState.mode}
@@ -13,9 +13,9 @@ function renderLick(lickState, deleteLick, saveLick, changeLickMode) {
         saveLick={saveLick}
         changeLickMode={changeLickMode}
         />;
-}
+};
 
-function renderRow(chunk, deleteLick, saveLick, changeLickMode) {
+const renderRow = (chunk, deleteLick, saveLick, changeLickMode) => {
     const chunkKey = chunk
         .map(lickState => lickState.lick.id)
         .join('-');
@@ -30,27 +30,31 @@ function renderRow(chunk, deleteLick, saveLick, changeLickMode) {
             })}
         </div>
     );
-}
+};
 
-class App extends Component {
-    render() {
-        const {
-            error,
-            licks,
-            deleteLick,
-            saveLick,
-            createLick,
-            changeLickMode
-        } = this.props;
+const App = (props) => {
+    const {
+        error,
+        licks,
+        deleteLick,
+        saveLick,
+        createLick,
+        changeLickMode
+    } = props;
 
-        if (error instanceof Error) {
-            alert('ERROR:' + "\n" + error);
-        }
+    if (error instanceof Error) {
+        alert('ERROR:' + "\n" + error);
+    }
 
-        const chunks = _.chunk(licks, 3);
+    const handleCreateLick = () => {
+        window.scrollTo(0, 0);
+        createLick();
+    };
 
-        return (
-            <div className="main-container">
+    const chunks = _.chunk(licks, 3);
+
+    return (
+        <div className="main-container">
                 <div className="top-container">
                     <header className="main-header">
                         <h5 className="title is-5">Lickit</h5>
@@ -58,7 +62,7 @@ class App extends Component {
                 </div>
                 <div className="main-content">
                     <div className="lick-new">
-                        <a className="button" onClick={createLick}>
+                        <a className="button" onClick={handleCreateLick}>
                             <span className="icon">
                                 <i className="fa fa-plus-circle"></i>
                             </span>
@@ -70,9 +74,8 @@ class App extends Component {
                     </div>
                 </div>
             </div>
-        );
-    }
-}
+    );
+};
 
 export default App;
 
