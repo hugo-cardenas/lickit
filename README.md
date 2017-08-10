@@ -7,4 +7,6 @@ Desktop application for recording, storing and classifying music licks.
 
 > A lick is "a stock pattern or phrase" consisting of a short series of notes that is used in solos and melodic lines and accompaniment - Wikipedia
 
+![Screenshot](https://github.com/hugo-cardenas/lickit/blob/master/readme/screenshot.png?raw=true)
+
 Being built using React, Redux and Electron.
