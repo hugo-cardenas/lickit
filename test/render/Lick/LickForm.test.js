@@ -98,9 +98,11 @@ test.skip('record track', () => {
 });
 
 test('render tags', () => {
-    const expectedTags = ['foo', 'bar', 'baz'];
+    const props = getTestProps();
+    props.lick.tags = ['bar', 'foo', 'baz'];
+    const expectedTags = ['bar', 'baz', 'foo']; // Expected tags sorted alphabetically
 
-    const component = shallow(<LickForm {...getTestProps()}/>);
+    const component = shallow(<LickForm {...props}/>);
     const tagsParent = component.find('.tags');
     expect(tagsParent.type()).toBe('div');
 
@@ -112,14 +114,14 @@ test('render tags', () => {
     });
 
     const keys = tagElements.map(tagElement => tagElement.key());
-    expect(keys).toEqual(expect.arrayContaining(expectedTags));
+    expect(keys).toEqual(expectedTags);
 
     const tags = getTags(component);
-    expect(tags).toEqual(expect.arrayContaining(expectedTags));
+    expect(tags).toEqual(expectedTags);
 });
 
 test('delete tag', () => {
-    let expectedTags = ['foo', 'bar', 'baz'];
+    let expectedTags = ['bar', 'baz', 'foo'];
     const component = shallow(<LickForm {...getTestProps()}/>);
 
     const tagElements = component.find('.tag');
@@ -134,7 +136,7 @@ test('delete tag', () => {
     });
 
     expect(getTags(component)).toEqual([]);
-})
+});
 
 test('input new tag', () => {
     const component = shallow(<LickForm {...getTestProps()}/>);
@@ -144,22 +146,23 @@ test('input new tag', () => {
     tagInput.simulate('change', {
         target: {
             name: 'tagInput',
-            value: 'abc'
+            value: 'faa'
         }
     });
-    expect(getTagInputValue(component)).toBe('abc');
+    expect(getTagInputValue(component)).toBe('faa');
 
     // After pressing Enter, the value is added to tags and the field gets cleaned
     tagInput.simulate('keyPress', {
         key: 'Enter',
         target: {
             name: 'tagInput',
-            value: 'abc'
+            value: 'faa'
         }
     });
 
     const tags = getTags(component);
-    expect(tags).toEqual(expect.arrayContaining(['foo', 'bar', 'baz', 'abc']));
+    // Expected tags sorted alphabetically
+    expect(tags).toEqual(['bar', 'baz', 'faa', 'foo']); 
     expect(getTagInputValue(component)).toBe('');
 });
 
@@ -187,7 +190,7 @@ test('input duplicate tag', () => {
     });
 
     const tags = getTags(component);
-    expect(tags).toEqual(expect.arrayContaining(['foo', 'bar', 'baz']));
+    expect(tags).toEqual(['bar', 'baz', 'foo']);
     expect(getTagInputValue(component)).toBe('');
 });
 
