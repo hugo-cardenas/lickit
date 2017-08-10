@@ -3,11 +3,6 @@
 }
 
 .description {
-  font-size: 14px;
-  margin-bottom: 15px;
-}
-
-.description {
   color: #4a4a4a;
   font-size: 14px;
   margin-bottom: 15px;
@@ -22,6 +17,10 @@
   white-space: -pre-wrap; /* Opera 4-6 */    
   white-space: -o-pre-wrap; /* Opera 7 */    
   word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+
+.description.textarea {
+   min-height: 100px; 
 }
 
 .lick .card-footer, .lick .card-footer-item {
