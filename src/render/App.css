@@ -32,13 +32,26 @@ header {
   margin-top: 170px;
 }
 
-.lick-new {
-  margin-top: -70px;
+.lick-controls {
+  margin-top: -70px; 
   margin-bottom: 20px;
-  position: fixed;
+  position: fixed; 
   z-index: 10;
 }
 
 .lick-list .column {
   width: 300px;
+}
+
+.suggestion-container-open {
+   border: 1px solid lightgray;
+  background-color: rgba(255, 255, 255, 0.9); 
+}
+
+.suggestion, .section-title {
+   padding: 5px 10px; 
+}
+
+.suggestion-highlighted {
+   background-color: rgba(245, 245, 245, 0.9); 
 }

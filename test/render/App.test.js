@@ -67,7 +67,7 @@ it('create new lick', () => {
     props.createLick = jest.fn();
 
     const component = shallow(<App {...props}/>);
-    component.find('.lick-new > .button').simulate('click');
+    component.find('.lick-create').simulate('click');
     
     expect(props.createLick).toHaveBeenCalledTimes(1);
     expect(props.createLick).toBeCalledWith();

@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import 'bulma/css/bulma.css';
 import './App.css';
 import Lick from './Lick/Lick';
+import Search from './Search';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
@@ -55,26 +56,35 @@ const App = (props) => {
 
     return (
         <div className="main-container">
-                <div className="top-container">
-                    <header className="main-header">
-                        <h5 className="title is-5">Lickit</h5>
-                    </header>
-                </div>
+                {renderTopContainer()}
                 <div className="main-content">
-                    <div className="lick-new">
-                        <a className="button" onClick={handleCreateLick}>
-                            <span className="icon">
-                                <i className="fa fa-plus-circle"></i>
-                            </span>
-                            <span>New lick</span>
-                        </a>
-                    </div>
+                    {renderLickControls(handleCreateLick)}
                     <div className="lick-list">
                         {chunks.map(chunk => renderRow(chunk, deleteLick, saveLick, changeLickMode))}
                     </div>
                 </div>
             </div>
     );
+};
+
+const renderTopContainer = () => {
+    return <div className="top-container">
+        <header className="main-header">
+            <h5 className="title is-5">Lickit</h5>
+        </header>
+    </div>;
+};
+
+const renderLickControls = (handleCreateLick) => {
+    return <div className="lick-controls field is-grouped">
+        <a className="button control lick-create" onClick={handleCreateLick}>
+            <span className="icon">
+                <i className="fa fa-plus-circle"></i>
+            </span>
+            <span>New lick</span>
+        </a>
+        <Search/>
+    </div>;
 };
 
 export default App;

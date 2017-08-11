@@ -62,7 +62,7 @@ const getInitialState = (numItems) => {
                 id: `${i + 1}`,
                 artist,
                 description,
-                tracks: _.range(rand(0, 2)).map(i => {
+                tracks: _.range(rand(0, 0)).map(i => {
                     return {
                         id: `${i}`,
                         url: url + `?a=${i}`
