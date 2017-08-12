@@ -70,7 +70,7 @@ const App = (props) => {
 const renderTopContainer = () => {
     return <div className="top-container">
         <header className="main-header">
-            <h5 className="title is-5">Lickit</h5>
+            <h5 className="subtitle is-5">Lickit</h5>
         </header>
     </div>;
 };
@@ -83,7 +83,7 @@ const renderLickControls = (handleCreateLick) => {
             </span>
             <span>New lick</span>
         </a>
-        <Search/>
+        <Search suggestions={getSuggestions()}/>
     </div>;
 };
 
@@ -96,4 +96,32 @@ App.propTypes = {
     saveLick: PropTypes.func.isRequired,
     deleteLick: PropTypes.func.isRequired,
     changeLickMode: PropTypes.func.isRequired
+};
+
+
+// TODO Test
+
+const getSuggestions = () => {
+    return [
+        {
+            title: 'Artist',
+            suggestions: [
+                'Charlie Parker',
+                'Dizzy Gillespie',
+                'Django Reinhardt',
+                ..._.range(0, 5).map(i => 'artist' + i)
+            ]
+        },
+        {
+            title: 'Tag',
+            suggestions: [
+                'christoph changes',
+                'bebop',
+                'blues',
+                'gypsy jazz',
+                'rhythm changes',
+                ..._.range(0, 10).map(i => 'tag' + i)
+            ]
+        }
+    ];
 };

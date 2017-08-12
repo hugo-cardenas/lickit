@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import createStore from './state/store';
 import jsonStorage from 'electron-json-storage';
 import { mapStateToProps, mapDispatchToProps } from './map';
+import randomColor from 'randomcolor';
 
 const storage = pify(jsonStorage);
 
@@ -29,8 +30,10 @@ storage.get('state')
             <Provider store={store}>
         <ConnectedApp/>
         </Provider>, document.getElementById('root'));
-    });
 
+        // Array.from(document.getElementsByTagName('div'))
+        //     .forEach(el => el.style.backgroundColor = randomColor({luminosity: 'light'}));
+    });
 
 const artists = [
   ['Django', 'Lady be good\nhttps://youtu.be/2Am48nza7JE?t=16s'],

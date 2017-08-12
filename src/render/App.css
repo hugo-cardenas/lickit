@@ -27,7 +27,7 @@ header {
 }
 
 .main-content {
-  width: 900px;
+  width: 876px; /* 900 - 12 left margin - 12 right margin */
   margin: 0 auto;
   margin-top: 170px;
 }
@@ -44,8 +44,10 @@ header {
 }
 
 .suggestion-container-open {
-   border: 1px solid lightgray;
+  border: 1px solid lightgray;
   background-color: rgba(255, 255, 255, 0.9); 
+  max-height: 450px;
+  overflow-y: auto;
 }
 
 .suggestion, .section-title {
@@ -54,4 +56,10 @@ header {
 
 .suggestion-highlighted {
    background-color: rgba(245, 245, 245, 0.9); 
+}
+
+.lick-filters {
+  margin-top: 6px;
+  margin-left: 15px;
+  max-width: 553px;
 }
