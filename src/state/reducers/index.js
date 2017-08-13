@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
-import licks from './lick';
 import error from './error';
+import licks from './lick';
+import search from './search';
 
 const rootReducer = combineReducers({
     error,
-    licks
+    licks,
+    search
 });
 
 export default rootReducer;
