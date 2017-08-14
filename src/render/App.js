@@ -6,10 +6,10 @@ import Search from './Search';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-const renderLick = (lickState, deleteLick, saveLick, changeLickMode) => {
+const renderItem = (item, deleteLick, saveLick, changeLickMode) => {
     return <Lick
-        lick={lickState.lick}
-        mode={lickState.mode}
+        lick={item.lick}
+        mode={item.mode}
         deleteLick={deleteLick}
         saveLick={saveLick}
         changeLickMode={changeLickMode}
@@ -18,15 +18,15 @@ const renderLick = (lickState, deleteLick, saveLick, changeLickMode) => {
 
 const renderRow = (chunk, deleteLick, saveLick, changeLickMode) => {
     const chunkKey = chunk
-        .map(lickState => lickState.lick.id)
+        .map(item => item.lick.id)
         .join('-');
     return (
         <div key={chunkKey} className="columns">
-            {chunk.map(lickState => {
+            {chunk.map(item => {
               return <div 
-                  key={lickState.lick.id} 
+                  key={item.lick.id} 
                   className="column is-one-third">
-                      {renderLick(lickState, deleteLick, saveLick, changeLickMode)}
+                      {renderItem(item, deleteLick, saveLick, changeLickMode)}
               </div>;
             })}
         </div>
@@ -36,7 +36,7 @@ const renderRow = (chunk, deleteLick, saveLick, changeLickMode) => {
 const App = (props) => {
     const {
         error,
-        licks,
+        items,
         deleteLick,
         saveLick,
         createLick,
@@ -52,7 +52,7 @@ const App = (props) => {
         createLick();
     };
 
-    const chunks = _.chunk(licks, 3);
+    const chunks = _.chunk(items, 3);
 
     return (
         <div className="main-container">
@@ -91,13 +91,12 @@ export default App;
 
 App.propTypes = {
     error: PropTypes.object,
-    licks: PropTypes.arrayOf(PropTypes.object).isRequired,
+    items: PropTypes.arrayOf(PropTypes.object).isRequired,
     createLick: PropTypes.func.isRequired,
     saveLick: PropTypes.func.isRequired,
     deleteLick: PropTypes.func.isRequired,
     changeLickMode: PropTypes.func.isRequired
 };
-
 
 // TODO Test
 

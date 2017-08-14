@@ -4,7 +4,7 @@ import { getUrlResolver } from './track/urlResolver';
 function mapStateToProps(state) {
     return {
         error: state.error,
-        licks: state.licks.map(mapLickStateToProps)
+        items: state.items.map(mapLickStateToProps)
     };
 }
 

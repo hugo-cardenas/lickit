@@ -12,8 +12,11 @@ import {
     LICK_MODE_VIEW
 } from '../actions/lick/modes';
 
+const defaultState = {
+    items: []
+};
 
-export default function (state = [], action) {
+export default function (state = defaultState, action) {
     switch (action.type) {
         case LICK_CREATE:
             return createLick(state);
@@ -29,49 +32,66 @@ export default function (state = [], action) {
 }
 
 function createLick(state) {
-    return [
-        {
-            lick: {
-                id: cuid(), // TODO Not so pure - maybe move to action?
-                artist: '',
-                description: '',
-                tracks: [],
-                tags: [],
-                createdAt: Date.now() // TODO Not so pure - maybe move to action?
+    return {
+        ...state,
+        items: [
+            {
+                lick: {
+                    id: cuid(), // TODO Not so pure - maybe move to action?
+                    artist: '',
+                    description: '',
+                    tracks: [],
+                    tags: [],
+                    createdAt: Date.now() // TODO Not so pure - maybe move to action?
+                },
+                mode: 'edit'
             },
-            mode: 'edit'
-        },
-        ...state
-    ];
+            ...state.items
+        ]
+    };
 }
 
 function updateLick(state, newLick) {
     try {
         validateLick(newLick);
-        var index = findLickIndex(state, newLick.id);
+        var index = findItemIndex(state.items, newLick.id);
     } catch (error) {
         throw new VError(error, 'Unable to reduce %s with lick %s', LICK_UPDATE, JSON.stringify(newLick));
     }
     const { id, artist, description, tracks, tags } = newLick;
 
-    const newState = [...state];
-    newState[index] = {
-        ...state[index],
-        lick: { ...state[index].lick, id, artist, description, tracks, tags },
-        mode: 'view'
+    const newState = {
+        ...state,
+        items: [
+            ...state.items,
+        ]
     };
+
+    const item = state.items[index];
+    newState.items[index] = {
+        ...item,
+        lick: { ...item.lick, id, artist, description, tracks, tags },
+        mode: 'view'
+
+    };
+
     return newState;
 }
 
 function deleteLick(state, id) {
     try {
-        var index = findLickIndex(state, id);
+        var index = findItemIndex(state.items, id);
     } catch (error) {
         throw new VError(error, 'Unable to reduce %s with id %s', LICK_DELETE, id);
     }
-    const newState = [...state];
-    newState.splice(index, 1);
-    return newState;
+
+    const items = [...state.items];
+    items.splice(index, 1);
+
+    return {
+        ...state,
+        items
+    };
 }
 
 function changeLickMode(state, id, mode) {
@@ -80,10 +100,15 @@ function changeLickMode(state, id, mode) {
         if (!validModes.includes(mode)) {
             throw new VError('Invalid mode %s, should be one of %s', mode, validModes.join(', '));
         }
-        const index = findLickIndex(state, id);
-        const newState = [...state];
-        newState[index] = { ...newState[index], mode };
-        return newState;
+        const index = findItemIndex(state.items, id);
+        const items = [...state.items];
+        items[index] = { ...state.items[index], mode };
+
+        return {
+            ...state,
+            items
+        };
+
     } catch (error) {
         throw new VError(error, 'Unable to reduce %s with id %s and mode %s', LICK_CHANGE_MODE, id, mode);
     }
@@ -106,8 +131,9 @@ function validateLick(lick) {
     }
 }
 
-function findLickIndex(state, id) {
-    const index = state.findIndex(lickState => lickState.lick.id === id);
+// TODO Optimize indexing items by lick id
+function findItemIndex(items, id) {
+    const index = items.findIndex(item => item.lick.id === id);
     if (index < 0) {
         throw new VError('Id %s not found', id);
     }

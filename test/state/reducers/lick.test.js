@@ -20,14 +20,14 @@ jest.mock('electron', () => {
 });
 
 it('define default state', () => {
-    const expectedState = [];
+    const expectedState = { items: [] };
 
     expect(lickReducer(undefined, { type: 'invalid action' })).toEqual(expectedState);
 });
 
 it('reduce unknown action', () => {
-    const state = Object.freeze([]);
-    const expectedState = [];
+    const state = createState([]);
+    const expectedState = { items: [] };
 
     expect(lickReducer(state, { type: 'invalid action' })).toEqual(expectedState);
 });
@@ -35,23 +35,25 @@ it('reduce unknown action', () => {
 it('create lick', () => {
     const initialTimestamp = Date.now();
 
-    const state = Object.freeze([{ lick: { id: 'c10' } }]);
+    const state = createState([{ lick: { id: 'c10' } }]);
     const newState = lickReducer(state, { type: LICK_CREATE });
-    expect(newState).toHaveLength(2);
 
-    expect(newState[0].mode).toBe('edit');
-    expect(typeof newState[0].lick.id).toBe('string');
-    expect(newState[0].lick.id.length).toBeGreaterThan(10);
-    expect(newState[0].lick.id.length).toBeLessThan(30);
-    expect(newState[0].lick.id).not.toBe('10abc');
-    expect(newState[0].lick.artist).toBe('');
-    expect(newState[0].lick.description).toBe('');
-    expect(newState[0].lick.tracks).toEqual([]);
-    expect(newState[0].lick.tags).toEqual([]);
-    expect(newState[0].lick.createdAt).toBeGreaterThanOrEqual(initialTimestamp);
-    expect(newState[0].lick.createdAt).toBeLessThan(Date.now());
+    const items = newState.items;
+    expect(items).toHaveLength(2);
 
-    expect(newState[1]).toEqual({ lick: { id: 'c10' } });
+    expect(items[0].mode).toBe('edit');
+    expect(typeof items[0].lick.id).toBe('string');
+    expect(items[0].lick.id.length).toBeGreaterThan(10);
+    expect(items[0].lick.id.length).toBeLessThan(30);
+    expect(items[0].lick.id).not.toBe('10abc');
+    expect(items[0].lick.artist).toBe('');
+    expect(items[0].lick.description).toBe('');
+    expect(items[0].lick.tracks).toEqual([]);
+    expect(items[0].lick.tags).toEqual([]);
+    expect(items[0].lick.createdAt).toBeGreaterThanOrEqual(initialTimestamp);
+    expect(items[0].lick.createdAt).toBeLessThan(Date.now());
+
+    expect(items[1]).toEqual({ lick: { id: 'c10' } });
 });
 
 const validLicks = [
@@ -94,7 +96,7 @@ const validLicks = [
 
 validLicks.forEach((lick, i) => {
     it('update lick, success #' + i, () => {
-        const state = Object.freeze([
+        const state = createState([
             { lick: { id: 'c10' } },
             {
                 lick: {
@@ -110,7 +112,7 @@ validLicks.forEach((lick, i) => {
             { lick: { id: 'c30' } }
         ]);
 
-        const expectedState = [
+        const expectedState = createState([
             { lick: { id: 'c10' } },
             {
                 lick: {
@@ -120,7 +122,7 @@ validLicks.forEach((lick, i) => {
                 mode: 'view'
             },
             { lick: { id: 'c30' } }
-        ];
+        ]);
 
         expect(lickReducer(state, { type: LICK_UPDATE, lick })).toEqual(expectedState);
     });
@@ -166,7 +168,7 @@ const invalidLicks = [
 invalidLicks.forEach((entry, i) => {
     it('update lick, invalid data #' + i, () => {
         const [lick, invalidProperties] = entry;
-        const state = Object.freeze([
+        const state = createState([
             { lick: { id: 'c10' } },
             { lick: { id: 'c20' } },
             { lick: { id: 'c30' } }
@@ -186,7 +188,7 @@ invalidLicks.forEach((entry, i) => {
 });
 
 it('update lick, id not found', () => {
-    const state = Object.freeze([
+    const state = createState([
         { lick: { id: 'c10' } },
         { lick: { id: 'c30' } }
     ]);
@@ -210,13 +212,13 @@ it('update lick, id not found', () => {
 });
 
 it('delete lick, success', () => {
-    const state = Object.freeze([
+    const state = createState([
         { lick: { id: 'c10' } },
         { lick: { id: 'c20' } },
         { lick: { id: 'c30' } }
     ]);
 
-    const expectedState = Object.freeze([
+    const expectedState = createState([
         { lick: { id: 'c10' } },
         { lick: { id: 'c30' } }
     ]);
@@ -225,7 +227,7 @@ it('delete lick, success', () => {
 });
 
 it('delete lick, id not found', () => {
-    const state = Object.freeze([
+    const state = createState([
         { lick: { id: 'c10' } },
         { lick: { id: 'c20' } },
         { lick: { id: 'c30' } }
@@ -244,21 +246,24 @@ const validModes = [LICK_MODE_EDIT, LICK_MODE_VIEW];
 
 validModes.forEach((mode, i) => {
     it('change lick mode, success #' + i, () => {
-        const state = Object.freeze([
+        const state = createState([
             { lick: { id: 'c5' } },
             { lick: { id: 'c10' }, mode: 'irrelevant' }
         ]);
-        const newState = lickReducer(state, changeLickMode('c10', mode));
-        expect(newState).toEqual([
+
+        const expectedState = createState([
             { lick: { id: 'c5' } },
             { lick: { id: 'c10' }, mode }
         ]);
+
+        const newState = lickReducer(state, changeLickMode('c10', mode));
+        expect(newState).toEqual(expectedState);
     });
 });
 
 it('change lick mode, invalid mode', () => {
     const mode = 'modeFooInvalid';
-    const state = Object.freeze([
+    const state = createState([
         { lick: { id: 'c5' } },
         { lick: { id: 'c10' }, mode: 'foo' }
     ]);
@@ -274,7 +279,7 @@ it('change lick mode, invalid mode', () => {
 });
 
 it('change lick mode, id not found', () => {
-    const state = Object.freeze([
+    const state = createState([
         { lick: { id: 'c5' } },
         { lick: { id: 'c10' }, mode: 'foo' }
     ]);
@@ -286,3 +291,9 @@ it('change lick mode, id not found', () => {
         assertErrorContainsString(error, 'Id c15 not found');
     }
 });
+
+const createState = (items) => {
+    return Object.freeze({
+        items
+    });
+};

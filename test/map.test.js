@@ -20,7 +20,7 @@ it('map state to props', () => {
     const error = new Error('foo');
     const state = {
         error,
-        licks: [
+        items: [
             {
                 mode: 'edit',
                 lick: {
@@ -37,7 +37,7 @@ it('map state to props', () => {
 
     const expectedProps = {
         error,
-        licks: [
+        items: [
             {
                 mode: 'edit',
                 lick: {

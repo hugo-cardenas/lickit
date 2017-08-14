@@ -45,7 +45,7 @@ it('renders without crashing', () => {
 
 it('renders expected number of licks', () => {
     const props = getProps();
-    props.licks = range(7).map(i => {
+    props.items = range(7).map(i => {
         return {
             lick: {
                 id: 'c' + i,
@@ -75,7 +75,7 @@ it('create new lick', () => {
 
 function getProps() {
     return {
-        licks: [],
+        items: [],
         createLick: () => {},
         saveLick: () => {},
         deleteLick: () => {},
