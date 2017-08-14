@@ -18,7 +18,7 @@ const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App);
 storage.get('state')
     .then(initialState => {
         if (isDev()) {
-            initialState = getInitialState(15);
+            initialState = getInitialState(150);
         }
         const store = createStore(initialState);
         // Add exec limit
@@ -75,7 +75,11 @@ const getInitialState = (numItems) => {
             };
         });
 
-    return { licks: licks.map(lick => { return { lick }; }) };
+    return {
+        lick: {
+            items: licks.map(lick => { return { lick }; })
+        }
+    };
 };
 
 function rand(min, max) {

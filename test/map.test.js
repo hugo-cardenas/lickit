@@ -1,6 +1,8 @@
 import { mapStateToProps, mapDispatchToProps } from 'src/map';
 import { updateLick, deleteLick, changeLickMode } from 'src/state/actions/lick';
+import { addFilter, removeFilter, setInput } from 'src/state/actions/search';
 import { LICK_CREATE } from 'src/state/actions/types';
+import { TYPE_ARTIST, TYPE_TAG } from 'src/search/filterTypes';
 
 // Mock the call electron.app.getPath('userData') - TODO extract to common
 jest.mock('electron', () => {
@@ -16,42 +18,110 @@ jest.mock('electron', () => {
     };
 });
 
-it('map state to props', () => {
+it('map state to props, map error', () => {
     const error = new Error('foo');
-    const state = {
-        error,
+    const state = createState({ error });
+
+    const props = mapStateToProps(state);
+    expect(props.error).toEqual(error);
+});
+
+it('map state to props, map items', () => {
+    const state = createStateWithItems([
+        {
+            mode: 'edit',
+            lick: {
+                id: 'c42',
+                artist: 'Charlie Foo',
+                description: 'Foo bar 42',
+                tracks: [{ id: 'abc10' }, { id: 'abc20' }],
+                tags: ['foo', 'bar'],
+                createdAt: 12500
+            }
+        }
+    ]);
+
+    const expectedItems = [
+        {
+            mode: 'edit',
+            lick: {
+                id: 'c42',
+                artist: 'Charlie Foo',
+                description: 'Foo bar 42',
+                tracks: [{ id: 'abc10', url: 'file:///tmp/foo/tracks/abc10.wav' }, { id: 'abc20', url: 'file:///tmp/foo/tracks/abc20.wav' }],
+                tags: ['foo', 'bar']
+            }
+        }
+    ];
+
+    const props = mapStateToProps(state);
+    expect(props.items).toEqual(expectedItems);
+});
+
+createItem({ artist: 'Charlie Foo', tags: ['foo', 'bar'] });
+
+const stateWithSearch = createState({
+    lick: {
         items: [
+            createItem({ artist: 'Charlie Foo', tags: ['foo', 'bar'] }),
+            createItem({ artist: 'Django Bar', tags: ['bar', 'baz'] }),
+            createItem({ artist: 'Django Bar', tags: ['foo', 'foobar'] }),
+        ]
+    },
+    search: {
+        filters: [
+            { type: 'foo', value: 123 },
+            { type: 'bar', value: 456 }
+        ]
+    }
+});
+
+const expectedSuggestions = [
+    {
+        input: '',
+        suggestions: [
             {
-                mode: 'edit',
-                lick: {
-                    id: 'c42',
-                    artist: 'Charlie Foo',
-                    description: 'Foo bar 42',
-                    tracks: [{ id: 'abc10' }, { id: 'abc20' }],
-                    tags: ['foo', 'bar'],
-                    createdAt: 12500
-                }
+                title: TYPE_ARTIST,
+                suggestions: ['Charlie Foo', 'Django Bar']
+            },
+            {
+                title: TYPE_TAG,
+                suggestions: ['foo', 'bar', 'baz', 'foobar']
             }
         ]
-    };
-
-    const expectedProps = {
-        error,
-        items: [
+    },
+    {
+        input: 'fo',
+        suggestions: [
             {
-                mode: 'edit',
-                lick: {
-                    id: 'c42',
-                    artist: 'Charlie Foo',
-                    description: 'Foo bar 42',
-                    tracks: [{ id: 'abc10', url: 'file:///tmp/foo/tracks/abc10.wav' }, { id: 'abc20', url: 'file:///tmp/foo/tracks/abc20.wav' }],
-                    tags: ['foo', 'bar']
-                }
+                title: TYPE_ARTIST,
+                suggestions: ['Charlie Foo']
+            },
+            {
+                title: TYPE_TAG,
+                suggestions: ['foo', 'foobar']
             }
         ]
-    };
+    }
+];
 
-    expect(mapStateToProps(state)).toEqual(expectedProps);
+expectedSuggestions.forEach((entry, i) => {
+    it('map state to props, map search #' + i, () => {
+        const { input, suggestions } = entry;
+
+        const state = stateWithSearch;
+        state.search.input = input;
+
+        const expectedSearch = {
+            filters: state.search.filters,
+            input: input,
+            // Suggestions are calculated from stored items
+            suggestions
+        };
+
+        const props = mapStateToProps(state);
+        expect(props.search).toEqual(expectedSearch);
+    });
 });
 
 it('map dispatch to props - create lick', () => {
@@ -60,7 +130,7 @@ it('map dispatch to props - create lick', () => {
 
     props.createLick();
     expect(dispatch).toHaveBeenCalledTimes(1);
-    expect(dispatch).toHaveBeenCalledWith({type: LICK_CREATE});
+    expect(dispatch).toHaveBeenCalledWith({ type: LICK_CREATE });
 });
 
 it('map dispatch to props - update lick', async() => {
@@ -94,3 +164,66 @@ it('map dispatch to props - change lick mode', async() => {
     expect(dispatch).toHaveBeenCalledTimes(1);
     expect(dispatch).toHaveBeenCalledWith(changeLickMode('a42', 'modeFoo'));
 });
+
+it('map dispatch to props - add filter', async() => {
+    const dispatch = jest.fn();
+    const props = mapDispatchToProps(dispatch);
+
+    props.addFilter({ foo: 'bar' });
+    expect(dispatch).toHaveBeenCalledTimes(1);
+    expect(dispatch).toHaveBeenCalledWith(addFilter({ foo: 'bar' }));
+});
+
+it('map dispatch to props - remove filter', async() => {
+    const dispatch = jest.fn();
+    const props = mapDispatchToProps(dispatch);
+
+    props.removeFilter({ foo: 'bar' });
+    expect(dispatch).toHaveBeenCalledTimes(1);
+    expect(dispatch).toHaveBeenCalledWith(removeFilter({ foo: 'bar' }));
+});
+
+it('map dispatch to props - set input', async() => {
+    const dispatch = jest.fn();
+    const props = mapDispatchToProps(dispatch);
+
+    props.setInput('foo');
+    expect(dispatch).toHaveBeenCalledTimes(1);
+    expect(dispatch).toHaveBeenCalledWith(setInput('foo'));
+});
+
+const createStateWithItems = items => {
+    return createState({
+        lick: {
+            items
+        }
+    });
+};
+
+function createState(state) {
+    return {
+        error: null,
+        lick: {
+            items: []
+        },
+        search: {
+            filters: [],
+            input: ''
+        },
+        ...state
+    };
+}
+
+function createItem(lick) {
+    return {
+        mode: 'view',
+        lick: {
+            id: 'c862',
+            artist: '',
+            description: '',
+            tracks: [],
+            tags: [],
+            ...lick
+        }
+    };
+}
