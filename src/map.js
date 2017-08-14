@@ -1,14 +1,15 @@
 import { createLick, updateLick, deleteLick, changeLickMode } from './state/actions/lick';
 import { getUrlResolver } from './track/urlResolver';
 
-function mapStateToProps(state) {
+const mapStateToProps = (state) => {
     return {
         error: state.error,
-        items: state.items.map(mapLickStateToProps)
+        items: state.items.map(mapLickStateToProps),
+        search: get
     };
-}
+};
 
-function mapLickStateToProps(lickState) {
+const mapLickStateToProps = (lickState) => {
     const lick = lickState.lick;
     return {
         mode: lickState.mode ? lickState.mode : undefined,
@@ -26,15 +27,31 @@ function mapLickStateToProps(lickState) {
             })
         }
     };
-}
+};
 
-function mapDispatchToProps(dispatch) {
+const mapSearchStateToProps = (searchState) => {
+
+};
+
+const getSuggestions = () => {
+
+};
+
+const getArtists = () => {
+
+};
+
+const getTags = () => {
+
+};
+
+const mapDispatchToProps = (dispatch) => {
     return {
         createLick: () => dispatch(createLick()),
         saveLick: (lick) => dispatch(updateLick(lick)),
         deleteLick: (id) => dispatch(deleteLick(id)),
         changeLickMode: (id, mode) => dispatch(changeLickMode(id, mode))
     };
-}
+};
 
 export { mapStateToProps, mapDispatchToProps };

@@ -4,8 +4,8 @@ import {
     SEARCH_SET_INPUT
 } from './types';
 
-export const addFilter = ({ type, value }) => {
-
+export const addFilter = (filter) => {
+    return { type: SEARCH_ADD_FILTER, filter };
 };
 
 export const removeFilter = ({ type, value }) => {
