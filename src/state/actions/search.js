@@ -8,10 +8,10 @@ export const addFilter = (filter) => {
     return { type: SEARCH_ADD_FILTER, filter };
 };
 
-export const removeFilter = ({ type, value }) => {
-
+export const removeFilter = (filter) => {
+    return { type: SEARCH_REMOVE_FILTER, filter };
 };
 
 export const setInput = (input) => {
-
+    return { type: SEARCH_SET_INPUT, input };
 };

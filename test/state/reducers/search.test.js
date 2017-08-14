@@ -72,7 +72,7 @@ const invalidFilters = [
 ];
 
 invalidFilters.forEach((filter, i) => {
-    it('add filter, invalid input #' + i, () => {
+    it('add filter, invalid filter #' + i, () => {
         const state = createState([
             { type: TYPE_ARTIST, value: 'foo' },
             { type: TYPE_TAG, value: 'bar' }
@@ -125,7 +125,7 @@ it('remove filter, empty filter collection', () => {
 });
 
 invalidFilters.forEach((filter, i) => {
-    it('remove filter, invalid input #' + i, () => {
+    it('remove filter, invalid filter #' + i, () => {
         const state = createState([
             { type: TYPE_ARTIST, value: 'foo' },
             { type: TYPE_TAG, value: 'bar' }
@@ -144,10 +144,18 @@ invalidFilters.forEach((filter, i) => {
 
 it('set input', () => {
     const state = createState([{ type: TYPE_ARTIST, value: 'foo' }], '');
-    const newState = searchReducer(state, setInput('foobar'));
-    const expectedState = createState([{ type: TYPE_ARTIST, value: 'foo' }], 'foobar');
+    
+    expect(
+        searchReducer(state, setInput('foobar'))
+    ).toEqual(
+        createState([{ type: TYPE_ARTIST, value: 'foo' }], 'foobar')
+    );
 
-    expect(newState).toEqual(expectedState);
+    expect(
+        searchReducer(state, setInput(''))
+    ).toEqual(
+        createState([{ type: TYPE_ARTIST, value: 'foo' }], '')
+    );
 });
 
 const invalidInputs = [
