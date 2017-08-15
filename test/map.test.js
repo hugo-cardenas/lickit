@@ -75,10 +75,10 @@ const stateWithSearch = createState({
 });
 
 const expectedSuggestions = [
-    // No filters or input applied, just sort alphabetically within type
+    // No filters applied, just sort alphabetically within type (input does not affect)
     {
         filters: [],
-        input: '',
+        input: 'foobar',
         suggestions: [
             {
                 title: TYPE_ARTIST,
@@ -117,39 +117,6 @@ const expectedSuggestions = [
             {
                 title: TYPE_TAG,
                 suggestions: ['bar', 'Baz', 'foobar']
-            }
-        ]
-    },
-    // Limit suggestions by input
-    {
-        filters: [],
-        input: 'fo',
-        suggestions: [
-            {
-                title: TYPE_ARTIST,
-                suggestions: ['charlie Foo']
-            },
-            {
-                title: TYPE_TAG,
-                suggestions: ['foo', 'foobar']
-            }
-        ]
-    },
-    // Apply combination of input and existing filter
-    {
-        filters: [{
-            type: TYPE_TAG, 
-            value: 'foo'
-        }],
-        input: 'fo',
-        suggestions: [
-            {
-                title: TYPE_ARTIST,
-                suggestions: ['charlie Foo']
-            },
-            {
-                title: TYPE_TAG,
-                suggestions: ['foobar']
             }
         ]
     }

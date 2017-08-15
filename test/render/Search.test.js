@@ -1,13 +1,44 @@
 import React from 'react';
 import { render, shallow } from 'enzyme';
 import Search from 'src/render/Search';
+import { TYPE_ARTIST, TYPE_TAG } from 'src/search/filterTypes';
 
 it('render', () => {
     const props = getProps();
     render(<Search {...props}/>);
 });
 
-it('get suggestions - all returned', () => {
+it('select suggestion, add filter', () => {
+    const props = getProps();
+    props.addFilter = jest.fn();
+    props.setInput = jest.fn();
+
+    const component = shallow(<Search {...props}/>);
+
+    selectSuggestion(component, 0, 'Charlie Foo');
+
+    expect(props.addFilter).toHaveBeenCalledTimes(1);
+    expect(props.addFilter).toBeCalledWith({
+        type: TYPE_ARTIST,
+        value: 'Charlie Foo'
+    });
+
+    expect(props.setInput).toHaveBeenCalledTimes(1);
+    expect(props.setInput).toBeCalledWith('');
+
+    selectSuggestion(component, 1, 'Bar');
+
+    expect(props.addFilter).toHaveBeenCalledTimes(2);
+    expect(props.addFilter).toBeCalledWith({
+        type: TYPE_TAG,
+        value: 'Bar'
+    });
+
+    expect(props.setInput).toHaveBeenCalledTimes(2);
+    expect(props.setInput).toBeCalledWith('');
+});
+
+it('get suggestions, all returned', () => {
     const props = getProps();
     const component = shallow(<Search {...props}/>);
 
@@ -15,31 +46,9 @@ it('get suggestions - all returned', () => {
     expect(getSuggestions(component)).toEqual(props.suggestions);
 });
 
-it('get suggestions - filter out all artist values', () => {
+it('get suggestions, filter based on input', () => {
     const props = getProps();
     const component = shallow(<Search {...props}/>);
-
-    selectSuggestion(component, 0, 'Charlie Foo');
-
-    // Should not suggest any more artist values
-    updateSuggestions(component, '');
-    expect(getSuggestions(component)).toEqual([{
-        title: 'Tag',
-        suggestions: [
-            'foo',
-            'Bar',
-            'fooBaR',
-            'baRbaz'
-        ]
-    }]);
-});
-
-it('get suggestions - filter based on input', () => {
-    const props = getProps();
-    const component = shallow(<Search {...props}/>);
-
-    // Should not appear in suggestions
-    selectSuggestion(component, 1, 'baRbaz');
 
     // Should trim value and lowercase it
     updateSuggestions(component, ' bAr  ');
@@ -55,7 +64,8 @@ it('get suggestions - filter based on input', () => {
             title: 'Tag',
             suggestions: [
                 'Bar', // These match case-insensitively
-                'fooBaR'
+                'fooBaR',
+                'baRbaz'
             ]
         }
     ]);
@@ -69,15 +79,52 @@ it('get suggestions - input does not match any', () => {
     expect(component.find('Autosuggest').prop('suggestions')).toEqual([]);
 });
 
-it('add and remove filter', () => {
+it('remove filter', () => {
+    const props = getProps();
+    props.filters = [
+        {
+            type: TYPE_ARTIST,
+            value: 'Charlie Foo'
+        },
+        {
+            type: TYPE_TAG,
+            value: 'foo'
+        },
+        {
+            type: TYPE_TAG,
+            value: 'bar'
+        }
+    ];
+    props.removeFilter = jest.fn();
+
+    const component = shallow(<Search {...props}/>);
+
+    clickRemoveFilter(component, 'foo');
+
+    expect(props.removeFilter).toHaveBeenCalledTimes(1);
+    expect(props.removeFilter).toBeCalledWith({
+        type: TYPE_TAG,
+        value: 'foo'
+    });
+});
+
+it('clear suggestions', () => {
     const props = getProps();
     const component = shallow(<Search {...props}/>);
 
-    selectSuggestion(component, 0, 'Charlie Foo');
-    clickRemoveFilter(component, 'Charlie Foo');
+    clearSuggestions(component);
+    expect(getSuggestions(component)).toEqual([]);
+});
 
-    updateSuggestions(component, '');
-    expect(getSuggestions(component)).toEqual(props.suggestions);
+it('set input on change', () => {
+    const props = getProps();
+    props.setInput = jest.fn();
+    const component = shallow(<Search {...props}/>);
+
+    changeInput(component, 'foobar');
+    
+    expect(props.setInput).toHaveBeenCalledTimes(1);
+    expect(props.setInput).toBeCalledWith('foobar');
 });
 
 const selectSuggestion = (search, sectionIndex, suggestionValue) =>
@@ -89,19 +136,26 @@ const getSuggestions = (search) =>
 const updateSuggestions = (search, value) =>
     search.find('Autosuggest').prop('onSuggestionsFetchRequested')({ value });
 
+const clearSuggestions = search =>
+    search.find('Autosuggest').prop('onSuggestionsClearRequested')();
+
 const clickRemoveFilter = (search, value) =>
     search.find('.lick-filters .tags')
-        .filterWhere(tag => tag.find('span').text() === value)
-        .first()
-        .find('.is-delete')
-        .simulate('click');
+    .filterWhere(tag => tag.find('span').text() === value)
+    .first()
+    .find('.is-delete')
+    .simulate('click');
+
+const changeInput = (search, value) => {
+    search.find('Autosuggest').prop('inputProps').onChange({}, { newValue: value });
+};
 
 const getProps = () => {
     return {
         filters: [],
         suggestions: [
             {
-                title: 'Artist',
+                title: TYPE_ARTIST,
                 suggestions: [
                     'Charlie Foo',
                     'Dizzy Bar',
@@ -109,7 +163,7 @@ const getProps = () => {
                 ]
             },
             {
-                title: 'Tag',
+                title: TYPE_TAG,
                 suggestions: [
                     'foo',
                     'Bar',

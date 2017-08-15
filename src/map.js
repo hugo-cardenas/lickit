@@ -1,4 +1,4 @@
-import { merge, uniq } from 'lodash';
+import { difference, merge, uniq } from 'lodash';
 import { createLick, updateLick, deleteLick, changeLickMode } from './state/actions/lick';
 import { addFilter, removeFilter, setInput } from './state/actions/search';
 import { getUrlResolver } from './track/urlResolver';
@@ -13,8 +13,16 @@ const mapStateToProps = (state) => {
 };
 
 const mapLickStateToProps = (state) => {
+    // const filters = state.search.filters;
+    // const artistFilter = filters.find(filter => filter.type === 'Artist');
+    // const artist = artistFilter ? artistFilter.value : null;
+    // const tags = filters.filter(filter => filter.type === 'Tag').map(filter => filter.value);
     return {
         items: state.lick.items.map(mapItemToProp)
+            // .filter(item => 
+            //     (!artist || item.lick.artist === artist) &&
+            //     (tags.length === 0 || difference(tags, item.lick.tags).length === 0)
+            // )
     };
 };
 
@@ -44,19 +52,16 @@ const mapSearchStateToProps = (state) => {
     return {
         filters,
         input,
-        suggestions: getSuggestions(input, state.lick.items, filters)
+        suggestions: getSuggestions(state.lick.items, filters)
     };
 };
 
 // TODO Move this out of map and memoize ops
-const getSuggestions = (input, items, filters) => {
+const getSuggestions = (items, filters) => {
     // Allow to set max 5 filters, don't show any more suggestions
     if (filters.length >= 5) {
         return [];
     }
-
-    const matchesInput = suggestion =>
-        suggestion.toLowerCase().includes(input.toLowerCase());
 
     let artists;
     // Exclude all artist suggestions if there is already an artist filter
@@ -64,9 +69,7 @@ const getSuggestions = (input, items, filters) => {
         artists = [];
     } else {
         artists = uniq(items
-            .map(item => item.lick.artist)
-            //.filter(matchesInput)             // TODO Update tests for removing input match
-            );
+            .map(item => item.lick.artist));
     }
 
     // Exclude tag suggestions which are already set in filters
@@ -75,7 +78,6 @@ const getSuggestions = (input, items, filters) => {
 
     const tags = uniq(
         [].concat(...items.map(item => item.lick.tags))
-        //.filter(matchesInput)                     // TODO Update tests for removing input match
         .filter(tag => !isContainedInFilters(tag))
     );
 

@@ -19,7 +19,6 @@ const theme = {
     suggestionHighlighted: 'suggestion-highlighted',
     suggestionsContainerOpen: 'suggestion-container-open',
     sectionTitle: 'section-title'
-    // suggestionsList: 'menu-list'
 };
 
 const getSuggestions = (suggestions, value) => {
@@ -51,8 +50,6 @@ const handleMouseLeave = () => {
         .forEach(elem => elem.style.overflow = "auto");
 };
 
-// TODO Update tests for whole module
-
 class Search extends Component {
     constructor(props) {
         super(props);
@@ -60,27 +57,24 @@ class Search extends Component {
     }
 
     onSuggestionsFetchRequested({ value }) {
-        // TODO Set input
-        //this.props.setInput(value);
         this.setState({
             showableSuggestions: getSuggestions(this.props.suggestions, value)
         });
     }
 
     onSuggestionsClearRequested() {
-        this.props.setInput('');
+        this.setState({
+            showableSuggestions: []
+        });
     }
 
     onSuggestionSelected(event, { suggestionValue, sectionIndex }) {
-        // TODO Call addFilter
-        // TODO Call setInput blank
         const type = this.state.showableSuggestions[sectionIndex].title;
         this.props.addFilter({ type, value: suggestionValue });
         this.props.setInput('');
     }
 
     removeFilter(filter) {
-        // TODO Call removeFilter
         this.props.removeFilter(filter);
     }
 
@@ -99,26 +93,26 @@ class Search extends Component {
             onChange: (event, { newValue }) => setInput(newValue)
         };
 
+        const autoSuggestProps = {
+            focusInputOnSuggestionClick: false,
+            getSectionSuggestions,
+            getSuggestionValue,
+            inputProps,
+            multiSection: true,
+            onSuggestionSelected: this.onSuggestionSelected.bind(this),
+            onSuggestionsClearRequested: this.onSuggestionsClearRequested.bind(this),
+            onSuggestionsFetchRequested: this.onSuggestionsFetchRequested.bind(this),
+            renderSectionTitle,
+            renderSuggestion,
+            shouldRenderSuggestions,
+            suggestions: showableSuggestions,
+            theme
+        };
+
         return <div className="field is-grouped is-grouped-multiline" 
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}>
-            <Autosuggest
-                suggestions={showableSuggestions}
-                onSuggestionsFetchRequested={this.onSuggestionsFetchRequested.bind(this)}
-                onSuggestionsClearRequested={this.onSuggestionsClearRequested.bind(this)}
-                getSuggestionValue={getSuggestionValue}
-                renderSuggestion={renderSuggestion}
-                
-                inputProps={inputProps}
-                theme={theme}
-                multiSection={true}
-                renderSectionTitle={renderSectionTitle}
-                getSectionSuggestions={getSectionSuggestions}
-                onSuggestionSelected={this.onSuggestionSelected.bind(this)}
-
-                shouldRenderSuggestions={shouldRenderSuggestions}
-                focusInputOnSuggestionClick={false}
-            />
+            <Autosuggest {...autoSuggestProps}/>
             {this.renderFilters(filters)}
         </div>;
     }
