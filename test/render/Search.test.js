@@ -118,6 +118,9 @@ const getProps = () => {
                 ]
             }
         ],
-        value: ''
+        input: '',
+        addFilter: () => {},
+        removeFilter: () => {},
+        setInput: () => {},
     };
 };

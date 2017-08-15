@@ -5,6 +5,9 @@ import App from 'src/render/App';
 import createStore from 'src/state/store';
 import { range } from 'lodash';
 import { shallow } from 'enzyme';
+import { TYPE_ARTIST } from 'src/search/filterTypes';
+
+
 
 // Mock the call electron.app.getPath('userData')
 jest.mock('electron', () => {
@@ -33,7 +36,7 @@ jest.mock('electron', () => {
     return electron;
 });
 
-it('renders without crashing', () => {
+it('render without crashing', () => {
     const div = document.createElement('div');
     const store = createStore();
 
@@ -43,9 +46,9 @@ it('renders without crashing', () => {
   </Provider>, div);
 });
 
-it('renders expected number of licks', () => {
+it('render expected number of licks', () => {
     const props = getProps();
-    props.items = range(7).map(i => {
+    props.lick.items = range(7).map(i => {
         return {
             lick: {
                 id: 'c' + i,
@@ -64,16 +67,34 @@ it('renders expected number of licks', () => {
 
 it('create new lick', () => {
     const props = getProps();
-    props.createLick = jest.fn();
+    props.lick.createLick = jest.fn();
 
     const component = shallow(<App {...props}/>);
     component.find('.lick-create').simulate('click');
 
-    expect(props.createLick).toHaveBeenCalledTimes(1);
-    expect(props.createLick).toBeCalledWith();
+    expect(props.lick.createLick).toHaveBeenCalledTimes(1);
+    expect(props.lick.createLick).toBeCalledWith();
 });
 
-function getProps() {
+it('render search', () => {
+    const props = getProps();
+    props.createLick = jest.fn();
+
+    const component = shallow(<App {...props}/>);
+    const searchComponent = component.find('Search');
+
+    expect(searchComponent.prop('filters')).toEqual([{
+        type: TYPE_ARTIST,
+        value: 'baz'
+    }]);
+    expect(searchComponent.prop('input')).toEqual('foobar');
+    expect(searchComponent.prop('suggestions')).toEqual([{
+        title: TYPE_ARTIST,
+        suggestions: ['foo', 'bar']
+    }]);
+});
+
+const getProps = () => {
     return {
         lick: {
             items: [],
@@ -83,9 +104,18 @@ function getProps() {
             changeLickMode: () => {}
         },
         search: {
-            filters: [],
-            input: '',
-            suggestions: []
+            filters: [{
+                type: TYPE_ARTIST,
+                value: 'baz'
+            }],
+            input: 'foobar',
+            suggestions: [{
+                title: TYPE_ARTIST,
+                suggestions: ['foo', 'bar']
+            }],
+            addFilter: () => {},
+            removeFilter: () => {},
+            setInput: () => {},
         }
     };
-}
+};

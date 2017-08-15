@@ -34,14 +34,14 @@ const renderRow = (chunk, deleteLick, saveLick, changeLickMode) => {
 };
 
 const App = (props) => {
+    const { error, lick, search } = props;
     const {
-        error,
         items,
-        deleteLick,
-        saveLick,
         createLick,
+        saveLick,
+        deleteLick,
         changeLickMode
-    } = props;
+    } = lick;
 
     if (error instanceof Error) {
         alert('ERROR:' + "\n" + error);
@@ -58,7 +58,7 @@ const App = (props) => {
         <div className="main-container">
                 {renderTopContainer()}
                 <div className="main-content">
-                    {renderLickControls(handleCreateLick)}
+                    {renderLickControls(handleCreateLick, search)}
                     <div className="lick-list">
                         {chunks.map(chunk => renderRow(chunk, deleteLick, saveLick, changeLickMode))}
                     </div>
@@ -75,7 +75,7 @@ const renderTopContainer = () => {
     </div>;
 };
 
-const renderLickControls = (handleCreateLick) => {
+const renderLickControls = (handleCreateLick, search) => {
     return <div className="lick-controls field is-grouped">
         <a className="button control lick-create" onClick={handleCreateLick}>
             <span className="icon">
@@ -83,7 +83,7 @@ const renderLickControls = (handleCreateLick) => {
             </span>
             <span>New lick</span>
         </a>
-        <Search suggestions={getSuggestions()}/>
+        <Search {...search}/>
     </div>;
 };
 
@@ -92,14 +92,16 @@ export default App;
 App.propTypes = {
     error: PropTypes.object,
     lick: PropTypes.shape({
-        items: PropTypes.arrayOf(PropTypes.object).isRequired,
+        items: PropTypes.arrayOf(PropTypes.shape({
+            lick: PropTypes.object.isRequired,
+            mode: PropTypes.string
+        })).isRequired,
         createLick: PropTypes.func.isRequired,
         saveLick: PropTypes.func.isRequired,
         deleteLick: PropTypes.func.isRequired,
         changeLickMode: PropTypes.func.isRequired
     }).isRequired,
     search: PropTypes.object.isRequired,
-    
 };
 
 // TODO Test

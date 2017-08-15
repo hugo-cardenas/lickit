@@ -2,7 +2,7 @@ html {
   -webkit-app-region: drag
 }
 
-button, .lick-list {
+button, .lick-list, .lick-controls {
   -webkit-app-region: no-drag
 }
 

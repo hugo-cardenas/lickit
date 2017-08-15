@@ -1,41 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Autosuggest from 'react-autosuggest';
-
-
-const getSuggestions = (suggestions, filters, value) => {
-    const inputValue = value.trim().toLowerCase();
-
-    // Allow max 5 filters applied
-    if (filters.length >= 5) {
-        return [];
-    }
-
-    return suggestions
-        // Filter out Artist section if there is already an Artist filter
-        .filter(section =>
-            section.title !== 'Artist' || !filters.find(filter => filter.type === 'Artist')
-        )
-        // Return suggestions matching the input and not contained in filters
-        .map(section => {
-            return {
-                title: section.title,
-                suggestions: section.suggestions.filter(suggestion =>
-                    suggestion.toLowerCase().includes(inputValue) &&
-                    !isSuggestionContainedInFilters(filters, section.title, suggestion)
-                )
-            };
-        })
-        // Filter out sections with 0 suggestions
-        .filter(section => section.suggestions.length > 0);
-};
-
-const isSuggestionContainedInFilters = (filters, sectionTitle, suggestion) => {
-    return filters.find(filter =>
-        filter.type === sectionTitle &&
-        filter.value.toLowerCase() === suggestion.toLowerCase()
-    );
-};
+import { TYPE_ARTIST, TYPE_TAG } from '../search/filterTypes';
 
 const getSuggestionValue = suggestion => suggestion;
 
@@ -56,6 +22,23 @@ const theme = {
     // suggestionsList: 'menu-list'
 };
 
+const getSuggestions = (suggestions, value) => {
+    const inputValue = value.trim().toLowerCase();
+
+    return suggestions
+        // Return suggestions matching the input and not contained in filters
+        .map(section => {
+            return {
+                title: section.title,
+                suggestions: section.suggestions.filter(suggestion =>
+                    suggestion.toLowerCase().includes(inputValue)
+                )
+            };
+        })
+        // Filter out sections with 0 suggestions
+        .filter(section => section.suggestions.length > 0);
+};
+
 const handleMouseEnter = () => {
     // Disable main scroll when mouse enters suggestion component
     Array.from(document.getElementsByTagName('html'))
@@ -68,54 +51,52 @@ const handleMouseLeave = () => {
         .forEach(elem => elem.style.overflow = "auto");
 };
 
+// TODO Update tests for whole module
+
 class Search extends Component {
     constructor(props) {
-        super();
-        this.state = {
-            filters: [],
-            showableSuggestions: [...props.suggestions], // TODO Solve reference issue
-            value: ''
-        };
+        super(props);
+        this.state = { showableSuggestions: this.props.suggestions };
     }
 
     onSuggestionsFetchRequested({ value }) {
+        // TODO Set input
+        //this.props.setInput(value);
         this.setState({
-            showableSuggestions: getSuggestions(this.props.suggestions, this.state.filters, value)
+            showableSuggestions: getSuggestions(this.props.suggestions, value)
         });
     }
 
     onSuggestionsClearRequested() {
-        this.setState({
-            suggestions: []
-        });
+        this.props.setInput('');
     }
 
     onSuggestionSelected(event, { suggestionValue, sectionIndex }) {
-        const sectionTitle = this.state.showableSuggestions[sectionIndex].title;
-        const newFilter = { type: sectionTitle, value: suggestionValue };
-
-        const filters = this.state.filters;
-        this.setState({
-            filters: [...filters, newFilter],
-            value: ''
-        });
+        // TODO Call addFilter
+        // TODO Call setInput blank
+        const type = this.state.showableSuggestions[sectionIndex].title;
+        this.props.addFilter({ type, value: suggestionValue });
+        this.props.setInput('');
     }
 
-    removeFilter({ title, value }) {
-        this.setState({
-            filters: this.state.filters.filter(filter =>
-                filter.title !== title || filter.value !== value
-            )
-        });
+    removeFilter(filter) {
+        // TODO Call removeFilter
+        this.props.removeFilter(filter);
     }
 
     render() {
-        const { filters, showableSuggestions, value } = this.state;
-        
+        const {
+            filters,
+            input,
+            setInput
+        } = this.props;
+
+        const showableSuggestions = this.state.showableSuggestions;
+
         const inputProps = {
             placeholder: 'Search',
-            value,
-            onChange: (event, { newValue }) => this.setState({ value: newValue })
+            value: input,
+            onChange: (event, { newValue }) => setInput(newValue)
         };
 
         return <div className="field is-grouped is-grouped-multiline" 
@@ -136,6 +117,7 @@ class Search extends Component {
                 onSuggestionSelected={this.onSuggestionSelected.bind(this)}
 
                 shouldRenderSuggestions={shouldRenderSuggestions}
+                focusInputOnSuggestionClick={false}
             />
             {this.renderFilters(filters)}
         </div>;
@@ -160,17 +142,20 @@ class Search extends Component {
 export default Search;
 
 Search.propTypes = {
-    // filters: PropTypes.arrayOf(
-    //     PropTypes.shape({
-    //         type: PropTypes.oneOf(['Artist', 'Tag']).isRequired, // TODO Extract to constants
-    //         value: PropTypes.string.isRequired,
-    //     })
-    // ).isRequired,
+    filters: PropTypes.arrayOf(
+        PropTypes.shape({
+            type: PropTypes.oneOf([TYPE_ARTIST, TYPE_TAG]).isRequired,
+            value: PropTypes.string.isRequired,
+        })
+    ).isRequired,
+    input: PropTypes.string.isRequired,
     suggestions: PropTypes.arrayOf(
         PropTypes.shape({
-            title: PropTypes.oneOf(['Artist', 'Tag']).isRequired,
+            title: PropTypes.oneOf([TYPE_ARTIST, TYPE_TAG]).isRequired,
             suggestions: PropTypes.arrayOf(PropTypes.string).isRequired,
         })
     ).isRequired,
-    // value: PropTypes.string.isRequired
+    addFilter: PropTypes.func.isRequired,
+    removeFilter: PropTypes.func.isRequired,
+    setInput: PropTypes.func.isRequired,
 };

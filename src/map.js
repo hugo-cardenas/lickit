@@ -39,28 +39,53 @@ const mapItemToProp = (item) => {
 };
 
 const mapSearchStateToProps = (state) => {
+    const filters = state.search.filters;
     const input = state.search.input;
     return {
-        filters: state.search.filters,
+        filters,
         input,
-        suggestions: getSuggestions(input, state.lick.items)
+        suggestions: getSuggestions(input, state.lick.items, filters)
     };
 };
 
 // TODO Move this out of map and memoize ops
-const getSuggestions = (input, items) => {
-    const filter = suggestion =>
+const getSuggestions = (input, items, filters) => {
+    // Allow to set max 5 filters, don't show any more suggestions
+    if (filters.length >= 5) {
+        return [];
+    }
+
+    const matchesInput = suggestion =>
         suggestion.toLowerCase().includes(input.toLowerCase());
 
-    const artists = uniq(items
-        .map(item => item.lick.artist)
-        .filter(filter));
+    let artists;
+    // Exclude all artist suggestions if there is already an artist filter
+    if (filters.find(filter => filter.type === TYPE_ARTIST)) {
+        artists = [];
+    } else {
+        artists = uniq(items
+            .map(item => item.lick.artist)
+            //.filter(matchesInput)             // TODO Update tests for removing input match
+            );
+    }
+
+    // Exclude tag suggestions which are already set in filters
+    const isContainedInFilters = tag =>
+        filters.find(filter => filter.type === TYPE_TAG && filter.value === tag) !== undefined;
+
     const tags = uniq(
         [].concat(...items.map(item => item.lick.tags))
-        .filter(filter)
+        //.filter(matchesInput)                     // TODO Update tests for removing input match
+        .filter(tag => !isContainedInFilters(tag))
     );
 
-    return [
+    const compareCaseInsensitive = (a, b) => 
+        a.toLowerCase() <= b.toLowerCase() ? -1 : 1;
+
+    artists.sort(compareCaseInsensitive);
+    tags.sort(compareCaseInsensitive);
+    
+    const suggestions = [
         {
             title: TYPE_ARTIST,
             suggestions: artists
@@ -70,6 +95,9 @@ const getSuggestions = (input, items) => {
             suggestions: tags
         }
     ];
+
+    // Exclude sections with 0 suggestions
+    return suggestions.filter(entry => entry.suggestions.length > 0);
 };
 
 // TODO Change to simple object 

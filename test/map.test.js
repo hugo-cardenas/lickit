@@ -61,8 +61,8 @@ it('map state to props, map items', () => {
 const stateWithSearch = createState({
     lick: {
         items: [
-            createItem({ artist: 'Charlie Foo', tags: ['foo', 'bar'] }),
-            createItem({ artist: 'Django Bar', tags: ['bar', 'baz'] }),
+            createItem({ artist: 'Django Bar', tags: ['bar', 'Baz'] }),
+            createItem({ artist: 'charlie Foo', tags: ['foo', 'bar'] }),
             createItem({ artist: 'Django Bar', tags: ['foo', 'foobar'] }),
         ]
     },
@@ -75,29 +75,81 @@ const stateWithSearch = createState({
 });
 
 const expectedSuggestions = [
+    // No filters or input applied, just sort alphabetically within type
     {
+        filters: [],
         input: '',
         suggestions: [
             {
                 title: TYPE_ARTIST,
-                suggestions: ['Charlie Foo', 'Django Bar']
+                suggestions: ['charlie Foo', 'Django Bar']
             },
             {
                 title: TYPE_TAG,
-                suggestions: ['foo', 'bar', 'baz', 'foobar']
+                suggestions: ['bar', 'Baz', 'foo', 'foobar']
             }
         ]
     },
+    // Artist filter should prevent any other artist suggestion
     {
+        filters: [{
+            type: TYPE_ARTIST, 
+            value: 'foo'
+        }],
+        input: '',
+        suggestions: [{
+            title: TYPE_TAG,
+            suggestions: ['bar', 'Baz', 'foo', 'foobar']
+        }]
+    },
+    // Tag filter should prevent the same tag suggestion
+    {
+        filters: [{
+            type: TYPE_TAG, 
+            value: 'foo'
+        }],
+        input: '',
+        suggestions: [
+            {
+                title: TYPE_ARTIST,
+                suggestions: ['charlie Foo', 'Django Bar']
+            },
+            {
+                title: TYPE_TAG,
+                suggestions: ['bar', 'Baz', 'foobar']
+            }
+        ]
+    },
+    // Limit suggestions by input
+    {
+        filters: [],
         input: 'fo',
         suggestions: [
             {
                 title: TYPE_ARTIST,
-                suggestions: ['Charlie Foo']
+                suggestions: ['charlie Foo']
             },
             {
                 title: TYPE_TAG,
                 suggestions: ['foo', 'foobar']
+            }
+        ]
+    },
+    // Apply combination of input and existing filter
+    {
+        filters: [{
+            type: TYPE_TAG, 
+            value: 'foo'
+        }],
+        input: 'fo',
+        suggestions: [
+            {
+                title: TYPE_ARTIST,
+                suggestions: ['charlie Foo']
+            },
+            {
+                title: TYPE_TAG,
+                suggestions: ['foobar']
             }
         ]
     }
@@ -105,9 +157,10 @@ const expectedSuggestions = [
 
 expectedSuggestions.forEach((entry, i) => {
     it('map state to props, map search #' + i, () => {
-        const { input, suggestions } = entry;
+        const { filters, input, suggestions } = entry;
 
         const state = stateWithSearch;
+        state.search.filters = filters;
         state.search.input = input;
 
         const search = mapStateToProps(state).search;
