@@ -8,12 +8,12 @@ import { Provider } from 'react-redux';
 import { connect } from 'react-redux';
 import createStore from './state/store';
 import jsonStorage from 'electron-json-storage';
-import { mapStateToProps, mapDispatchToProps } from './map';
+import { mapStateToProps, mapDispatchToProps, mergeProps } from './map';
 import randomColor from 'randomcolor';
 
 const storage = pify(jsonStorage);
 
-const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App);
+const ConnectedApp = connect(mapStateToProps, mapDispatchToProps, mergeProps)(App);
 
 storage.get('state')
     .then(initialState => {

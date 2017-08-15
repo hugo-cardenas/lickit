@@ -91,11 +91,15 @@ export default App;
 
 App.propTypes = {
     error: PropTypes.object,
-    items: PropTypes.arrayOf(PropTypes.object).isRequired,
-    createLick: PropTypes.func.isRequired,
-    saveLick: PropTypes.func.isRequired,
-    deleteLick: PropTypes.func.isRequired,
-    changeLickMode: PropTypes.func.isRequired
+    lick: PropTypes.shape({
+        items: PropTypes.arrayOf(PropTypes.object).isRequired,
+        createLick: PropTypes.func.isRequired,
+        saveLick: PropTypes.func.isRequired,
+        deleteLick: PropTypes.func.isRequired,
+        changeLickMode: PropTypes.func.isRequired
+    }).isRequired,
+    search: PropTypes.object.isRequired,
+    
 };
 
 // TODO Test

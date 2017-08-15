@@ -68,17 +68,24 @@ it('create new lick', () => {
 
     const component = shallow(<App {...props}/>);
     component.find('.lick-create').simulate('click');
-    
+
     expect(props.createLick).toHaveBeenCalledTimes(1);
     expect(props.createLick).toBeCalledWith();
 });
 
 function getProps() {
     return {
-        items: [],
-        createLick: () => {},
-        saveLick: () => {},
-        deleteLick: () => {},
-        changeLickMode: () => {}
+        lick: {
+            items: [],
+            createLick: () => {},
+            saveLick: () => {},
+            deleteLick: () => {},
+            changeLickMode: () => {}
+        },
+        search: {
+            filters: [],
+            input: '',
+            suggestions: []
+        }
     };
 }

@@ -1,4 +1,4 @@
-import { mapStateToProps, mapDispatchToProps } from 'src/map';
+import { mapStateToProps, mapDispatchToProps, mergeProps } from 'src/map';
 import { updateLick, deleteLick, changeLickMode } from 'src/state/actions/lick';
 import { addFilter, removeFilter, setInput } from 'src/state/actions/search';
 import { LICK_CREATE } from 'src/state/actions/types';
@@ -55,10 +55,8 @@ it('map state to props, map items', () => {
     ];
 
     const props = mapStateToProps(state);
-    expect(props.items).toEqual(expectedItems);
+    expect(props.lick.items).toEqual(expectedItems);
 });
-
-createItem({ artist: 'Charlie Foo', tags: ['foo', 'bar'] });
 
 const stateWithSearch = createState({
     lick: {
@@ -112,15 +110,11 @@ expectedSuggestions.forEach((entry, i) => {
         const state = stateWithSearch;
         state.search.input = input;
 
-        const expectedSearch = {
-            filters: state.search.filters,
-            input: input,
-            // Suggestions are calculated from stored items
-            suggestions
-        };
-
-        const props = mapStateToProps(state);
-        expect(props.search).toEqual(expectedSearch);
+        const search = mapStateToProps(state).search;
+        expect(search.filters).toEqual(state.search.filters);
+        expect(search.input).toEqual(input);
+        // Suggestions are calculated from stored items
+        expect(search.suggestions).toEqual(suggestions);
     });
 });
 
@@ -128,7 +122,7 @@ it('map dispatch to props - create lick', () => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
-    props.createLick();
+    props.lick.createLick();
     expect(dispatch).toHaveBeenCalledTimes(1);
     expect(dispatch).toHaveBeenCalledWith({ type: LICK_CREATE });
 });
@@ -138,7 +132,7 @@ it('map dispatch to props - update lick', async() => {
     const props = mapDispatchToProps(dispatch);
 
     const lick = { foo: 'bar' };
-    await (props.saveLick(lick));
+    await (props.lick.saveLick(lick));
 
     expect(dispatch).toHaveBeenCalledTimes(1);
     // Tricky thing - as updateLick returns a thunk, we just compare the functions returned
@@ -149,7 +143,7 @@ it('map dispatch to props - delete lick', async() => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
-    await (props.deleteLick('a42'));
+    await (props.lick.deleteLick('a42'));
 
     expect(dispatch).toHaveBeenCalledTimes(1);
     // Tricky thing - as updateLick returns a thunk, we just compare the functions returned
@@ -160,7 +154,7 @@ it('map dispatch to props - change lick mode', async() => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
-    props.changeLickMode('a42', 'modeFoo');
+    props.lick.changeLickMode('a42', 'modeFoo');
     expect(dispatch).toHaveBeenCalledTimes(1);
     expect(dispatch).toHaveBeenCalledWith(changeLickMode('a42', 'modeFoo'));
 });
@@ -169,7 +163,7 @@ it('map dispatch to props - add filter', async() => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
-    props.addFilter({ foo: 'bar' });
+    props.search.addFilter({ foo: 'bar' });
     expect(dispatch).toHaveBeenCalledTimes(1);
     expect(dispatch).toHaveBeenCalledWith(addFilter({ foo: 'bar' }));
 });
@@ -178,7 +172,7 @@ it('map dispatch to props - remove filter', async() => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
-    props.removeFilter({ foo: 'bar' });
+    props.search.removeFilter({ foo: 'bar' });
     expect(dispatch).toHaveBeenCalledTimes(1);
     expect(dispatch).toHaveBeenCalledWith(removeFilter({ foo: 'bar' }));
 });
@@ -187,9 +181,53 @@ it('map dispatch to props - set input', async() => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
-    props.setInput('foo');
+    props.search.setInput('foo');
     expect(dispatch).toHaveBeenCalledTimes(1);
     expect(dispatch).toHaveBeenCalledWith(setInput('foo'));
+});
+
+it('merge props', () => {
+    const stateProps = {
+        error: 'foo',
+        lick: {
+            items: ['foo', 'bar']
+        },
+        search: {
+            filters: ['bar', 'baz']
+        }
+    };
+
+    const func1 = () => 42;
+    const func2 = () => 44;
+    const func3 = () => 46;
+    const func4 = () => 48;
+
+    const dispatchProps = {
+        lick: {
+            func1,
+            func2
+        },
+        search: {
+            func3, 
+            func4
+        }
+    };
+
+    const expectedProps = {
+        error: 'foo',
+        lick: {
+            items: ['foo', 'bar'],
+            func1,
+            func2
+        },
+        search: {
+            filters: ['bar', 'baz'],
+            func3, 
+            func4
+        }
+    };
+
+    expect(mergeProps(stateProps, dispatchProps)).toEqual(expectedProps);
 });
 
 const createStateWithItems = items => {

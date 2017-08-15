@@ -7,15 +7,21 @@ import { TYPE_ARTIST, TYPE_TAG } from './search/filterTypes';
 const mapStateToProps = (state) => {
     return {
         error: state.error,
-        items: state.lick.items.map(mapLickStateToProps),
+        lick: mapLickStateToProps(state),
         search: mapSearchStateToProps(state)
     };
 };
 
-const mapLickStateToProps = (lickState) => {
-    const lick = lickState.lick;
+const mapLickStateToProps = (state) => {
     return {
-        mode: lickState.mode ? lickState.mode : undefined,
+        items: state.lick.items.map(mapItemToProp)
+    };
+};
+
+const mapItemToProp = (item) => {
+    const lick = item.lick;
+    return {
+        mode: item.mode ? item.mode : undefined,
         lick: {
             id: lick.id,
             artist: lick.artist,
@@ -41,40 +47,49 @@ const mapSearchStateToProps = (state) => {
     };
 };
 
-// TODO Move this out of map
+// TODO Move this out of map and memoize ops
 const getSuggestions = (input, items) => {
+    const filter = suggestion =>
+        suggestion.toLowerCase().includes(input.toLowerCase());
+
+    const artists = uniq(items
+        .map(item => item.lick.artist)
+        .filter(filter));
+    const tags = uniq(
+        [].concat(...items.map(item => item.lick.tags))
+        .filter(filter)
+    );
+
     return [
         {
             title: TYPE_ARTIST,
-            suggestions: uniq(items.map(item => item.lick.artist))
+            suggestions: artists
         },
         {
             title: TYPE_TAG,
-            suggestions: uniq([].concat(...items.map(item => item.lick.tags)))
+            suggestions: tags
         }
     ];
-};
-
-const getArtists = () => {
-
-};
-
-const getTags = () => {
-
 };
 
 // TODO Change to simple object 
 // https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options
 const mapDispatchToProps = (dispatch) => {
     return {
-        createLick: () => dispatch(createLick()),
-        saveLick: (lick) => dispatch(updateLick(lick)),
-        deleteLick: (id) => dispatch(deleteLick(id)),
-        changeLickMode: (id, mode) => dispatch(changeLickMode(id, mode)),
-        addFilter: (filter) => dispatch(addFilter(filter)),
-        removeFilter: (filter) => dispatch(removeFilter(filter)),
-        setInput: (input) => dispatch(setInput(input))
+        lick: {
+            createLick: () => dispatch(createLick()),
+            saveLick: (lick) => dispatch(updateLick(lick)),
+            deleteLick: (id) => dispatch(deleteLick(id)),
+            changeLickMode: (id, mode) => dispatch(changeLickMode(id, mode)),
+        },
+        search: {
+            addFilter: (filter) => dispatch(addFilter(filter)),
+            removeFilter: (filter) => dispatch(removeFilter(filter)),
+            setInput: (input) => dispatch(setInput(input))
+        }
     };
 };
 
-export { mapStateToProps, mapDispatchToProps };
+const mergeProps = (stateProps, dispatchProps) => merge(stateProps, dispatchProps);
+
+export { mapStateToProps, mapDispatchToProps, mergeProps };
