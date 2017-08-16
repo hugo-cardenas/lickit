@@ -13,18 +13,28 @@ const mapStateToProps = (state) => {
 };
 
 const mapLickStateToProps = (state) => {
-    // const filters = state.search.filters;
-    // const artistFilter = filters.find(filter => filter.type === 'Artist');
-    // const artist = artistFilter ? artistFilter.value : null;
-    // const tags = filters.filter(filter => filter.type === 'Tag').map(filter => filter.value);
+    const items = state.lick.items;
+    const filters = state.search.filters;
+
+    const artist = getFilteredArtist(filters);
+    const tags = getFilteredTags(filters);
+
     return {
-        items: state.lick.items.map(mapItemToProp)
-            // .filter(item => 
-            //     (!artist || item.lick.artist === artist) &&
-            //     (tags.length === 0 || difference(tags, item.lick.tags).length === 0)
-            // )
+        items: items.map(mapItemToProp)
+            .filter(item =>
+                (!artist || item.lick.artist === artist) &&
+                difference(tags, item.lick.tags).length === 0
+            )
     };
 };
+
+const getFilteredArtist = filters => {
+    const artistFilter = filters.find(filter => filter.type === 'Artist');
+    return artistFilter ? artistFilter.value : undefined;
+};
+
+const getFilteredTags = filters => 
+    filters.filter(filter => filter.type === 'Tag').map(filter => filter.value);
 
 const mapItemToProp = (item) => {
     const lick = item.lick;
@@ -56,7 +66,7 @@ const mapSearchStateToProps = (state) => {
     };
 };
 
-// TODO Move this out of map and memoize ops
+// TODO Move this out of map and memoize ops - Redux selector
 const getSuggestions = (items, filters) => {
     // Allow to set max 5 filters, don't show any more suggestions
     if (filters.length >= 5) {
@@ -81,12 +91,12 @@ const getSuggestions = (items, filters) => {
         .filter(tag => !isContainedInFilters(tag))
     );
 
-    const compareCaseInsensitive = (a, b) => 
+    const compareCaseInsensitive = (a, b) =>
         a.toLowerCase() <= b.toLowerCase() ? -1 : 1;
 
     artists.sort(compareCaseInsensitive);
     tags.sort(compareCaseInsensitive);
-    
+
     const suggestions = [
         {
             title: TYPE_ARTIST,

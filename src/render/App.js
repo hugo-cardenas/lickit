@@ -103,30 +103,3 @@ App.propTypes = {
     }).isRequired,
     search: PropTypes.object.isRequired,
 };
-
-// TODO Test
-
-const getSuggestions = () => {
-    return [
-        {
-            title: 'Artist',
-            suggestions: [
-                'Charlie Parker',
-                'Dizzy Gillespie',
-                'Django Reinhardt',
-                ..._.range(0, 5).map(i => 'artist' + i)
-            ]
-        },
-        {
-            title: 'Tag',
-            suggestions: [
-                'christoph changes',
-                'bebop',
-                'blues',
-                'gypsy jazz',
-                'rhythm changes',
-                ..._.range(0, 10).map(i => 'tag' + i)
-            ]
-        }
-    ];
-};

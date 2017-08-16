@@ -48,7 +48,10 @@ it('map state to props, map items', () => {
                 id: 'c42',
                 artist: 'Charlie Foo',
                 description: 'Foo bar 42',
-                tracks: [{ id: 'abc10', url: 'file:///tmp/foo/tracks/abc10.wav' }, { id: 'abc20', url: 'file:///tmp/foo/tracks/abc20.wav' }],
+                tracks: [
+                    { id: 'abc10', url: 'file:///tmp/foo/tracks/abc10.wav' },
+                    { id: 'abc20', url: 'file:///tmp/foo/tracks/abc20.wav' }
+                ],
                 tags: ['foo', 'bar']
             }
         }
@@ -56,6 +59,81 @@ it('map state to props, map items', () => {
 
     const props = mapStateToProps(state);
     expect(props.lick.items).toEqual(expectedItems);
+});
+
+const itemsToBeFiltered = [
+    createItem({ id: 'c42', artist: 'Charlie Foo', description: 'Foo bar 42', tags: ['foo', 'bar'] }),
+    createItem({ id: 'c44', artist: 'Charlie Foo', description: 'Foo bar 42', tags: ['baz', 'foobar'] }),
+    createItem({ id: 'c46', artist: 'Django Bar', description: 'Foo bar 42', tags: ['foo'] }),
+    createItem({ id: 'c48', artist: 'Django Bar', description: 'Foo bar 42', tags: ['bar'] }),
+    createItem({ id: 'c50', artist: 'Stephane Baz', description: 'Foo bar 42', tags: ['foobar', 'foo', 'bar'] }),
+];
+
+const expectedFilteredIds = [
+    // No filters
+    {
+        filters: [],
+        expectedIds: ['c42', 'c44', 'c46', 'c48', 'c50']
+    },
+    // Filter by artist
+    {
+        filters: [
+            {type: TYPE_ARTIST, value: 'Charlie Foo'}
+        ],
+        expectedIds: ['c42', 'c44']
+    },
+    // Filter by tag
+    {
+        filters: [
+            {type: TYPE_TAG, value: 'foo'}
+        ],
+        expectedIds: ['c42', 'c46', 'c50']
+    },
+    // Filter by multiple tags
+    {
+        filters: [
+            {type: TYPE_TAG, value: 'foo'},
+            {type: TYPE_TAG, value: 'bar'}
+        ],
+        expectedIds: ['c42', 'c50']
+    },
+    // Filter by artist and tag
+    {
+        filters: [
+            {type: TYPE_ARTIST, value: 'Django Bar'},
+            {type: TYPE_TAG, value: 'bar'}
+        ],
+        expectedIds: ['c48']
+    },
+    // Filter by artist and multiple tags
+    {
+        filters: [
+            {type: TYPE_ARTIST, value: 'Charlie Foo'},
+            {type: TYPE_TAG, value: 'foo'},
+            {type: TYPE_TAG, value: 'bar'}
+        ],
+        expectedIds: ['c42']
+    },
+    // Filter not matching anything
+    {
+        filters: [
+            {type: TYPE_ARTIST, value: 'Non matching filter'}
+        ],
+        expectedIds: []
+    },
+];
+
+expectedFilteredIds.forEach((entry, i) => {
+    it('map state to props, map items, apply filters #' + i, () => {
+        const { filters, expectedIds } = entry;
+        
+        const state = createStateWithItems(itemsToBeFiltered);
+        state.search.filters = filters;
+        
+        const props = mapStateToProps(state);
+        const ids = props.lick.items.map(item => item.lick.id);
+        expect(ids).toEqual(expectedIds);
+    });
 });
 
 const stateWithSearch = createState({
@@ -93,7 +171,7 @@ const expectedSuggestions = [
     // Artist filter should prevent any other artist suggestion
     {
         filters: [{
-            type: TYPE_ARTIST, 
+            type: TYPE_ARTIST,
             value: 'foo'
         }],
         input: '',
@@ -105,7 +183,7 @@ const expectedSuggestions = [
     // Tag filter should prevent the same tag suggestion
     {
         filters: [{
-            type: TYPE_TAG, 
+            type: TYPE_TAG,
             value: 'foo'
         }],
         input: '',
@@ -228,7 +306,7 @@ it('merge props', () => {
             func2
         },
         search: {
-            func3, 
+            func3,
             func4
         }
     };
@@ -242,7 +320,7 @@ it('merge props', () => {
         },
         search: {
             filters: ['bar', 'baz'],
-            func3, 
+            func3,
             func4
         }
     };
