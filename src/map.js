@@ -79,7 +79,8 @@ const getSuggestions = (items, filters) => {
         artists = [];
     } else {
         artists = uniq(items
-            .map(item => item.lick.artist));
+            .map(item => item.lick.artist)
+            .filter(item => item.length > 0));
     }
 
     // Exclude tag suggestions which are already set in filters

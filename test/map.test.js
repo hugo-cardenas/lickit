@@ -142,6 +142,7 @@ const stateWithSearch = createState({
             createItem({ artist: 'Django Bar', tags: ['bar', 'Baz'] }),
             createItem({ artist: 'charlie Foo', tags: ['foo', 'bar'] }),
             createItem({ artist: 'Django Bar', tags: ['foo', 'foobar'] }),
+            createItem({ artist: '', tags: [] }), // Empty artist should not appear as a suggestion
         ]
     },
     search: {
