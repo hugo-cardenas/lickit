@@ -32,7 +32,7 @@
     "babel-preset-es2017": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "codecov": "^2.2.0",
-    "electron-installer-dmg": "^0.2.1",
+    "create-dmg": "^1.3.0",
     "electron-packager": "^8.7.2",
     "enzyme": "^2.8.2",
     "eslint": "^4.1.1",
@@ -55,7 +55,7 @@
     "build": "npm run build-bundle && npm run build-package && npm run build-dmg",
     "build-bundle": "webpack --config ./config/webpack.config.electron.js",
     "build-package": "electron-packager . Lickit --platform=darwin --arch=x64 --icon=./assets/icon.icns --overwrite --osxSign=true --out=./pkg --ignore='.babelrc|.gitignore|.jsbeautifyrc|config|coverage|LICENSE|node_modules|public|README.md|src|test'",
-    "build-dmg": "electron-installer-dmg ./pkg/Lickit-darwin-x64/Lickit.app ./pkg/Lickit --overwrite",
+    "build-dmg": "cd ./pkg/Lickit-darwin-x64 && rm Lickit*.dmg && create-dmg ./Lickit.app",
     "test": "NODE_PATH=. jest --config=./test/jest.config.json",
     "test-ci": "npm test -- --coverage && codecov"
   }
