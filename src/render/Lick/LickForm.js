@@ -77,8 +77,6 @@ class LickForm extends Component {
     }
 
     renderTags(tags, tagInput) {
-        // Render tags sorted alphabetically
-        tags.sort();
         return <div className="tag-container">
             <div className="tags">
                 {tags.map(tag => <span key={tag} className="tag">{tag}
@@ -161,6 +159,8 @@ class LickForm extends Component {
 
         let tags = this.getLickState().tags;
         tags.push(tag);
+        // Display tags sorted alphabetically
+        tags.sort();
         this.setState({
             tagInput: '',
             lick: { ...this.getLickState(), tags: _.uniq(tags) }

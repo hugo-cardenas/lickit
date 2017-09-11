@@ -9,7 +9,10 @@ import { connect } from 'react-redux';
 import createStore from './state/store';
 import jsonStorage from 'electron-json-storage';
 import { mapStateToProps, mapDispatchToProps, mergeProps } from './map';
-import randomColor from 'randomcolor';
+
+// import randomColor from 'randomcolor';
+// import Perf from 'react-addons-perf';
+// window.Perf = Perf;
 
 const storage = pify(jsonStorage);
 

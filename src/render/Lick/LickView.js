@@ -35,7 +35,7 @@ function renderDescription(description) {
 
 function renderTags(tags) {
     // Render tags sorted alphabetically
-    tags.sort();
+    // tags.sort(); // TODO MOVE TO REDUX SELECTOR
     return <div className="tags">
         {tags.map(tag => <span key={tag} className="tag">{tag}</span>)}
     </div>;

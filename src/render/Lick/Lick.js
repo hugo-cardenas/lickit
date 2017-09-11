@@ -1,18 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import './Lick.css';
 import LickForm from './LickForm';
 import LickView from './LickView';
 import { LICK_MODE_EDIT, LICK_MODE_VIEW } from '../../state/actions/lick/modes';
 
-function Lick(props) {
-    const { lick, mode, saveLick, deleteLick, changeLickMode } = props;
-    switch (mode) {
-        case LICK_MODE_EDIT:
-            return renderForm(lick, saveLick, changeLickMode, deleteLick);
-        case LICK_MODE_VIEW:
-        default:
-            return renderView(lick, changeLickMode, deleteLick);
+class Lick extends React.Component {
+    render() {
+        const { lick, mode, saveLick, deleteLick, changeLickMode } = this.props;
+        switch (mode) {
+            case LICK_MODE_EDIT:
+                return renderForm(lick, saveLick, changeLickMode, deleteLick);
+            case LICK_MODE_VIEW:
+            default:
+                return renderView(lick, changeLickMode, deleteLick);
+        }
+    }
+
+    shouldComponentUpdate(nextProps) {
+        return  !_.isEqual(nextProps.lick, this.props.lick) ||
+            !_.isEqual(nextProps.mode, this.props.mode);
     }
 }
 

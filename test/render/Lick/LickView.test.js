@@ -40,8 +40,8 @@ test('render tracks', () => {
 });
 
 test('render tags', () => {
-    // Expect tags sorted alphabetically
-    const expectedTags = ['bar', 'baz', 'foo'];
+    // Prop tags are expected to be already sorted (no sorting done in the component)
+    const expectedTags = ['foo', 'bar', 'baz'];
 
     const component = shallow(<LickView {...getTestProps()}/>);
     const tagsParent = component.find('.tags');

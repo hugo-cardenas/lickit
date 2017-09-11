@@ -52,7 +52,7 @@ it('map state to props, map items', () => {
                     { id: 'abc10', url: 'file:///tmp/foo/tracks/abc10.wav' },
                     { id: 'abc20', url: 'file:///tmp/foo/tracks/abc20.wav' }
                 ],
-                tags: ['foo', 'bar']
+                tags: ['bar', 'foo'] // Tags should be sorted alphabetically
             }
         }
     ];

@@ -100,7 +100,7 @@ test.skip('record track', () => {
 test('render tags', () => {
     const props = getTestProps();
     props.lick.tags = ['bar', 'foo', 'baz'];
-    const expectedTags = ['bar', 'baz', 'foo']; // Expected tags sorted alphabetically
+    const expectedTags = ['bar', 'foo', 'baz']; // Prop tags are expected to be already sorted
 
     const component = shallow(<LickForm {...props}/>);
     const tagsParent = component.find('.tags');

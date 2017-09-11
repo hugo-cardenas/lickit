@@ -38,13 +38,17 @@ const getFilteredTags = filters =>
 
 const mapItemToProp = (item) => {
     const lick = item.lick;
+    // TODO Fix in a better way this reference problem - state modified as react state
+    const tags = [...lick.tags];
+    tags.sort();
+    
     return {
         mode: item.mode ? item.mode : undefined,
         lick: {
             id: lick.id,
             artist: lick.artist,
             description: lick.description,
-            tags: [...lick.tags], // TODO Fix in a better way this reference problem - state modified as react state
+            tags,
             tracks: lick.tracks.map(track => {
                 return {
                     ...track,

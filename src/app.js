@@ -7,6 +7,7 @@ const createMenuTemplate = require('./electron/menuTemplate');
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
 
+const os = require('os');
 const path = require('path');
 const url = require('url');
 
@@ -47,9 +48,13 @@ function createWindow() {
     // and load the index.html of the app.
     mainWindow.loadURL(appUrl);
 
-    // Open the DevTools.
+    // Add React DevTools extension
     if (isDev()) {
-        // mainWindow.webContents.openDevTools();
+        BrowserWindow.addDevToolsExtension(
+            path.join(os.homedir(),
+                'Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.5.0_0'
+            )
+        );
     }
 
     // Emitted when the window is closed.
@@ -59,7 +64,7 @@ function createWindow() {
         // when you should delete the corresponding element.
         mainWindow = null;
     });
-
+    
     Menu.setApplicationMenu(Menu.buildFromTemplate(createMenuTemplate(app)));
 }
 
