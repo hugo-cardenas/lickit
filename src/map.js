@@ -1,7 +1,7 @@
 import { difference, merge, uniq } from 'lodash';
 import { createLick, updateLick, deleteLick, changeLickMode } from './state/actions/lick';
 import { addFilter, removeFilter, setInput } from './state/actions/search';
-import { getUrlResolver } from './track/urlResolver';
+import { getPathResolver } from './track/pathResolver';
 import { TYPE_ARTIST, TYPE_TAG } from './search/filterTypes';
 
 const mapStateToProps = (state) => {
@@ -49,7 +49,7 @@ const mapItemToProp = (item) => {
                 return {
                     ...track,
                     // Calculate track urls to filesystem from their id
-                    url: 'file://' + getUrlResolver()(track.id)
+                    url: 'file://' + getPathResolver()(track.id)
                 };
             })
         }

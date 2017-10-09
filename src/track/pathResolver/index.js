@@ -1,14 +1,14 @@
 import electron from 'electron';
 import path from 'path';
-import createUrlResolver from './urlResolver';
+import createPathResolver from './pathResolver';
 
-let urlResolver;
+let pathResolver;
 
-export function getUrlResolver() {
-    if (!urlResolver) {
-        urlResolver = createUrlResolver(getConfig());
+export function getPathResolver() {
+    if (!pathResolver) {
+        pathResolver = createPathResolver(getConfig());
     }
-    return urlResolver;
+    return pathResolver;
 }
 
 function getConfig() {

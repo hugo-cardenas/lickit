@@ -9,12 +9,12 @@ import cuid from 'cuid';
 const fs = pify(libFs);
 const toBuffer = pify(libToBuffer);
 
-export default function createTrackStorage(resolveUrl) {
+export default function createTrackStorage(resolvePath) {
     async function saveBlob(blob) {
         const id = cuid();
         try {
             const buffer = await toBuffer(blob);
-            const path = resolveUrl(id);
+            const path = resolvePath(id);
             await saveBuffer(path, buffer);
         } catch (error) {
             throw new VError(error, 'Unable to save blob');
@@ -23,7 +23,7 @@ export default function createTrackStorage(resolveUrl) {
     }
 
     async function deleteTrack(id) {
-        const path = resolveUrl(id);
+        const path = resolvePath(id);
         try {
             await fs.unlink(path);
         } catch (error) {
