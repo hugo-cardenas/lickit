@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import './TrackSection.css';
+import './TrackSection.styl';
 
 function TrackSectionView(props) {
     const {tracks} = props;

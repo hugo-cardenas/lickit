@@ -1,4 +1,3 @@
-// import './index.css'; 
 import App from './render/App';
 import pify from 'pify';
 import React from 'react';

@@ -1,6 +1,6 @@
 import React from 'react';
 import 'bulma/css/bulma.css';
-import './App.css';
+import './App.styl';
 import Lick from './Lick/Lick';
 import Search from './Search';
 import PropTypes from 'prop-types';

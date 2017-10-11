@@ -1,6 +1,5 @@
 const { join } = require('path');
-const htmlWebpackPlugin = require('html-webpack-plugin');
-const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: {
@@ -9,15 +8,19 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.css$/,
-                use: ['style-loader', 'css-loader']
-            },
-            {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader'
                 }
+            },
+            {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader']
+            },
+            {
+                test: /\.styl$/,
+                use: ['style-loader', 'css-loader', 'stylus-loader']
             }
         ]
     },
@@ -30,7 +33,7 @@ module.exports = {
         path: join(__dirname, '../dist')
     },
     plugins: [
-        new htmlWebpackPlugin({
+        new HtmlWebpackPlugin({
             template: './src/template/index.html',
             filename: 'index.html',
             inject: false

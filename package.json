@@ -44,6 +44,8 @@
     "react-addons-perf": "^15.4.2",
     "react-scripts": "1.0.5",
     "react-test-renderer": "^15.5.4",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.1",
     "tmp": "0.0.31",
     "webpack": "^3.0.0",
     "webpack-dev-server": "^2.5.0",
@@ -51,13 +53,13 @@
   },
   "main": "./dist/app",
   "scripts": {
-    "start-react": "webpack-dev-server --config ./config/webpack.config.dev.js",
+    "start-react": "webpack-dev-server --config ./config/webpack.dev.js",
     "start-electron": "ELECTRON_ENV=development electron ./src/app",
     "start": "concurrently 'npm run start-react' 'wait-on --config wait-on.config.json http://localhost:3000 && npm run start-electron'",
     "build": "npm run build-bundle && npm run build-package && npm run build-dmg",
-    "build-bundle": "webpack --config ./config/webpack.config.electron.js",
+    "build-bundle": "webpack --config ./config/webpack.electron.js",
     "build-package": "electron-packager . Lickit --platform=darwin --arch=x64 --icon=./assets/icon.icns --overwrite --osxSign=true --out=./pkg --ignore='.babelrc|.gitignore|.jsbeautifyrc|config|coverage|LICENSE|node_modules|public|README.md|src|test'",
-    "build-dmg": "cd ./pkg/Lickit-darwin-x64 && rm Lickit*.dmg && create-dmg ./Lickit.app",
+    "build-dmg": "cd ./pkg/Lickit-darwin-x64 && (rm Lickit*.dmg || echo 'No previous dmg found') && create-dmg ./Lickit.app",
     "test": "NODE_PATH=. jest --config=./test/jest.config.json",
     "test-ci": "npm test -- --coverage && codecov"
   }
