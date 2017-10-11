@@ -10,10 +10,6 @@ import createStore from './state/store';
 import jsonStorage from 'electron-json-storage';
 import { mapStateToProps, mapDispatchToProps, mergeProps } from './map';
 
-// import randomColor from 'randomcolor';
-// import Perf from 'react-addons-perf';
-// window.Perf = Perf;
-
 const storage = pify(jsonStorage);
 
 const ConnectedApp = connect(mapStateToProps, mapDispatchToProps, mergeProps)(App);
@@ -21,7 +17,7 @@ const ConnectedApp = connect(mapStateToProps, mapDispatchToProps, mergeProps)(Ap
 storage.get('state')
     .then(initialState => {
         if (isDev()) {
-            initialState = getInitialState(150);
+            initialState = getInitialState(15);
         }
         const store = createStore(initialState);
         // Add exec limit
@@ -34,6 +30,7 @@ storage.get('state')
         <ConnectedApp/>
         </Provider>, document.getElementById('root'));
 
+        // const randomColor = require('randomcolor');
         // Array.from(document.getElementsByTagName('div'))
         //     .forEach(el => el.style.backgroundColor = randomColor({luminosity: 'light'}));
     });
