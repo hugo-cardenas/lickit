@@ -1,9 +1,9 @@
 html {
-  -webkit-app-region: drag
+  -webkit-app-region: drag;
 }
 
 button, .lick-list, .lick-controls {
-  -webkit-app-region: no-drag
+  -webkit-app-region: no-drag;
 }
 
 .top-container {
@@ -47,7 +47,7 @@ header {
   border: 1px solid lightgray;
   background-color: rgba(255, 255, 255, 0.9); 
   max-height: 450px;
-  overflow-y: auto;
+  overflow-y: scroll;
 }
 
 .suggestion, .section-title {

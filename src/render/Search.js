@@ -38,14 +38,12 @@ const getSuggestions = (suggestions, value) => {
         .filter(section => section.suggestions.length > 0);
 };
 
-const handleMouseEnter = () => {
-    // Disable main scroll when mouse enters suggestion component
+const disableMainScroll = () => {
     Array.from(document.getElementsByTagName('html'))
         .forEach(elem => elem.style.overflow = "hidden");
 };
 
-const handleMouseLeave = () => {
-    // Enable main scroll when mouse leaves suggestion component
+const enableMainScroll = () => {
     Array.from(document.getElementsByTagName('html'))
         .forEach(elem => elem.style.overflow = "auto");
 };
@@ -69,9 +67,11 @@ class Search extends Component {
     }
 
     onSuggestionSelected(event, { suggestionValue, sectionIndex }) {
+        const { addFilter, setInput } = this.props;
         const type = this.state.showableSuggestions[sectionIndex].title;
-        this.props.addFilter({ type, value: suggestionValue });
-        this.props.setInput('');
+        addFilter({ type, value: suggestionValue });
+        setInput('');
+        enableMainScroll();
     }
 
     removeFilter(filter) {
@@ -90,10 +90,22 @@ class Search extends Component {
         const inputProps = {
             placeholder: 'Search',
             value: input,
-            onChange: (event, { newValue }) => setInput(newValue)
+            onChange: (event, { newValue }) => setInput(newValue),
+            onMouseEnter: disableMainScroll,
+            onMouseLeave: enableMainScroll
         };
 
+        // Need to override the default render in order to add the mouse events
+        const renderSuggestionsContainer = ({ containerProps, children }) =>
+            <div 
+                {...containerProps} 
+                onMouseEnter={disableMainScroll} 
+                onMouseLeave={enableMainScroll}>
+                    {children}
+            </div>;
+
         const autoSuggestProps = {
+            alwaysRenderSuggestions: true,
             focusInputOnSuggestionClick: false,
             getSectionSuggestions,
             getSuggestionValue,
@@ -104,14 +116,13 @@ class Search extends Component {
             onSuggestionsFetchRequested: this.onSuggestionsFetchRequested.bind(this),
             renderSectionTitle,
             renderSuggestion,
+            renderSuggestionsContainer,
             shouldRenderSuggestions,
             suggestions: showableSuggestions,
             theme
         };
 
-        return <div className="field is-grouped is-grouped-multiline" 
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}>
+        return <div className="field is-grouped is-grouped-multiline">
             <Autosuggest {...autoSuggestProps}/>
             {this.renderFilters(filters)}
         </div>;
