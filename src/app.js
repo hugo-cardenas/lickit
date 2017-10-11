@@ -7,6 +7,7 @@ const createMenuTemplate = require('./electron/menuTemplate');
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
 
+const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const url = require('url');
@@ -49,11 +50,10 @@ function createWindow() {
 
     // Add React DevTools extension
     if (isDev()) {
-        BrowserWindow.addDevToolsExtension(
-            path.join(os.homedir(),
-                'Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/2.5.0_0'
-            )
-        );
+        const extDir = path.join(os.homedir(),
+            'Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi');
+        const version = fs.readdirSync(extDir).shift();
+        BrowserWindow.addDevToolsExtension(path.join(extDir, version));
     }
 
     // Emitted when the window is closed.
