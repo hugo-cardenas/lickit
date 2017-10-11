@@ -105,7 +105,6 @@ class Search extends Component {
             </div>;
 
         const autoSuggestProps = {
-            alwaysRenderSuggestions: true,
             focusInputOnSuggestionClick: false,
             getSectionSuggestions,
             getSuggestionValue,
