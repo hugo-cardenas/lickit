@@ -4,7 +4,7 @@ const artists = [
     ['Django', 'Lady be good\nhttps://youtu.be/2Am48nza7JE?t=16s'],
     ['Django', 'Blues clair'],
     ['Django', 'Blues clair 2'],
-    ['Charlie Parker', 'Confirmation'],
+    ['Charlie Parker Parker Parker', 'Confirmation'],
     ['Dizzy Gillespie', 'Perdido\nhttps://youtu.be/X8gCmtkuVgk?t=20s']
   ];
 

@@ -105,6 +105,7 @@ class Search extends Component {
             </div>;
 
         const autoSuggestProps = {
+            // alwaysRenderSuggestions: true,
             focusInputOnSuggestionClick: false,
             getSectionSuggestions,
             getSuggestionValue,
@@ -121,9 +122,11 @@ class Search extends Component {
             theme
         };
 
-        return <div className="level-item field is-grouped is-grouped-multiline">
-            <Autosuggest {...autoSuggestProps}/>
-            {this.renderFilters(filters)}
+        return <div id="search-container" className="level">
+            <div className="level-left">
+                <div className="level-item"><Autosuggest {...autoSuggestProps}/></div>
+                {filters.map(filter => this.renderFilter(filter))}
+            </div>
         </div>;
     }
 
@@ -134,7 +137,7 @@ class Search extends Component {
     }
 
     renderFilter(filter) {
-        return <div key={filter.type + filter.value} className="control">
+        return <div key={filter.type + filter.value} className="control level-item">
             <div className="tags has-addons">
                 <span className="tag">{filter.value}</span>
                 <a className="tag is-delete" onClick={() => this.removeFilter(filter)}></a>

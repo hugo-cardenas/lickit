@@ -66,23 +66,18 @@ const App = (props) => {
     );
 };
 
-const renderTopContainer = () => {
-    return <div className="top-container">
-        <header className="main-header columns">
+const renderTopContainer = (createLick, search) => {
+    return <header className="top-container main-header columns">
             <div className="column">
-                <a id="button-lick-create" className="button is-small">
-                    <span className="icon is-small">
-                        <i className="fa fa-plus"></i>
-                    </span>
-                </a>
+                
             </div>
             <div className="column">
-                {renderNav()}
+                {/* {renderNav()} */}
+                {renderLickControls(createLick, search)}
             </div>
             <div className="column">    
             </div>
-        </header>
-    </div>;
+        </header>;
 };
 
 const renderNav = () => {
@@ -98,6 +93,22 @@ const renderNav = () => {
             </a>
         </p>
     </nav>;
+};
+
+const renderLickControls = (createLick, search) => {
+    return <div id="lick-controls" className="">
+        
+            <a 
+                id="button-lick-create" 
+                className="level-item button is-small"
+                onClick={createLick}>
+                <span className="icon is-small">
+                    <i className="fa fa-plus"></i>
+                </span>
+            </a>
+            <Search {...search}/>
+        
+    </div>;
 };
 
 export default App;

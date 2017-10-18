@@ -1,5 +1,6 @@
 import App from './render/App';
 import pify from 'pify';
+import _ from 'lodash';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -20,9 +21,9 @@ storage.get('state')
         }
         const store = createStore(initialState);
         // Add exec limit
-        store.subscribe(() => {
+        store.subscribe(_.throttle(() => {
             storage.set('state', store.getState());
-        });
+        }, 200));
 
         ReactDOM.render(
             <Provider store={store}>

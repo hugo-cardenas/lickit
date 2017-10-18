@@ -1,5 +1,5 @@
 
-top-container-height = 42px
+top-container-height = 54px
 container-width = 876px /* 900 - 12 left margin - 12 right margin */
 top-container-color = #ffffff
 main-container-color = #ffffff
@@ -17,6 +17,7 @@ button, .lick-list, .lick-controls
   position: fixed
   top: 0px
   z-index: 10
+  margin-bottom: 50px
   padding-top: 7px
   padding-right: 50px
   padding-left: 50px
@@ -24,27 +25,27 @@ button, .lick-list, .lick-controls
   height: top-container-height
   border-bottom: 1px solid lightgray
   background-color: top-container-color
+  text-align: center
 
 nav-button-horizontal-padding = 40px
 
-header
-  text-align: center
+#navigation
+  display: inline-block
 
-.main-header
-  margin-bottom: 50px
-
-  #button-lick-create
-    border-radius: 50%
-
-  #navigation
+  p
     display: inline-block
 
-    p
-      display: inline-block
+    a
+      padding-right: nav-button-horizontal-padding
+      padding-left: nav-button-horizontal-padding
 
-      a
-        padding-right: nav-button-horizontal-padding
-        padding-left: nav-button-horizontal-padding
+#lick-controls
+  #button-lick-create
+    border-radius: 50%
+    display: inline-block
+    margin-right: 20px
+  #search-container
+    display: inline-block
 
 .main-content
   margin: 0 auto
