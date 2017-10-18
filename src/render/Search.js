@@ -14,7 +14,7 @@ const renderSuggestion = suggestion => suggestion;
 const shouldRenderSuggestions = () => true;
 
 const theme = {
-    input: 'input control',
+    input: 'input control is-small',
     suggestion: 'suggestion',
     suggestionHighlighted: 'suggestion-highlighted',
     suggestionsContainerOpen: 'suggestion-container-open',
@@ -121,7 +121,7 @@ class Search extends Component {
             theme
         };
 
-        return <div className="field is-grouped is-grouped-multiline">
+        return <div className="level-item field is-grouped is-grouped-multiline">
             <Autosuggest {...autoSuggestProps}/>
             {this.renderFilters(filters)}
         </div>;

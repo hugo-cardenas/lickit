@@ -7,6 +7,14 @@ const createMenuTemplate = require('./electron/menuTemplate');
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
 
+require('electron-context-menu')({
+	prepend: (params) => [{
+		label: 'Rainbow',
+		// Only show it when right-clicking images
+		visible: params.mediaType === 'image'
+	}]
+});
+
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -64,7 +72,7 @@ function createWindow() {
         mainWindow = null;
     });
     
-    Menu.setApplicationMenu(Menu.buildFromTemplate(createMenuTemplate(app)));
+    // Menu.setApplicationMenu(Menu.buildFromTemplate(createMenuTemplate(app)));
 }
 
 // This method will be called when Electron has finished

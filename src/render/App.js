@@ -56,9 +56,8 @@ const App = (props) => {
 
     return (
         <div className="main-container">
-                {renderTopContainer()}
+                {renderTopContainer(handleCreateLick, search)}
                 <div className="main-content">
-                    {renderLickControls(handleCreateLick, search)}
                     <div className="lick-list">
                         {chunks.map(chunk => renderRow(chunk, deleteLick, saveLick, changeLickMode))}
                     </div>
@@ -69,22 +68,36 @@ const App = (props) => {
 
 const renderTopContainer = () => {
     return <div className="top-container">
-        <header className="main-header">
-            <h5 className="subtitle is-5">Lickit</h5>
+        <header className="main-header columns">
+            <div className="column">
+                <a id="button-lick-create" className="button is-small">
+                    <span className="icon is-small">
+                        <i className="fa fa-plus"></i>
+                    </span>
+                </a>
+            </div>
+            <div className="column">
+                {renderNav()}
+            </div>
+            <div className="column">    
+            </div>
         </header>
     </div>;
 };
 
-const renderLickControls = (handleCreateLick, search) => {
-    return <div className="lick-controls field is-grouped">
-        <a className="button control lick-create" onClick={handleCreateLick}>
-            <span className="icon">
-                <i className="fa fa-plus-circle"></i>
-            </span>
-            <span>New lick</span>
-        </a>
-        <Search {...search}/>
-    </div>;
+const renderNav = () => {
+    return <nav id="navigation" className="field has-addons">
+        <p className="control">
+            <a className="button is-small is-active">
+                <span>Licks</span>
+            </a>
+        </p>
+        <p className="control">
+            <a className="button is-small">
+                <span>Routine</span>
+            </a>
+        </p>
+    </nav>;
 };
 
 export default App;

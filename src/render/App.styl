@@ -1,19 +1,31 @@
+
+top-container-height = 42px
+container-width = 876px /* 900 - 12 left margin - 12 right margin */
+top-container-color = #ffffff
+main-container-color = #ffffff
+
 html
   -webkit-app-region: drag
 
 button, .lick-list, .lick-controls
   -webkit-app-region: no-drag
 
+.main-container
+  background-color: main-container-color
+
 .top-container
   position: fixed
   top: 0px
   z-index: 10
-  padding-top: 10px
+  padding-top: 7px
   padding-right: 50px
   padding-left: 50px
   width: 100%
-  height: 160px
-  background-color: #fff
+  height: top-container-height
+  border-bottom: 1px solid lightgray
+  background-color: top-container-color
+
+nav-button-horizontal-padding = 40px
 
 header
   text-align: center
@@ -21,16 +33,23 @@ header
 .main-header
   margin-bottom: 50px
 
+  #button-lick-create
+    border-radius: 50%
+
+  #navigation
+    display: inline-block
+
+    p
+      display: inline-block
+
+      a
+        padding-right: nav-button-horizontal-padding
+        padding-left: nav-button-horizontal-padding
+
 .main-content
   margin: 0 auto
-  margin-top: 170px
-  width: 876px /* 900 - 12 left margin - 12 right margin */
-
-.lick-controls
-  position: fixed
-  z-index: 10
-  margin-top: -70px
-  margin-bottom: 20px
+  margin-top: top-container-height + 20px
+  width: container-width
 
 .lick-list
   .column
