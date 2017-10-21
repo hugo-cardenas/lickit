@@ -1,24 +1,16 @@
 const electron = require('electron');
-// Module to control application life.
-const app = electron.app;
-const Menu = electron.Menu;
-const createMenuTemplate = require('./electron/menuTemplate');
-
-// Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow;
-
-require('electron-context-menu')({
-	prepend: (params) => [{
-		label: 'Rainbow',
-		// Only show it when right-clicking images
-		visible: params.mediaType === 'image'
-	}]
-});
-
+const contextMenu = require('electron-context-menu');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const url = require('url');
+
+// Module to control application life.
+const app = electron.app;
+// Module to create native browser window.
+const BrowserWindow = electron.BrowserWindow;
+
+contextMenu();
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -71,8 +63,6 @@ function createWindow() {
         // when you should delete the corresponding element.
         mainWindow = null;
     });
-    
-    // Menu.setApplicationMenu(Menu.buildFromTemplate(createMenuTemplate(app)));
 }
 
 // This method will be called when Electron has finished
