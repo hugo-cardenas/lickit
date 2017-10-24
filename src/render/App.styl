@@ -1,7 +1,8 @@
 
-top-container-height = 54px
+top-container-height = 40px
+controls-container-height = 60px
 container-width = 876px /* 900 - 12 left margin - 12 right margin */
-top-container-color = #ffffff
+top-container-color = rgb(238, 242, 243)
 main-container-color = #ffffff
 
 html
@@ -17,15 +18,37 @@ button, .lick-list, .lick-controls
   position: fixed
   top: 0px
   z-index: 10
-  margin-bottom: 50px
-  padding-top: 7px
-  padding-right: 50px
-  padding-left: 50px
+  // margin-bottom: 50px
+  // padding-top: 7px
+  // padding-right: 50px
+  // padding-left: 50px
   width: 100%
   height: top-container-height
-  border-bottom: 1px solid lightgray
+  // border-bottom: 1px solid lightgray
   background-color: top-container-color
-  text-align: center
+  // text-align: center
+
+.tabs
+  margin-top: 6px
+  // margin-left: 100px
+  font-weight: bold
+
+  // font-size: 15px
+  ul
+    border-bottom-color: top-container-color
+
+    li
+      a
+        padding-bottom: 9px
+
+.controls-container
+  position: fixed
+  top: top-container-height
+  z-index: 10
+  width: 100%
+  height: controls-container-height
+  border-bottom: 1px solid #dadada
+  background-color: white
 
 nav-button-horizontal-padding = 40px
 
@@ -40,35 +63,45 @@ nav-button-horizontal-padding = 40px
       padding-left: nav-button-horizontal-padding
 
 #lick-controls
+  margin-top: 16px
+  margin-left: 40px
+  text-align: left
+
+  // margin-top: 6px
+  // margin-left: 40px
   #button-lick-create
-    border-radius: 50%
     display: inline-block
-    margin-right: 20px
-  #search-container
-    display: inline-block
+    margin-right: 10px
+    border-radius: 20px
+
+#search-container
+  display: inline-block
+
+  .suggestion-container-open
+    overflow-y: scroll
+    max-height: 450px
+    border: 1px solid lightgray
+    background-color: rgba(255, 255, 255, 0.9)
+
+  .suggestion, .section-title
+    padding: 5px 10px
+
+  .suggestion-highlighted
+    background-color: rgba(245, 245, 245, 0.9)
+
+  .lick-filters
+    margin-top: 6px
+    margin-left: 15px
+    max-width: 553px
+
+  input
+    border-radius: 20px
 
 .main-content
   margin: 0 auto
-  margin-top: top-container-height + 20px
+  margin-top: top-container-height + controls-container-height + 20px
   width: container-width
 
 .lick-list
   .column
     width: 300px
-
-.suggestion-container-open
-  overflow-y: scroll
-  max-height: 450px
-  border: 1px solid lightgray
-  background-color: rgba(255, 255, 255, 0.9)
-
-.suggestion, .section-title
-  padding: 5px 10px
-
-.suggestion-highlighted
-  background-color: rgba(245, 245, 245, 0.9)
-
-.lick-filters
-  margin-top: 6px
-  margin-left: 15px
-  max-width: 553px

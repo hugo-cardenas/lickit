@@ -57,6 +57,7 @@ const App = (props) => {
     return (
         <div className="main-container">
                 {renderTopContainer(handleCreateLick, search)}
+                {renderControlsContainer(handleCreateLick, search)}
                 <div className="main-content">
                     <div className="lick-list">
                         {chunks.map(chunk => renderRow(chunk, deleteLick, saveLick, changeLickMode))}
@@ -67,17 +68,31 @@ const App = (props) => {
 };
 
 const renderTopContainer = (createLick, search) => {
-    return <header className="top-container main-header columns">
+    return <div className="top-container">
+        <div className="columns">
             <div className="column">
-                
+            
             </div>
             <div className="column">
-                {/* {renderNav()} */}
-                {renderLickControls(createLick, search)}
+                {renderNav2()}    
+                
             </div>
             <div className="column">    
             </div>
-        </header>;
+        </div>
+    </div>;
+};
+
+const renderControlsContainer = (createLick, search) => {
+    return <div className="controls-container">
+        {/* <div className="columns"> */}
+            {/* <div className="column"> */}
+                {renderLickControls(createLick, search)}
+            {/* </div> */}
+            
+            
+        {/* </div> */}
+    </div>;
 };
 
 const renderNav = () => {
@@ -95,9 +110,27 @@ const renderNav = () => {
     </nav>;
 };
 
+const renderNav2 = () => {
+    return <div className="tabs is-centered is-small">
+        <ul>
+            <li className="is-active">
+                <a href="#">
+                    <span className="icon is-small"><i className="fa fa-music"></i></span>
+                    <span>Licks</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <span className="icon is-small"><i className="fa fa-book"></i></span>
+                    <span>Routine</span>
+                </a>
+            </li>
+        </ul>
+    </div>;
+};
+
 const renderLickControls = (createLick, search) => {
     return <div id="lick-controls" className="">
-        
             <a 
                 id="button-lick-create" 
                 className="level-item button is-small"
@@ -105,6 +138,7 @@ const renderLickControls = (createLick, search) => {
                 <span className="icon is-small">
                     <i className="fa fa-plus"></i>
                 </span>
+                <span>Add lick</span>
             </a>
             <Search {...search}/>
         
