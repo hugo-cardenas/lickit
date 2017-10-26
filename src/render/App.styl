@@ -8,6 +8,8 @@ top-container-color = #eef2f3
 main-container-color = white
 border-color = #dadada
 
+font-size = 13px
+
 fixed-container(top, height)
   position: fixed
   top: top
@@ -62,6 +64,7 @@ button, .lick-list, #button-lick-create, #search-container
   display: inline-block
   margin-right: 10px
   border-radius: 20px
+  font-size: font-size
 
 #search-container
   display: inline-block
@@ -69,6 +72,7 @@ button, .lick-list, #button-lick-create, #search-container
   input
     width: 200px
     border-radius: 20px
+    font-size: font-size
 
   .suggestion-container-open
     overflow-y: scroll
@@ -78,6 +82,7 @@ button, .lick-list, #button-lick-create, #search-container
 
   .suggestion, .section-title
     padding: 5px 10px
+    font-size: font-size
 
   .suggestion-highlighted
     background-color: rgba(245, 245, 245, 0.9)
@@ -91,7 +96,6 @@ button, .lick-list, #button-lick-create, #search-container
   margin-top: top-container-height + controls-container-height + 20px
   margin-right: margin-horizontal
   margin-left: margin-horizontal
-  // width: container-width
 
 .lick-list
   .column

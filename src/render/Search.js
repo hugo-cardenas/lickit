@@ -16,10 +16,10 @@ const shouldRenderSuggestions = () => true;
 const theme = {
     container: 'autosuggest-container is-pulled-left',
     input: 'input control is-small',
-    suggestion: 'suggestion is-small is-size-7',
+    suggestion: 'suggestion',
     suggestionHighlighted: 'suggestion-highlighted',
     suggestionsContainerOpen: 'suggestion-container-open',
-    sectionTitle: 'section-title is-size-7'
+    sectionTitle: 'section-title'
 };
 
 const getSuggestions = (suggestions, value) => {

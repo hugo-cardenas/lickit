@@ -1,11 +1,11 @@
 import _ from 'lodash';
 
 const artists = [
-    ['Django', 'Lady be good\nhttps://youtu.be/2Am48nza7JE?t=16s'],
+    ['Django', 'Lady be good'],
     ['Django', 'Blues clair'],
     ['Django', 'Blues clair 2'],
     ['Charlie Parker Parker Parker', 'Confirmation'],
-    ['Dizzy Gillespie', 'Perdido\nhttps://youtu.be/X8gCmtkuVgk?t=20s']
+    ['Dizzy Gillespie', 'Perdido']
   ];
 
 const tags = [
@@ -47,7 +47,7 @@ const createItem = i => {
 const createTrack = i => {
     return {
         // id: `${i}`,
-        id: 'cj6dz5cfd0000bnc9nkn4o47f',
+        id: 'cj6dz5r8h0001bnc9ejpij80v',
         url: url + `?a=${i}`
     };
 };
