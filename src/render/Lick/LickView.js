@@ -13,16 +13,17 @@ function LickView(props) {
                 {/* <span className="icon">
                     <i className="fa fa-ellipsis-h" aria-hidden="true"></i>
                 </span> */}
-            {renderMenu(id, editLick, deleteLick)}
+            
                 
             {/* </header> */}
             <div className="card-content">
+                {renderMenu(id, editLick, deleteLick)}
                 {renderArtist(artist)}
                 {renderDescription(description)}
                 <TrackSectionView tracks={tracks}/> 
-                {renderTags(tags)}
+                {renderTags(tags)}                
             </div>
-            {/* renderFooter(id, editLick, deleteLick) */}
+            {renderFooter(id, editLick, deleteLick)}
         </div>
     );
 }
@@ -30,11 +31,9 @@ function LickView(props) {
 function renderMenu(id, editLick, deleteLick) {
     return <div className="dropdown is-right is-hoverable is-pulled-right">
         <div className="dropdown-trigger">
-            <button className="button" aria-haspopup="true" aria-controls="dropdown-menu">
-                <span className="icon is-small">
-                    <i className="fa fa-ellipsis-h" aria-hidden="true"></i>
-                </span>
-            </button>
+            <span className="icon is-small" aria-haspopup="true" aria-controls="dropdown-menu">
+                <i className="fa fa-bars" aria-hidden="true"></i>
+            </span>
         </div>
         <div className="dropdown-menu" id="dropdown-menu" role="menu">
             <div className="dropdown-content">
@@ -64,7 +63,7 @@ function renderArtist(artist) {
 function renderDescription(description) {
     // TODO Wrap long links
     return <pre className="description">
-        {linkifier(description, {target: '_blank'})}
+        {linkifier(description, {target: '_blank'})} | <a href="#">Link</a>
     </pre>;
 }
 
@@ -78,7 +77,10 @@ function renderTags(tags) {
 
 function renderFooter(id, editLick, deleteLick) {
     return <footer className="card-footer">
-        <a className="card-footer-item lick-edit" onClick={() => editLick(id)}>
+        <div className="card-footer-item">
+            <time className="is-size-7" dateTime="2016-1-1">3 days ago</time>
+        </div>
+        {/* <a className="card-footer-item lick-edit" onClick={() => editLick(id)}>
             <a className="button is-small is-pulled-right" onClick={() => editLick(id)}>
                 <span className="icon is-small">
                     <i className="fa fa-pencil"></i>
@@ -93,7 +95,7 @@ function renderFooter(id, editLick, deleteLick) {
                 </span>
                 {<span>Del</span>}
             </a>
-        </div>
+        </div> */}
     </footer>;
 }
 
