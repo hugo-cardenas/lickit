@@ -14,6 +14,7 @@ const renderSuggestion = suggestion => suggestion;
 const shouldRenderSuggestions = () => true;
 
 const theme = {
+    container: 'autosuggest-container is-pulled-left',
     input: 'input control is-small',
     suggestion: 'suggestion is-small is-size-7',
     suggestionHighlighted: 'suggestion-highlighted',
@@ -105,7 +106,7 @@ class Search extends Component {
             </div>;
 
         const autoSuggestProps = {
-            alwaysRenderSuggestions: true,
+            // alwaysRenderSuggestions: true,
             focusInputOnSuggestionClick: false,
             getSectionSuggestions,
             getSuggestionValue,
@@ -122,22 +123,22 @@ class Search extends Component {
             theme
         };
 
-        return <div id="search-container" className="">
-            <div className="">
-                <div className=""><Autosuggest {...autoSuggestProps}/></div>
-                {this.renderFilters(filters)}
-            </div>
+        return <div id="search-container">
+            <Autosuggest {...autoSuggestProps}/>
+            {this.renderFilters(filters)}
         </div>;
     }
 
     renderFilters(filters) {
-        return <div className="lick-filters">
-            {filters.map(filter => this.renderFilter(filter))}
+        return <div className="lick-filters level is-pulled-left">
+            <div className="level-left">
+                {filters.map(filter => this.renderFilter(filter))}
+            </div>
         </div>;
     }
 
     renderFilter(filter) {
-        return <div key={filter.type + filter.value} className="">
+        return <div key={filter.type + filter.value} className="level-item">
             <div className="tags has-addons">
                 <span className="tag">{filter.value}</span>
                 <a className="tag is-delete" onClick={() => this.removeFilter(filter)}></a>

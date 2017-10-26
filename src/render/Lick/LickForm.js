@@ -45,8 +45,12 @@ class LickForm extends Component {
             handleRecordTrack: this.handleRecordTrack
         };
 
-        return (
-            <div className="card lick lick-form">
+        return <div className="modal is-active">
+        <div className="modal-background"></div>
+        <div className="modal-content">
+          
+
+        <div className="card lick lick-form">
                 <div className="card-content">
                     {this.renderArtist(artist)}
                     {this.renderDescription(description)}
@@ -54,8 +58,19 @@ class LickForm extends Component {
                     {this.renderTags(tags, tagInput)}
                 </div>
                 {this.renderFooter(id, cancelLickEditor, deleteLick)}
-            </div>
-        );
+        </div>
+
+
+
+        </div>
+        <button className="modal-close is-large" aria-label="close"></button>
+      </div>
+        
+        
+        
+        
+        
+        ;
     }
 
     renderArtist(artist) {
@@ -104,21 +119,30 @@ class LickForm extends Component {
 
     renderFooter(id, cancelLickEditor, deleteLick) {
         return <footer className="card-footer">
-            <a className="card-footer-item lick-save" onClick={this.handleSave.bind(this)}>
-                <span className="icon is-small">
-                    <i className="fa fa-floppy-o"></i>
-                </span>
-            </a>
-            <a className="card-footer-item lick-cancel" onClick={() => cancelLickEditor(id)}>
-                <span className="icon is-small">
-                    <i className="fa fa-undo"></i>
-                </span>
-            </a>
-            <a className="card-footer-item lick-delete" onClick={() => deleteLick(id)}>
-                <span className="icon is-small">
-                    <i className="fa fa-trash"></i>
-                </span>
-            </a>
+            <div className="card-footer-item lick-save">
+                <a className="button is-small is-pulled-right" onClick={this.handleSave.bind(this)}>
+                    <span className="icon is-small">
+                        <i className="fa fa-floppy-o"></i>
+                    </span>
+                    {<span>Save</span>}
+                </a>
+            </div>
+            <div className="card-footer-item lick-cancel">
+                <a className="button is-small is-pulled-right" onClick={() => cancelLickEditor(id)}>
+                    <span className="icon is-small">
+                        <i className="fa fa-undo"></i>
+                    </span>
+                    {<span>Undo</span>}
+                </a>
+            </div>
+            <div className="card-footer-item lick-delete">
+                <a className="button is-small is-pulled-right" onClick={() => deleteLick(id)}>
+                    <span className="icon is-small">
+                        <i className="fa fa-trash"></i>
+                    </span>
+                    {<span>Del</span>}
+                </a>
+            </div>
         </footer>;
     }
 

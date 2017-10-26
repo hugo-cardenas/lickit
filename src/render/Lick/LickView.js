@@ -9,15 +9,50 @@ function LickView(props) {
 
     return (
         <div className="card lick lick-view">
+            {/* <header className="card-header"> */}
+                {/* <span className="icon">
+                    <i className="fa fa-ellipsis-h" aria-hidden="true"></i>
+                </span> */}
+            {renderMenu(id, editLick, deleteLick)}
+                
+            {/* </header> */}
             <div className="card-content">
                 {renderArtist(artist)}
                 {renderDescription(description)}
                 <TrackSectionView tracks={tracks}/> 
                 {renderTags(tags)}
             </div>
-            {renderFooter(id, editLick, deleteLick)}
+            {/* renderFooter(id, editLick, deleteLick) */}
         </div>
     );
+}
+
+function renderMenu(id, editLick, deleteLick) {
+    return <div className="dropdown is-right is-hoverable is-pulled-right">
+        <div className="dropdown-trigger">
+            <button className="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                <span className="icon is-small">
+                    <i className="fa fa-ellipsis-h" aria-hidden="true"></i>
+                </span>
+            </button>
+        </div>
+        <div className="dropdown-menu" id="dropdown-menu" role="menu">
+            <div className="dropdown-content">
+                <a className="dropdown-item" onClick={() => editLick(id)}>
+                    <span className="icon is-small">
+                        <i className="fa fa-pencil" aria-hidden="true"></i>
+                    </span>
+                    <span>Edit</span>
+                </a>
+                <a className="dropdown-item" onClick={() => deleteLick(id)}>
+                    <span className="icon is-small">
+                        <i className="fa fa-trash" aria-hidden="true"></i>
+                    </span>
+                    <span>Delete</span>
+                </a>
+            </div>
+        </div>
+    </div>;
 }
 
 export default LickView;
@@ -44,15 +79,21 @@ function renderTags(tags) {
 function renderFooter(id, editLick, deleteLick) {
     return <footer className="card-footer">
         <a className="card-footer-item lick-edit" onClick={() => editLick(id)}>
-            <span className="icon is-small">
-                <i className="fa fa-pencil-square-o"></i>
-            </span>
+            <a className="button is-small is-pulled-right" onClick={() => editLick(id)}>
+                <span className="icon is-small">
+                    <i className="fa fa-pencil"></i>
+                </span>
+                {<span>Edit</span>}
+            </a>
         </a>
-        <a className="card-footer-item lick-delete" onClick={() => deleteLick(id)}>
-            <span className="icon is-small">
-                <i className="fa fa-trash"></i>
-            </span>
-        </a>
+        <div className="card-footer-item lick-delete">
+            <a className="button is-small is-pulled-right" onClick={() => deleteLick(id)}>
+                <span className="icon is-small">
+                    <i className="fa fa-trash"></i>
+                </span>
+                {<span>Del</span>}
+            </a>
+        </div>
     </footer>;
 }
 

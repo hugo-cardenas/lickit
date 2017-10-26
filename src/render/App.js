@@ -12,8 +12,7 @@ const renderItem = (item, deleteLick, saveLick, changeLickMode) => {
         mode={item.mode}
         deleteLick={deleteLick}
         saveLick={saveLick}
-        changeLickMode={changeLickMode}
-        />;
+        changeLickMode={changeLickMode}/>;
 };
 
 const renderRow = (chunk, deleteLick, saveLick, changeLickMode) => {
@@ -67,51 +66,18 @@ const App = (props) => {
     );
 };
 
-const renderTopContainer = (createLick, search) => {
-    return <div className="top-container">
-        <div className="columns">
-            <div className="column">
-            
-            </div>
-            <div className="column">
-                {renderNav2()}    
-                
-            </div>
-            <div className="column">    
-            </div>
-        </div>
+const renderTopContainer = () =>
+    <div className="top-container">
+        {renderNav()}
     </div>;
-};
 
-const renderControlsContainer = (createLick, search) => {
-    return <div className="controls-container">
-        {/* <div className="columns"> */}
-            {/* <div className="column"> */}
-                {renderLickControls(createLick, search)}
-            {/* </div> */}
-            
-            
-        {/* </div> */}
+const renderControlsContainer = (createLick, search) =>
+    <div className="controls-container">
+        {renderLickControls(createLick, search)}
     </div>;
-};
 
-const renderNav = () => {
-    return <nav id="navigation" className="field has-addons">
-        <p className="control">
-            <a className="button is-small is-active">
-                <span>Licks</span>
-            </a>
-        </p>
-        <p className="control">
-            <a className="button is-small">
-                <span>Routine</span>
-            </a>
-        </p>
-    </nav>;
-};
-
-const renderNav2 = () => {
-    return <div className="tabs is-centered is-small">
+const renderNav = () => 
+    <div className="tabs is-centered is-small">
         <ul>
             <li className="is-active">
                 <a href="#">
@@ -127,23 +93,20 @@ const renderNav2 = () => {
             </li>
         </ul>
     </div>;
-};
 
-const renderLickControls = (createLick, search) => {
-    return <div id="lick-controls" className="">
-            <a 
-                id="button-lick-create" 
-                className="level-item button is-small"
-                onClick={createLick}>
-                <span className="icon is-small">
-                    <i className="fa fa-plus"></i>
-                </span>
-                <span>Add lick</span>
-            </a>
-            <Search {...search}/>
-        
+const renderLickControls = (createLick, search) => 
+    <div id="lick-controls" className="">
+        <a 
+            id="button-lick-create" 
+            className="level-item button is-small"
+            onClick={createLick}>
+            <span className="icon is-small">
+                <i className="fa fa-plus"></i>
+            </span>
+            <span>Add lick</span>
+        </a>
+        <Search {...search}/>
     </div>;
-};
 
 export default App;
 

@@ -39,14 +39,15 @@ const createItem = i => {
         id: `${i + 1}`,
         artist,
         description,
-        tracks: _.range(rand(0, 0)).map(createTrack),
+        tracks: _.range(rand(1, 1)).map(createTrack),
         tags: _.uniq(_.range(rand(0, 3)).map(() => tags[rand(0, tags.length - 1)]))
     };
 };
 
 const createTrack = i => {
     return {
-        id: `${i}`,
+        // id: `${i}`,
+        id: 'cj6dz5cfd0000bnc9nkn4o47f',
         url: url + `?a=${i}`
     };
 };

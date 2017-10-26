@@ -1,81 +1,74 @@
-
 top-container-height = 40px
 controls-container-height = 60px
 container-width = 876px /* 900 - 12 left margin - 12 right margin */
-top-container-color = rgb(238, 242, 243)
-main-container-color = #ffffff
+margin-horizontal = 60px
+// Colors
+background-color = white
+top-container-color = #eef2f3
+main-container-color = white
+border-color = #dadada
+
+fixed-container(top, height)
+  position: fixed
+  top: top
+  z-index: 10
+  width: 100%
+  height: height
 
 html
   -webkit-app-region: drag
 
-button, .lick-list, .lick-controls
+button, .lick-list, #button-lick-create, #search-container
   -webkit-app-region: no-drag
+
+.button.is-small
+  padding-right: 15px
+  padding-left: 15px
+  border-radius: 20px
 
 .main-container
   background-color: main-container-color
 
 .top-container
-  position: fixed
-  top: 0px
-  z-index: 10
-  // margin-bottom: 50px
-  // padding-top: 7px
-  // padding-right: 50px
-  // padding-left: 50px
-  width: 100%
-  height: top-container-height
-  // border-bottom: 1px solid lightgray
+  fixed-container(0px, top-container-height)
+  border-bottom: 1px solid border-color
   background-color: top-container-color
-  // text-align: center
 
-.tabs
-  margin-top: 6px
-  // margin-left: 100px
-  font-weight: bold
+  .tabs
+    margin-top: 6px
+    font-weight: bold
 
-  // font-size: 15px
-  ul
-    border-bottom-color: top-container-color
+    ul
+      border-bottom-color: top-container-color
 
-    li
-      a
-        padding-bottom: 9px
+      li
+        a
+          padding-bottom: 9px
+
+      li:not(.is-active)
+        a
+          border-bottom-color: top-container-color
 
 .controls-container
-  position: fixed
-  top: top-container-height
-  z-index: 10
-  width: 100%
-  height: controls-container-height
-  border-bottom: 1px solid #dadada
-  background-color: white
-
-nav-button-horizontal-padding = 40px
-
-#navigation
-  display: inline-block
-
-  p
-    display: inline-block
-
-    a
-      padding-right: nav-button-horizontal-padding
-      padding-left: nav-button-horizontal-padding
+  fixed-container(top-container-height, controls-container-height)
+  border-bottom: 1px solid border-color
+  background-color: background-color
 
 #lick-controls
-  margin-top: 16px
-  margin-left: 40px
+  margin: 16px margin-horizontal
   text-align: left
 
-  // margin-top: 6px
-  // margin-left: 40px
-  #button-lick-create
-    display: inline-block
-    margin-right: 10px
-    border-radius: 20px
+#button-lick-create
+  display: inline-block
+  margin-right: 10px
+  border-radius: 20px
 
 #search-container
   display: inline-block
+
+  input
+    width: 200px
+    border-radius: 20px
 
   .suggestion-container-open
     overflow-y: scroll
@@ -90,17 +83,15 @@ nav-button-horizontal-padding = 40px
     background-color: rgba(245, 245, 245, 0.9)
 
   .lick-filters
-    margin-top: 6px
+    margin-top: 1.5px
     margin-left: 15px
     max-width: 553px
 
-  input
-    border-radius: 20px
-
 .main-content
-  margin: 0 auto
   margin-top: top-container-height + controls-container-height + 20px
-  width: container-width
+  margin-right: margin-horizontal
+  margin-left: margin-horizontal
+  // width: container-width
 
 .lick-list
   .column
