@@ -1,12 +1,24 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import Radium from 'radium';
 import { linkifier } from 'react-linkifier';
 import TrackSectionView from './Track/TrackSectionView';
 
 function LickView(props) {
     const { lick, editLick, deleteLick } = props;
-    const { id, artist, description, tracks, tags } = lick;
+    const { id, artist, description, tracks, tags, background } = lick;
 
+    const style = {
+        backgroundImage: `url(${background[0]})`,
+        backgroundPositionY: `${background[1]}%`,
+
+        ':hover': {
+            backgroundImage: `linear-gradient(rgba(222, 222, 222, 0.45), rgba(222, 222, 222, 0.45)), url(${background[0]})`
+        }
+    };
+
+    
+    
     return (
         <div className="card lick lick-view">
             {/* <header className="card-header"> */}
@@ -20,10 +32,20 @@ function LickView(props) {
                 {renderMenu(id, editLick, deleteLick)}
                 {renderArtist(artist)}
                 {renderDescription(description)}
-                <TrackSectionView tracks={tracks}/> 
+                <div id="track-container" 
+                    style={style}>
+                    <div className="center">
+                        <a className="button is-primary">
+                            <span className="icon is-small">
+                                <i className="fa fa-play"></i>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                
                 {renderTags(tags)}                
             </div>
-            {renderFooter(id, editLick, deleteLick)}
+            {/* renderFooter(id, editLick, deleteLick) */}
         </div>
     );
 }
@@ -54,7 +76,7 @@ function renderMenu(id, editLick, deleteLick) {
     </div>;
 }
 
-export default LickView;
+export default Radium(LickView);
 
 function renderArtist(artist) {
     return <p className="artist">{artist}</p>;
@@ -78,7 +100,7 @@ function renderTags(tags) {
 function renderFooter(id, editLick, deleteLick) {
     return <footer className="card-footer">
         <div className="card-footer-item">
-            <time className="is-size-7" dateTime="2016-1-1">3 days ago</time>
+            <time dateTime="2016-1-1">3 days ago</time>
         </div>
         {/* <a className="card-footer-item lick-edit" onClick={() => editLick(id)}>
             <a className="button is-small is-pulled-right" onClick={() => editLick(id)}>

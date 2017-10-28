@@ -77,7 +77,7 @@ const renderControlsContainer = (createLick, search) =>
     </div>;
 
 const renderNav = () => 
-    <div className="tabs is-centered is-small">
+    <div className="tabs is-centered">
         <ul>
             <li className="is-active">
                 <a href="#">

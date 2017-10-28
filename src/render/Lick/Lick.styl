@@ -1,3 +1,7 @@
+artist-font-size = 14px
+description-font-size = 14px
+date-font-size = 12px
+
 .lick
   border: none
   border-radius: 3px
@@ -9,12 +13,12 @@
     margin-right: 10px
 
 .card-content
-  padding: 1rem
   margin-bottom: 10px
+  padding: 1rem
 
 .dropdown-trigger
-  padding-left: 10px
   padding-bottom: 5px
+  padding-left: 10px
 
   .icon
     color: gray
@@ -28,30 +32,70 @@
     margin-bottom: 10px
 
 .lick-view
+  height: 220px
+  
   .card-content
     height: 145px
 
   .artist
-    font-weight: bold
-    font-size: 14px
-    color: gray
-    margin-bottom: 7.5px
-    white-space: nowrap
     overflow: hidden
+    margin-bottom: 7.5px
+    color: #636363
     text-overflow: ellipsis
+    white-space: nowrap
+    font-weight: bold
+    font-size: artist-font-size
 
   .card-footer-item
     justify-content: flex-start
 
+    time
+      font-size: date-font-size
+
   time
-    color: darkgray
     margin-left: 5px
+    color: darkgray
+
+  .tags
+    margin-top: 20px
+
+gradient = linear-gradient(rgba(222, 222, 222, 0.45), rgba(222, 222, 222, 0.45))
+img1 = url('https://cps-static.rovicorp.com/3/JPG_400/MI0002/750/MI0002750232.jpg?partner=allrovi.com')
+img2 = url('https://upload.wikimedia.org/wikipedia/commons/f/f5/Django_Reinhardt_%28Gottlieb_07301%29.jpg')
+
+background(img)
+  // background-image: img
+  // background-position-y: 30%
+  background-size: cover
+
+#track-container
+  padding-top: 20px
+  padding-bottom: 20px
+  background-size: cover
+
+  // width: 276px;
+  // margin-left: -16px;
+
+  // &:hover
+  // background-size: cover
+  &:hover .button
+    visibility: visible
+
+  .center
+    display: block
+    margin: 0 auto
+    width: 35px
+
+  .button
+    visibility: hidden
+    margin: 0 auto
+    border-radius: 50%
 
 .description
   margin-bottom: 15px
   background-color: white
   color: #4a4a4a
-  font-size: 14px
+  font-size: description-font-size
   font-family: BlinkMacSystemFont, -apple-system, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif
   -webkit-font-smoothing: antialiased
 
