@@ -59,7 +59,8 @@ const App = (props) => {
                 {renderControlsContainer(handleCreateLick, search)}
                 <div className="main-content">
                     <div className="lick-list">
-                        {chunks.map(chunk => renderRow(chunk, deleteLick, saveLick, changeLickMode))}
+                        {items.map(item => renderItem(item, deleteLick, saveLick, changeLickMode))}
+                        {/* chunks.map(chunk => renderRow(chunk, deleteLick, saveLick, changeLickMode)) */}
                     </div>
                 </div>
             </div>

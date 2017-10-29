@@ -17,7 +17,7 @@ const ConnectedApp = connect(mapStateToProps, mapDispatchToProps, mergeProps)(Ap
 storage.get('state')
     .then(initialState => {
         if (isDev()) {
-            initialState = createDummyState(15);
+            initialState = createDummyState(100);
         }
         const store = createStore(initialState);
         // Add exec limit

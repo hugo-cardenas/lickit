@@ -1,13 +1,12 @@
 top-container-height = 40px
 controls-container-height = 60px
-container-width = 876px /* 900 - 12 left margin - 12 right margin */
-margin-horizontal = 60px
+main-content-margin-left = 70px
+main-content-margin-right = 40px
 // Colors
 background-color = white
 top-container-color = #eef2f3
 main-container-color = white
 border-color = #dadada
-
 font-size = 13px
 
 fixed-container(top, height)
@@ -38,8 +37,8 @@ button, .lick-list, #button-lick-create, #search-container
 
   .tabs
     margin-top: 4px
-    font-size: font-size
     font-weight: bold
+    font-size: font-size
 
     ul
       border-bottom-color: top-container-color
@@ -58,7 +57,8 @@ button, .lick-list, #button-lick-create, #search-container
   background-color: background-color
 
 #lick-controls
-  margin: 16px margin-horizontal
+  margin-top: 16px
+  margin-left: main-content-margin-left
   text-align: left
 
 #button-lick-create
@@ -95,9 +95,11 @@ button, .lick-list, #button-lick-create, #search-container
 
 .main-content
   margin-top: top-container-height + controls-container-height + 20px
-  margin-right: margin-horizontal
-  margin-left: margin-horizontal
+  margin-right: main-content-margin-right
+  margin-left: main-content-margin-left
 
 .lick-list
-  .column
-    width: 300px
+  display: flex
+  flex-wrap: wrap
+  // border: 1px solid gray
+  // justify-content: space-around
