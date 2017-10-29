@@ -33,10 +33,10 @@ function LickView(props) {
                 {renderArtist(artist)}
                 {renderDescription(description)}
                 <div id="track-container" 
-                    style={style}>
+                    >
                     <div className="center">
-                        <a className="button is-primary">
-                            <span className="icon is-small">
+                        <a className="button is-primary is-large">
+                            <span className="icon">
                                 <i className="fa fa-play"></i>
                             </span>
                         </a>
