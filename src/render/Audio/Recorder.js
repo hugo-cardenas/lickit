@@ -1,6 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LibRecorder from 'react-recorder';
+
+const
+    STATE_IDLE = 'idle',
+    STATE_RECORDING = 'recording';
+    
 
 class Recorder extends Component {
     constructor(props) {
@@ -14,15 +19,15 @@ class Recorder extends Component {
 
     render() {
         switch (this.state.recordState) {
-            case 'recording':
+            case STATE_RECORDING:
                 return this.renderRecorderRecording();
-            case 'idle':
+            case STATE_IDLE:
             default:
                 return this.renderRecorderIdle();
         }
     }
 
-    renderRecorderIdle(handleRecordStart) {
+    renderRecorderIdle() {
         return <div className="recorder">
             <a className="button is-primary" onClick={this.handleRecordStart}>
                 <span className="icon is-small">
@@ -33,7 +38,7 @@ class Recorder extends Component {
         </div>;
     }
 
-    renderRecorderRecording(handleRecordStop) {
+    renderRecorderRecording() {
         return <div className="recorder">
             <a className="button is-primary" onClick={this.handleRecordStop}>
                 <span className="icon is-small">
@@ -41,15 +46,15 @@ class Recorder extends Component {
                 </span>
             </a>
             <LibRecorder command="start" onStop={this.props.handleRecordTrack}/>
-        </div>
+        </div>;
     }
 
-    handleRecordStart(){
-        this.setState({recordState: 'recording'});
+    handleRecordStart() {
+        this.setState({ recordState: STATE_RECORDING });
     }
 
-    handleRecordStop(){
-        this.setState({recordState: 'idle'});
+    handleRecordStop() {
+        this.setState({ recordState: STATE_IDLE });
     }
 }
 

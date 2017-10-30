@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Recorder from './Recorder/Recorder';
+import Recorder from '../../Audio/Recorder';
 
 function TrackSectionForm(props) {
     const { tracks, handleDeleteTrack, handleRecordTrack } = props;
