@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import './Lick.styl';
 import LickForm from './LickForm';
 import LickView from './LickView';
 import { LICK_MODE_EDIT, LICK_MODE_VIEW } from '../../state/actions/lick/modes';

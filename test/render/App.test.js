@@ -61,7 +61,6 @@ it('render expected number of licks', () => {
     });
 
     const component = shallow(<App {...props}/>);
-    expect(component.find('.columns')).toHaveLength(3);
     expect(component.find('Lick')).toHaveLength(7);
 });
 
@@ -70,7 +69,7 @@ it('create new lick', () => {
     props.lick.createLick = jest.fn();
 
     const component = shallow(<App {...props}/>);
-    component.find('.lick-create').simulate('click');
+    component.find('#button-lick-create').simulate('click');
 
     expect(props.lick.createLick).toHaveBeenCalledTimes(1);
     expect(props.lick.createLick).toBeCalledWith();

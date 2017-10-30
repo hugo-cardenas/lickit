@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './TrackSection.styl';
 import Recorder from './Recorder/Recorder';
 
 function TrackSectionForm(props) {

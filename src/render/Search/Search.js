@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Autosuggest from 'react-autosuggest';
-import { TYPE_ARTIST, TYPE_TAG } from '../search/filterTypes';
+import { TYPE_ARTIST, TYPE_TAG } from '../../search/filterTypes';
 
 const getSuggestionValue = suggestion => suggestion;
 

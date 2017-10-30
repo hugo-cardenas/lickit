@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, shallow } from 'enzyme';
-import Search from 'src/render/Search';
+import Search from 'src/render/Search/Search';
 import { TYPE_ARTIST, TYPE_TAG } from 'src/search/filterTypes';
 
 it('render', () => {
