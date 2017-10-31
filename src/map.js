@@ -48,7 +48,6 @@ const mapItemToProp = (item) => {
             id: lick.id,
             artist: lick.artist,
             description: lick.description,
-            background: lick.background,
             tags,
             tracks: lick.tracks.map(track => {
                 return {

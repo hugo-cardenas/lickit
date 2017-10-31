@@ -66,7 +66,7 @@ test('edit lick', () => {
     props.editLick = jest.fn();
 
     const component = shallow(<LickView {...props}/>);
-    component.find('.lick-edit').simulate('click');
+    component.find('.dropdown-item').at(0).simulate('click');
 
     expect(props.editLick).toHaveBeenCalledTimes(1);
     expect(props.editLick).toBeCalledWith(props.lick.id);
@@ -77,7 +77,7 @@ test('delete lick', () => {
     props.deleteLick = jest.fn();
 
     const component = shallow(<LickView {...props}/>);
-    component.find('.lick-delete').simulate('click');
+    component.find('.dropdown-item').at(1).simulate('click');
 
     expect(props.deleteLick).toHaveBeenCalledTimes(1);
     expect(props.deleteLick).toBeCalledWith(props.lick.id);

@@ -1,56 +1,30 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import Radium from 'radium';
 import { linkifier } from 'react-linkifier';
-import TrackSectionView from './Track/TrackSectionView';
+import Player from '../Audio/Player';
 
-function LickView(props) {
+const LickView = (props) => {
     const { lick, editLick, deleteLick } = props;
-    const { id, artist, description, tracks, tags, background } = lick;
+    const { id, artist, description, tracks, tags } = lick;
 
-    const style = {
-        backgroundImage: `url(${background[0]})`,
-        backgroundPositionY: `${background[1]}%`,
+    // linear-gradient(rgba(222, 222, 222, 0.45), rgba(222, 222, 222, 0.45))
 
-        ':hover': {
-            backgroundImage: `linear-gradient(rgba(222, 222, 222, 0.45), rgba(222, 222, 222, 0.45)), url(${background[0]})`
-        }
-    };
-
-    
-    
-    return (
-        <div className="card lick lick-view">
-            {/* <header className="card-header"> */}
-                {/* <span className="icon">
-                    <i className="fa fa-ellipsis-h" aria-hidden="true"></i>
-                </span> */}
-            
-                
-            {/* </header> */}
-            <div className="card-content">
-                {renderMenu(id, editLick, deleteLick)}
-                {renderArtist(artist)}
-                {renderDescription(description)}
-                <div id="track-container" 
-                    >
-                    <div className="center">
-                        <a className="button is-primary is-large">
-                            <span className="icon">
-                                <i className="fa fa-play"></i>
-                            </span>
-                        </a>
-                    </div>
+    return <div className="card lick lick-view">
+        <div className="card-content">
+            {renderMenu(id, editLick, deleteLick)}
+            {renderArtist(artist)}
+            {renderDescription(description)}
+            <div id="track-container">
+                <div className="center">
+                    <Player src={tracks[0].url}/>
                 </div>
-                
-                {renderTags(tags)}                
             </div>
-            {/* renderFooter(id, editLick, deleteLick) */}
+            {renderTags(tags)}                
         </div>
-    );
-}
+    </div>;
+};
 
-function renderMenu(id, editLick, deleteLick) {
+const renderMenu = (id, editLick, deleteLick) => {
     return <div className="dropdown is-right is-hoverable is-pulled-right">
         <div className="dropdown-trigger">
             <span className="icon is-small" aria-haspopup="true" aria-controls="dropdown-menu">
@@ -74,52 +48,22 @@ function renderMenu(id, editLick, deleteLick) {
             </div>
         </div>
     </div>;
-}
+};
 
-export default Radium(LickView);
+const renderArtist = artist => 
+    <p className="artist">{artist}</p>;
 
-function renderArtist(artist) {
-    return <p className="artist">{artist}</p>;
-}
-
-function renderDescription(description) {
-    // TODO Wrap long links
-    return <pre className="description">
+const renderDescription = description => 
+    <pre className="description">
         {linkifier(description, {target: '_blank'})} | <a href="#">Link</a>
     </pre>;
-}
 
-function renderTags(tags) {
-    // Render tags sorted alphabetically
-    // tags.sort(); // TODO MOVE TO REDUX SELECTOR
-    return <div className="tags">
+const renderTags = tags =>
+    <div className="tags">
         {tags.map(tag => <span key={tag} className="tag">{tag}</span>)}
     </div>;
-}
 
-function renderFooter(id, editLick, deleteLick) {
-    return <footer className="card-footer">
-        <div className="card-footer-item">
-            <time dateTime="2016-1-1">3 days ago</time>
-        </div>
-        {/* <a className="card-footer-item lick-edit" onClick={() => editLick(id)}>
-            <a className="button is-small is-pulled-right" onClick={() => editLick(id)}>
-                <span className="icon is-small">
-                    <i className="fa fa-pencil"></i>
-                </span>
-                {<span>Edit</span>}
-            </a>
-        </a>
-        <div className="card-footer-item lick-delete">
-            <a className="button is-small is-pulled-right" onClick={() => deleteLick(id)}>
-                <span className="icon is-small">
-                    <i className="fa fa-trash"></i>
-                </span>
-                {<span>Del</span>}
-            </a>
-        </div> */}
-    </footer>;
-}
+export default LickView;
 
 LickView.propTypes = {
     lick: PropTypes.shape({

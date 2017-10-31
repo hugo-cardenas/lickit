@@ -59,7 +59,7 @@ const createItem = i => {
         id: `${i + 1}`,
         artist,
         description,
-        background,
+        // background,
         tracks: _.range(rand(1, 1)).map(createTrack),
         tags: _.uniq(_.range(rand(2, 2)).map(() => tags[rand(0, tags.length - 1)]))
     };
@@ -68,7 +68,7 @@ const createItem = i => {
 const createTrack = i => {
     return {
         // id: `${i}`,
-        id: 'cj6exzurc0000lqc95irxi7sd',
+        id: 'cj99x1nk90001uvc9y3mjpjne',
         url: url + `?a=${i}`
     };
 };
