@@ -46,43 +46,51 @@ class LickForm extends Component {
         };
 
         return <div className="modal is-active">
-        <div className="modal-background"></div>
-        <div className="modal-content">
-          
-
-        <div className="card lick lick-form">
-                <div className="card-content">
-                    {this.renderArtist(artist)}
-                    {this.renderDescription(description)}
-                    <TrackSectionForm {...trackSectionState}/> 
-                    {this.renderTags(tags, tagInput)}
+            <div className="modal-background"></div>
+            <div className="modal-content">
+                <div className="card lick lick-form">
+                    <div className="card-content">
+                        {this.renderArtist(artist)}
+                        {this.renderDescription(description)}
+                        <TrackSectionForm {...trackSectionState}/> 
+                        {this.renderTags(tags, tagInput)}
+                    </div>
+                    {this.renderFooter(id, cancelLickEditor, deleteLick)}
                 </div>
-                {this.renderFooter(id, cancelLickEditor, deleteLick)}
-        </div>
-
-
-
-        </div>
-        <button className="modal-close is-large" aria-label="close"></button>
-      </div>
-        
-        
-        
-        
-        
-        ;
+            </div>
+            <button className="modal-close is-large" aria-label="close"></button>
+        </div>;
     }
 
     renderArtist(artist) {
-        return <input
-            name="artist"
-            className="input artist"
-            placeholder="Add artist name"
-            value={artist}
-            onChange={this.handleInputArtist}/>;
+        return <div className="field">
+            <label className="label">Artist</label>
+            <div className="control">
+                <input 
+                    name="artist" 
+                    className="input artist" 
+                    type="text" 
+                    placeholder="Artist name"
+                    value={artist}
+                    onChange={this.handleInputArtist}/>
+            </div>
+        </div>;
     }
 
     renderDescription(description) {
+        return <div className="field">
+            <label className="label">Song</label>
+            <div className="control">
+                <input 
+                    name="song" 
+                    className="input song" 
+                    type="text" 
+                    placeholder="Song name"
+                    value={description}
+                    onChange={this.handleInputDescription}/>
+            </div>
+        </div>;
+
         return <textarea
             name="description"
             className="textarea description"
@@ -132,17 +140,17 @@ class LickForm extends Component {
                     <span className="icon is-small">
                         <i className="fa fa-undo"></i>
                     </span>
-                    {<span>Undo</span>}
+                    {<span>Cancel</span>}
                 </a>
             </div>
-            <div className="card-footer-item lick-delete">
+            {/* <div className="card-footer-item lick-delete">
                 <a className="button is-small is-pulled-right" onClick={() => deleteLick(id)}>
                     <span className="icon is-small">
                         <i className="fa fa-trash"></i>
                     </span>
                     {<span>Del</span>}
                 </a>
-            </div>
+            </div> */}
         </footer>;
     }
 

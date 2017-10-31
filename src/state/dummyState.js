@@ -46,11 +46,14 @@ export default function getDummyState(numItems) {
         .range(numItems)
         .map(createItem);
 
-    return {
+    const state = {
         lick: {
             items: licks.map(lick => { return { lick }; })
         }
     };
+
+    state.lick.items[0].mode = 'edit';
+    return state;
 }
 
 const createItem = i => {

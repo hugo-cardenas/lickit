@@ -54,9 +54,9 @@ const renderArtist = artist =>
     <p className="artist">{artist}</p>;
 
 const renderDescription = description => 
-    <pre className="description">
+    <div className="description">
         {linkifier(description, {target: '_blank'})} | <a href="#">Link</a>
-    </pre>;
+    </div>;
 
 const renderTags = tags =>
     <div className="tags">
