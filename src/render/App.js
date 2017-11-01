@@ -70,7 +70,7 @@ const renderLickControls = (createLick, search) =>
 const renderCreateLickButton = createLick =>
     <a 
         id="button-lick-create" 
-        className="level-item button is-small is-light"
+        className="level-item button is-small"
         onClick={createLick}>
         <span className="icon is-small">
             <i className="fa fa-plus"></i>

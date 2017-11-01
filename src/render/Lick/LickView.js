@@ -17,11 +17,7 @@ const LickView = (props) => {
             {renderMenu(id, editLick, deleteLick)}
             {renderArtist(artist)}
             {renderDescription(description)}
-            <div id="track-container">
-                <div className="center">
-                    <Player src={url}/>
-                </div>
-            </div>
+            {renderTrack(url)}
             {renderTags(tags)}                
         </div>
     </div>;
@@ -59,6 +55,13 @@ const renderArtist = artist =>
 const renderDescription = description => 
     <div className="description">
         {linkifier(description, {target: '_blank'})} | <a href="#">Link</a>
+    </div>;
+
+const renderTrack = url =>
+    <div className="track-container">
+        <div className="center">
+            <Player src={url}/>
+        </div>
     </div>;
 
 const renderTags = tags =>

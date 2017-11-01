@@ -110,7 +110,7 @@ class LickForm extends Component {
 
         return <div className="field">
             <label className="label">Audio</label>
-            <div id="track-container" className="control">
+            <div className="track-container control">
                 {deleteControl}
                 <div className="center">
                     {tracks[0] ? <Player src={tracks[0].url}/> : <Recorder handleRecordTrack={handleRecordTrack}/>}
