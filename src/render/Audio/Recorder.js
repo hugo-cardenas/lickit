@@ -29,8 +29,8 @@ class Recorder extends Component {
 
     renderRecorderIdle() {
         return <div className="recorder">
-            <a className="button is-primary" onClick={this.handleRecordStart}>
-                <span className="icon is-small">
+            <a className="button-audio button is-primary is-large" onClick={this.handleRecordStart}>
+                <span className="icon">
                     <i className="fa fa-microphone"></i>
                 </span>
             </a>
@@ -40,8 +40,8 @@ class Recorder extends Component {
 
     renderRecorderRecording() {
         return <div className="recorder">
-            <a className="button is-primary" onClick={this.handleRecordStop}>
-                <span className="icon is-small">
+            <a className="button-audio button is-primary is-large" onClick={this.handleRecordStop}>
+                <span className="icon">
                     <i className="fa fa-stop"></i>
                 </span>
             </a>

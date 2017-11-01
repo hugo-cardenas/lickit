@@ -9,6 +9,9 @@ const LickView = (props) => {
 
     // linear-gradient(rgba(222, 222, 222, 0.45), rgba(222, 222, 222, 0.45))
 
+    // TODO Mandatory track?
+    const url = tracks[0] ? tracks[0].url : '';
+
     return <div className="card lick lick-view">
         <div className="card-content">
             {renderMenu(id, editLick, deleteLick)}
@@ -16,7 +19,7 @@ const LickView = (props) => {
             {renderDescription(description)}
             <div id="track-container">
                 <div className="center">
-                    <Player src={tracks[0].url}/>
+                    <Player src={url}/>
                 </div>
             </div>
             {renderTags(tags)}                
