@@ -4,9 +4,9 @@ import LickView from 'src/render/Lick/LickView';
 
 test('render artist', () => {
     const component = shallow(<LickView {...getTestProps()}/>);
-    const description = component.find('.artist');
-    expect(description.type()).toBe('p');
-    expect(description.text()).toBe('Charlie Foo');
+    const artist = component.find('.artist');
+    expect(artist.type()).toBe('p');
+    expect(artist.text()).toBe('Charlie Foo');
 });
 
 test('render song', () => {

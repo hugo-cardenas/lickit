@@ -4,10 +4,10 @@ import LickForm from 'src/render/Lick/LickForm';
 
 test('render artist', () => {
     const component = shallow(<LickForm {...getTestProps()}/>);
-    const description = component.find('.artist');
-    expect(description.type()).toBe('input');
-    expect(description.prop('name')).toBe('artist');
-    expect(description.prop('value')).toBe('Charlie Foo');
+    const artist = component.find('.artist');
+    expect(artist.type()).toBe('input');
+    expect(artist.prop('name')).toBe('artist');
+    expect(artist.prop('value')).toBe('Charlie Foo');
 });
 
 test('input artist', () => {
