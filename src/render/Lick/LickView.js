@@ -53,11 +53,13 @@ const renderMenu = (id, editLick, deleteLick) => {
 };
 
 const renderArtist = artist => 
-    <p className="artist">{artist}</p>;
+    <p className="artist">
+        {artist !== '' ? artist : "\u00a0"}
+    </p>;
 
 const renderSong = song => 
     <div className="song">
-        {song}{/* | <a href="#">Link</a> */}
+        {song !== '' ? song : "\u00a0"}{/* | <a href="#">Link</a> */}
     </div>;
 
 const renderTrack = url => {

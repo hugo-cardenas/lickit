@@ -12,8 +12,8 @@ const artists = [
         ['https://upload.wikimedia.org/wikipedia/commons/f/f5/Django_Reinhardt_%28Gottlieb_07301%29.jpg', 30]
     ],
     [
-        'Coleman Hawkins', 
-        'Night and day', 
+        '', 
+        '', 
         ['https://rilm.files.wordpress.com/2014/11/coleman-hawkins.jpg', 25]
     ],
     [
