@@ -125,7 +125,7 @@ function validateLick(lick) {
         tags: Joi.array().items(Joi.string()).required()
     });
 
-    const { error } = Joi.validate(lick, schema, { abortEarly: false, convert: false });
+    const { error } = Joi.validate(lick, schema, { abortEarly: false, allowUnknown: true, convert: false });
     if (error) {
         throw error;
     }

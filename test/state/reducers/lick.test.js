@@ -128,6 +128,41 @@ validLicks.forEach((lick, i) => {
     });
 });
 
+
+it('update lick, ignores extra attributes', () => {
+    const state = createState([
+        { lick: { id: 'c10' } },
+        {
+            lick: { id: 'c20'},
+            mode: 'edit'
+        },
+        { lick: { id: 'c30' } }
+    ]);
+
+    const lickToUpdate = {
+        id: 'c20',
+        artist: 'barbar',
+        description: 'foo',
+        tracks: [{ id: 'abc200' }, { id: 'abc200' }],
+        tags: ['foo', 'bar'],
+        extraAttribute: 'foobar'
+    };
+
+    const expectedLick = _.pick(lickToUpdate, ['id', 'artist', 'description', 'tracks', 'tags']);
+
+    const expectedState = createState([
+        { lick: { id: 'c10' } },
+        {
+            lick: expectedLick,
+            mode: 'view'
+        },
+        { lick: { id: 'c30' } }
+    ]);
+
+    expect(lickReducer(state, { type: LICK_UPDATE, lick: lickToUpdate })).toEqual(expectedState);
+});
+
+
 const validLick = {
     id: 'c20',
     artist: 'foofoo',
@@ -158,11 +193,7 @@ const invalidLicks = [
     [Object.assign({}, validLick, { tracks: [{ id: 'abc200' }, { id: true }] }), ['tracks']],
 
     [Object.assign({}, validLick, { tags: 42 }), ['tags']],
-    [Object.assign({}, validLick, { tags: ['foo', 42] }), ['tags']],
-
-    // Extra fields not allowed
-    [Object.assign({}, validLick, { createdAt: 12500 }), ['createdAt']],
-    [Object.assign({}, validLick, { foobar: 123 }), ['foobar']],
+    [Object.assign({}, validLick, { tags: ['foo', 42] }), ['tags']]
 ];
 
 invalidLicks.forEach((entry, i) => {

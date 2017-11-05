@@ -11,7 +11,7 @@ test('render artist', () => {
 
 test('render song', () => {
     const component = shallow(<LickView {...getTestProps()}/>);
-    expect(component.find('.song').text()).toBe('Foobar baz');
+    expect(component.find('.song').text()).toBe('#2 | Foobar baz');
 });
 
 test('render track', () => {
@@ -68,6 +68,7 @@ function getTestProps() {
         lick: {
             id: 'c42',
             artist: 'Charlie Foo',
+            artistIndex: 2,
             description: 'Foobar baz',
             tracks: [{ id: 'a10', url: 'foo.abc' }, { id: 'a20', url: 'bar.abc' }],
             tags: ['foo', 'bar', 'baz']

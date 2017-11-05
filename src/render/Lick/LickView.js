@@ -8,7 +8,7 @@ import radium from 'radium';
 
 const LickView = (props) => {
     const { lick, editLick, deleteLick } = props;
-    const { id, artist, description, tracks, tags } = lick;
+    const { id, artist, artistIndex, description, tracks, tags } = lick;
 
     // linear-gradient(rgba(222, 222, 222, 0.45), rgba(222, 222, 222, 0.45))
 
@@ -19,7 +19,7 @@ const LickView = (props) => {
         <div className="card-content">
             {renderMenu(id, editLick, deleteLick)}
             {renderArtist(artist)}
-            {renderSong(description)}
+            {renderDescription(artistIndex, description)}
             {renderTrack(url)}
             {renderTags(tags)}                
         </div>
@@ -54,12 +54,12 @@ const renderMenu = (id, editLick, deleteLick) => {
 
 const renderArtist = artist => 
     <p className="artist">
-        {artist !== '' ? artist : "\u00a0"}
+        {artist !== '' ? artist : "Unknown artist"}
     </p>;
 
-const renderSong = song => 
+const renderDescription = (artistIndex, song) => 
     <div className="song">
-        {song !== '' ? song : "\u00a0"}{/* | <a href="#">Link</a> */}
+        #{artistIndex} {song !== '' ? `| ${song}` : ''}{/* | <a href="#">Link</a> */}
     </div>;
 
 const renderTrack = url => {

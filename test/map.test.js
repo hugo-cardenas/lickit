@@ -47,18 +47,68 @@ it('map state to props, map items', () => {
             lick: {
                 id: 'c42',
                 artist: 'Charlie Foo',
+                artistIndex: 1,
                 description: 'Foo bar 42',
                 tracks: [
                     { id: 'abc10', url: 'file:///tmp/foo/tracks/abc10.wav' },
                     { id: 'abc20', url: 'file:///tmp/foo/tracks/abc20.wav' }
                 ],
-                tags: ['bar', 'foo'] // Tags should be sorted alphabetically
+                tags: ['bar', 'foo'], // Tags should be sorted alphabetically
+                createdAt: 12500
             }
         }
     ];
 
     const props = mapStateToProps(state);
     expect(props.lick.items).toEqual(expectedItems);
+});
+
+it('map state to props, map items, set artist indexes and sort by createdAt', () => {
+    const state = createStateWithItems([
+        {
+            mode: 'edit',
+            lick: {
+                id: 'c42',
+                artist: 'Charlie Foo',
+                description: 'Foo bar 42',
+                tracks: [{ id: 'abc10' }, { id: 'abc20' }],
+                tags: ['foo', 'bar'],
+                createdAt: 12500
+            }
+        },
+        {
+            mode: 'edit',
+            lick: {
+                id: 'c44',
+                artist: 'Charlie Foo',
+                description: 'Foo bar 42',
+                tracks: [{ id: 'abc10' }, { id: 'abc20' }],
+                tags: ['foo', 'bar'],
+                createdAt: 12600
+            }
+        },
+        {
+            mode: 'edit',
+            lick: {
+                id: 'c46',
+                artist: 'Charlie Bar',
+                description: 'Foo bar 42',
+                tracks: [{ id: 'abc10' }, { id: 'abc20' }],
+                tags: ['foo', 'bar'],
+                createdAt: 12700
+            }
+        }
+    ]);
+
+    const props = mapStateToProps(state);
+    expect(props.lick.items[0].lick.id).toBe('c46');
+    expect(props.lick.items[0].lick.artistIndex).toEqual(1);
+    
+    expect(props.lick.items[1].lick.id).toBe('c44');
+    expect(props.lick.items[1].lick.artistIndex).toEqual(2);
+    
+    expect(props.lick.items[2].lick.id).toBe('c42');
+    expect(props.lick.items[2].lick.artistIndex).toEqual(1);
 });
 
 const itemsToBeFiltered = [

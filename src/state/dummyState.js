@@ -7,12 +7,12 @@ const artists = [
         ['https://upload.wikimedia.org/wikipedia/commons/f/f5/Django_Reinhardt_%28Gottlieb_07301%29.jpg', 30]
     ],
     [
-        'Django Reinhardt', 
+        '', 
         'Blues clair', 
         ['https://upload.wikimedia.org/wikipedia/commons/f/f5/Django_Reinhardt_%28Gottlieb_07301%29.jpg', 30]
     ],
     [
-        '', 
+        'Coleman Hawkins', 
         '', 
         ['https://rilm.files.wordpress.com/2014/11/coleman-hawkins.jpg', 25]
     ],
@@ -23,7 +23,7 @@ const artists = [
     ],
     [
         'Dizzy Gillespie', 
-        'Perdido', 
+        'A night in Tunisia', 
         ['http://mediad.publicbroadcasting.net/p/kuvo/files/styles/medium/public/201707/dizzy_gillespie.jpg', 35]
     ]
   ];
@@ -62,9 +62,10 @@ const createItem = i => {
         id: `${i + 1}`,
         artist,
         description,
-        // background,
+        background,
         tracks: _.range(rand(1, 1)).map(createTrack),
-        tags: _.uniq(_.range(rand(2, 2)).map(() => tags[rand(0, tags.length - 1)]))
+        tags: _.uniq(_.range(rand(2, 2)).map(() => tags[rand(0, tags.length - 1)])),
+        createdAt: i
     };
 };
 

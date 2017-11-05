@@ -1,4 +1,4 @@
-import { difference, merge, uniq } from 'lodash';
+import { difference, groupBy, merge, uniq } from 'lodash';
 import { createLick, updateLick, deleteLick, changeLickMode } from './state/actions/lick';
 import { addFilter, removeFilter, setInput } from './state/actions/search';
 import { getUrlResolver } from './track/urlResolver';
@@ -13,18 +13,36 @@ const mapStateToProps = (state) => {
 };
 
 const mapLickStateToProps = (state) => {
-    const items = state.lick.items;
-    const filters = state.search.filters;
+    const stateItems = state.lick.items.map(mapItemToProp);
+    
+    const groupedItems = Object.values(groupBy(stateItems, item => item.lick.artist))
+        .map(items => {
+            items.sort((a, b) => a.lick.createdAt - b.lick.createdAt);
+            return items.map((item, index) => {
+                return {
+                    ...item,
+                    lick: {
+                        ...item.lick,
+                        artistIndex: index + 1
+                    }
+                };
+            });
+        });
 
+    const items = [].concat(...groupedItems);
+    items.sort((a, b) => b.lick.createdAt - a.lick.createdAt);
+
+    const filters = state.search.filters;
     const artist = getFilteredArtist(filters);
     const tags = getFilteredTags(filters);
 
+    const filteredItems = items.filter(item =>
+        (!artist || item.lick.artist === artist) &&
+        difference(tags, item.lick.tags).length === 0
+    );
+
     return {
-        items: items.map(mapItemToProp)
-            .filter(item =>
-                (!artist || item.lick.artist === artist) &&
-                difference(tags, item.lick.tags).length === 0
-            )
+        items: filteredItems
     };
 };
 
@@ -33,7 +51,7 @@ const getFilteredArtist = filters => {
     return artistFilter ? artistFilter.value : undefined;
 };
 
-const getFilteredTags = filters => 
+const getFilteredTags = filters =>
     filters.filter(filter => filter.type === 'Tag').map(filter => filter.value);
 
 const mapItemToProp = (item) => {
@@ -41,7 +59,7 @@ const mapItemToProp = (item) => {
     // TODO Fix in a better way this reference problem - state modified as react state
     const tags = [...lick.tags];
     tags.sort();
-    
+
     return {
         mode: item.mode ? item.mode : undefined,
         lick: {
@@ -55,7 +73,8 @@ const mapItemToProp = (item) => {
                     // Calculate track urls to filesystem from their id
                     url: 'file://' + getUrlResolver()(track.id)
                 };
-            })
+            }),
+            createdAt: lick.createdAt
         }
     };
 };
