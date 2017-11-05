@@ -31,70 +31,64 @@ test('input artist', () => {
     expect(component.find('.artist').prop('value')).toBe('bar');
 });
 
-test('render description', () => {
+test('render song', () => {
     const component = shallow(<LickForm {...getTestProps()}/>);
-    const description = component.find('.description');
-    expect(description.type()).toBe('textarea');
-    expect(description.prop('name')).toBe('description');
-    expect(description.prop('value')).toBe('Foobar baz');
+    const song = component.find('.song');
+    expect(song.type()).toBe('input');
+    expect(song.prop('name')).toBe('song');
+    expect(song.prop('value')).toBe('Foobar baz');
 });
 
-test('input description', () => {
+test('input song', () => {
     const component = shallow(<LickForm {...getTestProps()}/>);
-    const description = component.find('.description');
+    const song = component.find('.song');
 
-    description.simulate('change', {
+    song.simulate('change', {
         target: {
-            name: 'description',
+            name: 'song',
             value: 'foo'
         }
     });
-    expect(component.find('.description').prop('value')).toBe('foo');
+    expect(component.find('.song').prop('value')).toBe('foo');
 
-    description.simulate('change', {
+    song.simulate('change', {
         target: {
-            name: 'description',
+            name: 'song',
             value: 'bar'
         }
     });
-    expect(component.find('.description').prop('value')).toBe('bar');
+    expect(component.find('.song').prop('value')).toBe('bar');
 });
 
-test('render tracks', () => {
+test('render track', () => {
     const props = getTestProps();
     const component = shallow(<LickForm {...props}/>);
-    const trackSection = component.find('TrackSectionForm');
-    expect(trackSection).toHaveLength(1);
-
-    expect(trackSection.prop('tracks')).toEqual(props.lick.tracks);
-    expect(typeof trackSection.prop('handleDeleteTrack')).toBe('function');
-    expect(typeof trackSection.prop('handleRecordTrack')).toBe('function');
+    const player = component.find('Player');
+    expect(player.prop('src')).toEqual(props.lick.tracks[0].url);
 });
 
 test('delete track', () => {
     let props = getTestProps();
     props.lick.tracks = [
-        { id: 'a10', url: 'foo.abc' }, { id: 'a20', url: 'bar.abc' }, { id: 'a30', url: 'baz.abc' }
+        { id: 'a10', url: 'foo.abc' }
     ];
     const component = shallow(<LickForm {...props}/>);
 
-    const handleDeleteTrack = component.find('TrackSectionForm').prop('handleDeleteTrack');
-    handleDeleteTrack('a20');
+    component.find('.track-container .icon').simulate('click');
 
-    const expectedTracks = [{ id: 'a10', url: 'foo.abc' }, { id: 'a30', url: 'baz.abc' }];
-    expect(component.find('TrackSectionForm').prop('tracks')).toEqual(expectedTracks);
+    expect(component.find('Player').exists()).toBe(false);
+    expect(component.find('Recorder').exists()).toBe(true);
 });
 
 test.skip('record track', () => {
     const component = shallow(<LickForm {...getTestProps()}/>);
-    const handleRecordTrack = component.find('TrackSectionForm').prop('handleRecordTrack');
+    const handleRecordTrack = component.find('Recorder').prop('handleRecordTrack');
 
     // TODO Find a way of having URL and web Audio API work on enzyme
     //handleRecordTrack(new Blob(['foo']));
 
     // TODO Check url of generated track
-    // const expectedTracks = [{id: 10}, {id: 20}, {link: 'foo.mp3'}];
-    // expect(component.find('TrackSectionForm').prop('tracks')).toHaveLength(3);
+    // expect(component.find('Player').prop('src')).;
 });
 
 test('render tags', () => {
@@ -222,17 +216,6 @@ test('cancel lick editor', () => {
 
     expect(props.cancelLickEditor).toHaveBeenCalledTimes(1);
     expect(props.cancelLickEditor).toBeCalledWith(props.lick.id);
-});
-
-test('delete lick', () => {
-    let props = getTestProps();
-    props.deleteLick = jest.fn();
-
-    const component = shallow(<LickForm {...props}/>);
-    component.find('.lick-delete').simulate('click');
-
-    expect(props.deleteLick).toHaveBeenCalledTimes(1);
-    expect(props.deleteLick).toBeCalledWith(props.lick.id);
 });
 
 function getTags(component) {

@@ -1,6 +1,9 @@
+track-container-border = 1px solid border-color //#a2a2a2
+
 .track-container
   padding: 10px
-  border: 1px solid lightgray
+  border-top: track-container-border
+  border-bottom: track-container-border
   background-color: whitesmoke
   background-size: cover
 
@@ -8,9 +11,10 @@
     visibility: visible
 
   .center
-    display: block
-    margin: 0 auto
-    width: 52px
+    text-align: center
+    // width: 52px
+    .div
+      display: inline-block
 
   .button
     // visibility: hidden

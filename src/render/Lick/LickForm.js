@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import TrackSectionForm from './Track/TrackSectionForm';
 import Player from '../Audio/Player';
 import Recorder from '../Audio/Recorder';
+import ReactTooltip from 'react-tooltip';
 
 class LickForm extends Component {
     constructor(props) {
@@ -34,18 +34,15 @@ class LickForm extends Component {
         this.handleRecordTrack = this
             .handleRecordTrack
             .bind(this);
+        this.handleDeleteTrack = this
+            .handleDeleteTrack
+            .bind(this);
     }
 
     render() {
         const { lick, tagInput } = this.state;
         const { id, artist, description, tracks, tags } = lick;
-        const { cancelLickEditor, deleteLick } = this.props;
-
-        const trackSectionState = {
-            tracks,
-            handleDeleteTrack: this.handleDeleteTrack.bind(this),
-            handleRecordTrack: this.handleRecordTrack
-        };
+        const { cancelLickEditor } = this.props;
 
         return <div className="modal is-active">
             <div className="modal-background"></div>
@@ -53,12 +50,11 @@ class LickForm extends Component {
                 <div className="card lick lick-form">
                     <div className="card-content">
                         {this.renderArtist(artist)}
-                        {this.renderDescription(description)}
-                        {this.renderTrackSection(trackSectionState)}
+                        {this.renderSong(description)}
+                        {this.renderTrackSection(tracks[0], this.handleDeleteTrack, this.handleRecordTrack)}
                         {this.renderTags(tags, tagInput)}
                         {this.renderSubmitButtons(id, cancelLickEditor)}
                     </div>
-                    {/* this.renderFooter(id, cancelLickEditor, deleteLick) */}
                 </div>
             </div>
             <button className="modal-close is-large" aria-label="close" onClick={() => cancelLickEditor(id)}></button>
@@ -80,7 +76,7 @@ class LickForm extends Component {
         </div>;
     }
 
-    renderDescription(description) {
+    renderSong(song) {
         return <div className="field">
             <label className="label">Song</label>
             <div className="control">
@@ -89,42 +85,40 @@ class LickForm extends Component {
                     className="input song" 
                     type="text" 
                     placeholder="Song name"
-                    value={description}
+                    value={song}
                     onChange={this.handleInputDescription}/>
             </div>
         </div>;
     }
 
-    renderTrackSection(trackSectionState) {
-        const {
-            tracks,
-            handleDeleteTrack,
-            handleRecordTrack
-        } = trackSectionState;
-
-        const deleteControl = tracks.length > 0 ? 
-            <a className="icon is-small is-pulled-right" onClick={() => handleDeleteTrack(tracks[0].id)}>
-                <i className="fa fa-trash"></i>
-            </a> : 
-            '';
-
+    renderTrackSection(track, handleDeleteTrack, handleRecordTrack) {
         return <div className="field">
             <label className="label">Audio</label>
             <div className="track-container control">
-                {deleteControl}
+                {this.renderTrackDeleteButton(track, handleDeleteTrack)}
                 <div className="center">
-                    {tracks[0] ? <Player src={tracks[0].url}/> : <Recorder handleRecordTrack={handleRecordTrack}/>}
+                    {track ? <Player src={track.url}/> : <Recorder handleRecordTrack={handleRecordTrack}/>}
                 </div>
             </div>
-
-            {/* <div className="control">
-                {tracks[0] ? <Player src={tracks[0].url}/> : <Recorder handleRecordTrack={handleRecordTrack}/>}
-            </div> */}
         </div>;
     }
 
+    renderTrackDeleteButton(track, handleDeleteTrack) {
+        if (track) {
+            return <a 
+                className="icon is-small is-pulled-right" 
+                data-tip='Delete track' 
+                onClick={() => handleDeleteTrack(track.id)}>
+                <i className="fa fa-trash"></i>
+                <ReactTooltip effect="solid" place="left"/>
+            </a>;
+        } else {
+            return '';
+        }
+    }
+
     renderTags(tags, tagInput) {
-        return <div className="field">
+        return <div className="field tag-container">
             <label className="label">Tags</label>
             <div className="tags">
                 {tags.map(tag => <span key={tag} className="tag">{tag}
@@ -150,31 +144,10 @@ class LickForm extends Component {
         </p>;
     }
 
-    renderFooter(id, cancelLickEditor, deleteLick) {
-        return <footer className="card-footer">
-            <div className="card-footer-item lick-save">
-                <a className="button is-small is-primary" onClick={this.handleSave.bind(this)}>
-                    <span className="icon is-small">
-                        <i className="fa fa-check"></i>
-                    </span>
-                    {<span>Save</span>}
-                </a>
-            </div>
-            <div className="card-footer-item lick-cancel">
-                <a className="button is-small" onClick={() => cancelLickEditor(id)}>
-                    <span className="icon is-small">
-                        <i className="fa fa-undo"></i>
-                    </span>
-                    {<span>Cancel</span>}
-                </a>
-            </div>
-        </footer>;
-    }
-
     renderSubmitButtons(id, cancelLickEditor) {
         return <div className="field is-grouped">
             <p className="control">
-                <a className="button is-small is-primary" onClick={this.handleSave.bind(this)}>
+                <a className="button is-small is-primary lick-save" onClick={this.handleSave.bind(this)}>
                     <span className="icon is-small">
                         <i className="fa fa-check"></i>
                     </span>
@@ -182,7 +155,7 @@ class LickForm extends Component {
                 </a>
             </p>
             <p className="control">
-                <a className="button is-small is-light" onClick={() => cancelLickEditor(id)}>
+                <a className="button is-small is-light lick-cancel" onClick={() => cancelLickEditor(id)}>
                     <span className="icon is-small">
                         <i className="fa fa-times"></i>
                     </span>
@@ -286,6 +259,5 @@ LickForm.propTypes = {
         tags: PropTypes.arrayOf(PropTypes.string).isRequired
     }).isRequired,
     saveLick: PropTypes.func.isRequired,
-    cancelLickEditor: PropTypes.func.isRequired,
-    deleteLick: PropTypes.func.isRequired
+    cancelLickEditor: PropTypes.func.isRequired
 };

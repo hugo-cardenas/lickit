@@ -2,6 +2,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { linkifier } from 'react-linkifier';
 import Player from '../Audio/Player';
+import radium from 'radium';
+
+// const img = require('/Users/hugo/Library/Application Support/Electron/images/piano.jpeg');
 
 const LickView = (props) => {
     const { lick, editLick, deleteLick } = props;
@@ -16,7 +19,7 @@ const LickView = (props) => {
         <div className="card-content">
             {renderMenu(id, editLick, deleteLick)}
             {renderArtist(artist)}
-            {renderDescription(description)}
+            {renderSong(description)}
             {renderTrack(url)}
             {renderTags(tags)}                
         </div>
@@ -52,24 +55,49 @@ const renderMenu = (id, editLick, deleteLick) => {
 const renderArtist = artist => 
     <p className="artist">{artist}</p>;
 
-const renderDescription = description => 
-    <div className="description">
-        {linkifier(description, {target: '_blank'})} | <a href="#">Link</a>
+const renderSong = song => 
+    <div className="song">
+        {song}{/* | <a href="#">Link</a> */}
     </div>;
 
-const renderTrack = url =>
-    <div className="track-container">
+const renderTrack = url => {
+
+    const backgroundImage = `url("file:///Users/hugo/Library/Application Support/Electron/images/piano.jpeg")`;
+    const style = {
+        backgroundImage: [
+            `linear-gradient(
+                rgba(222, 222, 222, 0.45), 
+                rgba(222, 222, 222, 0.45)
+            )`,
+            backgroundImage,
+        ].join(', '),
+        // filter: `blur(1px)`,
+        // height: '50px',
+        backgroundSize: 'cover',
+        ':hover': {
+            backgroundImage: [
+                `linear-gradient(
+                    rgba(222, 222, 222, 0.65), 
+                    rgba(222, 222, 222, 0.65)
+                )`,
+                backgroundImage,
+            ].join(', ')
+        }
+    };
+    
+    return <div className="track-container">
         <div className="center">
             <Player src={url}/>
         </div>
     </div>;
+};
 
 const renderTags = tags =>
     <div className="tags">
         {tags.map(tag => <span key={tag} className="tag">{tag}</span>)}
     </div>;
 
-export default LickView;
+export default radium(LickView);
 
 LickView.propTypes = {
     lick: PropTypes.shape({

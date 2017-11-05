@@ -23,8 +23,8 @@ class Player extends Component {
 
         return <div>
             <audio src={src} onEnded={this.switchState} ref={audio => this.audio = audio}></audio>
-            <a style={buttonStyle} className="button-audio button is-primary is-large" onClick={this.switchState}>
-                <span className="icon">
+            <a style={buttonStyle} className="button-audio button is-primary" onClick={this.switchState}>
+                <span className="icon is-small">
                     <i className={isPlaying ? 'fa fa-stop' : 'fa fa-play'}></i>
                 </span>
             </a>

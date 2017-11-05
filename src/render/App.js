@@ -2,6 +2,7 @@ import React from 'react';
 import Lick from './Lick/Lick';
 import Search from './Search/Search';
 import PropTypes from 'prop-types';
+import ReactTooltip from 'react-tooltip';
 
 const App = (props) => {
     const { error, lick, search } = props;
@@ -44,22 +45,27 @@ const renderControlsContainer = (createLick, search) =>
     </div>;
 
 const renderNav = () =>
-    <div className="tabs is-centered">
-        <ul>
-            <li className="is-active">
-                <a href="#">
-                    <span className="icon is-small"><i className="fa fa-music"></i></span>
+    <nav>
+        <div className="field has-addons is-small">
+            <p className="control">
+                <a className="button is-small is-primary is-active">
+                    <span className="icon is-small">
+                        <i className="fa fa-music"></i>
+                    </span>
                     <span>Licks</span>
                 </a>
-            </li>
-            <li>
-                <a href="#">
-                    <span className="icon is-small"><i className="fa fa-book"></i></span>
+            </p>
+            <p className="control" data-tip="Feature not yet available">
+                <a className="button is-small" disabled>
+                    <span className="icon is-small">
+                        <i className="fa fa-book"></i>
+                    </span>
                     <span>Routine</span>
                 </a>
-            </li>
-        </ul>
-    </div>;
+            </p>
+        </div>
+        <ReactTooltip effect="solid" place="bottom"/>
+    </nav>;
 
 const renderLickControls = (createLick, search) =>
     <div id="lick-controls">

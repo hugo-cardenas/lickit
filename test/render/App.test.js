@@ -7,8 +7,6 @@ import { range } from 'lodash';
 import { shallow } from 'enzyme';
 import { TYPE_ARTIST } from 'src/search/filterTypes';
 
-
-
 // Mock the call electron.app.getPath('userData')
 jest.mock('electron', () => {
     const tmp = require('tmp');
