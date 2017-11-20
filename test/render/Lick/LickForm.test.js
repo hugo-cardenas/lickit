@@ -74,7 +74,7 @@ test('delete track', () => {
     ];
     const component = shallow(<LickForm {...props}/>);
 
-    component.find('.track-container .icon').simulate('click');
+    component.find('.track-delete').simulate('click');
 
     expect(component.find('Player').exists()).toBe(false);
     expect(component.find('Recorder').exists()).toBe(true);

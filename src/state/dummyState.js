@@ -52,7 +52,7 @@ export default function getDummyState(numItems) {
         }
     };
 
-    // state.lick.items[0].mode = 'edit';
+    state.lick.items[0].mode = 'edit';
     return state;
 }
 

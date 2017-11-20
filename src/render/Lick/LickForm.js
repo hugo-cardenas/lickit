@@ -3,7 +3,6 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 import Player from '../Audio/Player';
 import Recorder from '../Audio/Recorder';
-import ReactTooltip from 'react-tooltip';
 
 class LickForm extends Component {
     constructor(props) {
@@ -16,27 +15,13 @@ class LickForm extends Component {
     }
 
     bindHandlers() {
-        this.handleInputArtist = this
-            .handleInputArtist
-            .bind(this);
-        this.handleInputDescription = this
-            .handleInputDescription
-            .bind(this);
-        this.handleInputTag = this
-            .handleInputTag
-            .bind(this);
-        this.setLickState = this
-            .setLickState
-            .bind(this);
-        this.handleCreateTag = this
-            .handleCreateTag
-            .bind(this);
-        this.handleRecordTrack = this
-            .handleRecordTrack
-            .bind(this);
-        this.handleDeleteTrack = this
-            .handleDeleteTrack
-            .bind(this);
+        this.handleInputArtist = this.handleInputArtist.bind(this);
+        this.handleInputDescription = this.handleInputDescription.bind(this);
+        this.handleInputTag = this.handleInputTag.bind(this);
+        this.setLickState = this.setLickState.bind(this);
+        this.handleCreateTag = this.handleCreateTag.bind(this);
+        this.handleRecordTrack = this.handleRecordTrack.bind(this);
+        this.handleDeleteTrack = this.handleDeleteTrack.bind(this);
     }
 
     render() {
@@ -96,9 +81,10 @@ class LickForm extends Component {
             <label className="label">Audio</label>
             <div className="track-container control">
                 {this.renderTrackDeleteButton(track, handleDeleteTrack)}
-                <div className="center">
+                <div className="track">
                     {track ? <Player src={track.url}/> : <Recorder handleRecordTrack={handleRecordTrack}/>}
                 </div>
+                
             </div>
         </div>;
     }
@@ -106,11 +92,12 @@ class LickForm extends Component {
     renderTrackDeleteButton(track, handleDeleteTrack) {
         if (track) {
             return <a 
-                className="icon is-small is-pulled-right" 
-                data-tip='Delete track' 
+                className="button is-small is-pulled-right track-delete" 
                 onClick={() => handleDeleteTrack(track.id)}>
-                <i className="fa fa-trash"></i>
-                <ReactTooltip effect="solid" place="left"/>
+                <span className="icon is-small">
+                    <i className="fa fa-trash"></i>
+                </span>
+                <span>Delete track</span>
             </a>;
         } else {
             return '';
