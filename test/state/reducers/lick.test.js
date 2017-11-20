@@ -11,7 +11,7 @@ import {
     LICK_MODE_EDIT,
     LICK_MODE_VIEW
 } from 'src/state/actions/lick/modes';
-import { changeLickMode } from 'src/state/actions/lick';
+import { enableCreateForm, cancelCreateForm, changeLickMode } from 'src/state/actions/lick';
 
 jest.mock('electron', () => {
     return {
@@ -20,16 +20,30 @@ jest.mock('electron', () => {
 });
 
 it('define default state', () => {
-    const expectedState = { items: [] };
+    const expectedState = createState([]);
 
     expect(lickReducer(undefined, { type: 'invalid action' })).toEqual(expectedState);
 });
 
 it('reduce unknown action', () => {
     const state = createState([]);
-    const expectedState = { items: [] };
+    const expectedState = createState([]);
 
     expect(lickReducer(state, { type: 'invalid action' })).toEqual(expectedState);
+});
+
+it('enable create form', () => {
+    const state = createState([]);
+    const expectedState = { items: [], isCreateFormEnabled: true };
+
+    expect(lickReducer(state, enableCreateForm())).toEqual(expectedState);
+});
+
+it('cancel create form', () => {
+    const state = { items: [], isCreateFormEnabled: true };
+    const expectedState = { items: [], isCreateFormEnabled: false };
+
+    expect(lickReducer(state, cancelCreateForm())).toEqual(expectedState);
 });
 
 const validLicks = [
@@ -81,15 +95,18 @@ const validLicks = [
 validLicks.forEach((lick, i) => {
     it('create lick, success #' + i, () => {
         const initialTimestamp = Date.now();
-    
-        const state = createState([{ lick: { id: 'c10' } }]);
-        const newLick = {...lick};
+
+        const state = { isCreateFormEnabled: true, items: [{ lick: { id: 'c10' } }] };
+        const newLick = { ...lick };
         delete newLick.id;
         const newState = lickReducer(state, { type: LICK_CREATE, lick: newLick });
-    
-        const items = newState.items;
+
+        const { isCreateFormEnabled, items } = newState;
+
+        expect(isCreateFormEnabled).toBe(false);
+
         expect(items).toHaveLength(2);
-    
+
         expect(items[0].mode).toBe('view');
         expect(typeof items[0].lick.id).toBe('string');
         expect(items[0].lick.id.length).toBeGreaterThan(10);
@@ -102,7 +119,7 @@ validLicks.forEach((lick, i) => {
         expect(items[0].lick.createdAt).toBeGreaterThanOrEqual(initialTimestamp);
         expect(items[0].lick.createdAt).toBeLessThan(Date.now() + 1);
         expect(items[0].lick.foo).toBe(undefined);
-    
+
         expect(items[1]).toEqual({ lick: { id: 'c10' } });
     });
 });
@@ -173,7 +190,7 @@ const invalidLicks = [
 invalidLicks.forEach((entry, i) => {
     it('create lick, invalid data #' + i, () => {
         const [lick, invalidProperties] = entry;
-        const newLick = {...lick};
+        const newLick = { ...lick };
         delete newLick.id;
 
         const state = createState([]);
@@ -193,7 +210,7 @@ invalidLicks.forEach((entry, i) => {
 
 const invalidLicksToUpdate = [
     ...invalidLicks,
-    
+
     // Missing fields
     [_.pick(validLick, ['artist', 'description', 'tracks', 'tags']), ['id']],
 
@@ -331,6 +348,7 @@ it('change lick mode, id not found', () => {
 
 const createState = (items) => {
     return Object.freeze({
+        isCreateFormEnabled: false,
         items
     });
 };

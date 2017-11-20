@@ -1,6 +1,104 @@
-import { LICK_UPDATE, LICK_DELETE } from 'src/state/actions/types';
+import { LICK_CREATE, LICK_UPDATE, LICK_DELETE } from 'src/state/actions/types';
 import getActions from 'src/state/actions/lick/lick';
 import { assertErrorContainsString } from '../../helper/assertionHelper';
+
+it('create lick - success', async() => {
+    const blob1 = new Blob(['foo']);
+    const blob2 = new Blob(['bar']);
+
+    const lick = {
+        tracks: [
+            { blob: blob1, url: 'bar10' }, // To be created
+            { blob: blob2, url: 'bar20' }, // To be created
+        ]
+    };
+
+    const storage = {
+        saveBlob: jest.fn()
+            .mockReturnValueOnce(Promise.resolve('c100'))
+            .mockReturnValueOnce(Promise.resolve('c200'))
+    };
+    const { createLick } = getActions(storage);
+
+    const action = createLick(lick);
+    const dispatch = jest.fn();
+    await action(dispatch);
+
+    const expectedLick = {
+        tracks: [
+            { id: 'c100' },
+            { id: 'c200' }
+        ]
+    };
+
+    expect(storage.saveBlob).toHaveBeenCalledTimes(2);
+    expect(storage.saveBlob).toHaveBeenCalledWith(blob1);
+    expect(storage.saveBlob).toHaveBeenCalledWith(blob2);
+
+    expect(dispatch).toHaveBeenCalledTimes(1);
+    expect(dispatch).toHaveBeenCalledWith({
+        type: LICK_CREATE,
+        lick: expectedLick
+    });
+});
+
+it('create lick - invalid action data', async() => {
+    const invalidTrack = { foo: 'bar' }; // Missing id or blob
+    const lick = {
+        tracks: [invalidTrack]
+    };
+
+    const storage = {};
+    const { createLick } = getActions(storage);
+
+    const action = createLick(lick);
+    const dispatch = jest.fn();
+    try {
+        await action(dispatch);
+        throw new Error();
+    } catch (error) {
+        assertErrorContainsString(error, 'Unable to create action');
+        assertErrorContainsString(error, LICK_CREATE);
+        assertErrorContainsString(error, JSON.stringify(lick));
+        assertErrorContainsString(error, `Invalid track ${JSON.stringify(invalidTrack)}, should contain id or blob`);
+    }
+});
+
+it('create lick - async save fails', async() => {
+    const blob1 = new Blob(['foo']);
+    const blob2 = new Blob(['bar']);
+
+    const lick = {
+        id: 'c1024',
+        tracks: [
+            { blob: blob1 }, // To be created, will succeed
+            { blob: blob2 }, // To be created, will fail
+        ]
+    };
+
+    const errorMessage = 'Failed to save blob 2';
+    const storage = {
+        saveBlob: jest.fn()
+            .mockReturnValueOnce(Promise.resolve(100))
+            .mockReturnValueOnce(Promise.reject(new Error(errorMessage))),
+    };
+    const { createLick } = getActions(storage);
+
+    const action = createLick(lick);
+    const dispatch = jest.fn();
+    try {
+        await action(dispatch);
+        throw new Error();
+    } catch (error) {
+        assertErrorContainsString(error, 'Unable to create action');
+        assertErrorContainsString(error, LICK_CREATE);
+        assertErrorContainsString(error, JSON.stringify(lick));
+        assertErrorContainsString(error, errorMessage);
+        expect(storage.saveBlob).toHaveBeenCalledTimes(2);
+        expect(storage.saveBlob).toHaveBeenCalledWith(blob1);
+        expect(storage.saveBlob).toHaveBeenCalledWith(blob2);
+    }
+});
 
 it('update lick - success', async() => {
     const state = createFullState([
@@ -13,7 +111,7 @@ it('update lick - success', async() => {
                     { id: 'c42', url: 'foo2' },
                     { id: 'c44', url: 'foo3' }, // To be deleted
                     { id: 'c46', url: 'foo4' },
-                    ]
+                ]
             }
             },
         { lick: { id: 'c2048' } }

@@ -2,6 +2,8 @@ import VError from 'verror';
 import Joi from 'joi-browser';
 import cuid from 'cuid';
 import {
+    LICK_ENABLE_CREATE_FORM,
+    LICK_CANCEL_CREATE_FORM,
     LICK_CREATE,
     LICK_UPDATE,
     LICK_DELETE,
@@ -13,11 +15,16 @@ import {
 } from '../actions/lick/modes';
 
 const defaultState = {
+    isCreateFormEnabled: false,
     items: []
 };
 
 export default function (state = defaultState, action) {
     switch (action.type) {
+        case LICK_ENABLE_CREATE_FORM:
+            return { ...state, isCreateFormEnabled: true };
+        case LICK_CANCEL_CREATE_FORM:
+            return { ...state, isCreateFormEnabled: false };
         case LICK_CREATE:
             return createLick(state, action.lick);
         case LICK_UPDATE:
@@ -42,6 +49,7 @@ function createLick(state, newLick) {
 
     return {
         ...state,
+        isCreateFormEnabled: false,
         items: [
             {
                 lick: {
@@ -80,7 +88,6 @@ function updateLick(state, newLick) {
         ...item,
         lick: { ...item.lick, id, artist, description, tracks, tags },
         mode: 'view'
-
     };
 
     return newState;

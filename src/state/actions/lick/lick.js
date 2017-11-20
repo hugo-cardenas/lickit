@@ -1,5 +1,7 @@
 import VError from 'verror';
 import {
+    LICK_ENABLE_CREATE_FORM,
+    LICK_CANCEL_CREATE_FORM,
     LICK_CREATE,
     LICK_UPDATE,
     LICK_DELETE,
@@ -7,8 +9,29 @@ import {
 } from '../types';
 
 export default function getActions(trackStorage) {
-    function createLick() {
-        return { type: LICK_CREATE };
+    function enableCreateForm() {
+        return { type: LICK_ENABLE_CREATE_FORM };
+    }
+
+    function cancelCreateForm() {
+        return { type: LICK_CANCEL_CREATE_FORM };
+    }
+    
+    function createLick(lick) {
+        return async(dispatch) => {
+            let tracks;
+            try {
+                // Handle all new tracks submitted in form
+                tracks = await Promise.all(lick.tracks.map(track => handleTrack(track)));
+            } catch (error) {
+                throw new VError(error, 'Unable to create action %s with lick %s', LICK_CREATE, JSON.stringify(lick));
+            }
+
+            return dispatch({
+                type: LICK_CREATE,
+                lick: { ...lick, tracks }
+            });
+        };
     }
 
     function updateLick(lick) {
@@ -75,7 +98,7 @@ export default function getActions(trackStorage) {
         return { type: LICK_CHANGE_MODE, id, mode };
     }
 
-    return { createLick, updateLick, deleteLick, changeLickMode };
+    return { enableCreateForm, cancelCreateForm, createLick, updateLick, deleteLick, changeLickMode };
 }
 
 // TODO May write a Redux selector for this http://redux.js.org/docs/recipes/ComputingDerivedData.html

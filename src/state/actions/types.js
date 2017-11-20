@@ -1,6 +1,8 @@
 export const 
     ERROR_CREATE = 'error_create',
     
+    LICK_ENABLE_CREATE_FORM = 'lick_enable_create_form',
+    LICK_CANCEL_CREATE_FORM = 'lick_cancel_create_form',
     LICK_CREATE = 'lick_create',
     LICK_UPDATE = 'lick_update',
     LICK_DELETE = 'lick_delete',
