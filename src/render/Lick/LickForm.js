@@ -252,7 +252,7 @@ export default LickForm;
 
 LickForm.propTypes = {
     lick: PropTypes.shape({
-        id: PropTypes.string.isRequired,
+        id: PropTypes.string, // Form for new lick won't have id
         artist: PropTypes.string.isRequired,
         description: PropTypes.string.isRequired,
         tracks: PropTypes.arrayOf(PropTypes.object).isRequired,

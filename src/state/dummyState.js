@@ -48,11 +48,12 @@ export default function getDummyState(numItems) {
 
     const state = {
         lick: {
+            isCreateFormEnabled: false,
             items: licks.map(lick => { return { lick }; })
         }
     };
 
-    state.lick.items[0].mode = 'edit';
+    // state.lick.items[0].mode = 'edit';
     return state;
 }
 

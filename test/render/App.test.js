@@ -64,13 +64,13 @@ it('render expected number of licks', () => {
 
 it('create new lick', () => {
     const props = getProps();
-    props.lick.createLick = jest.fn();
+    props.lick.enableCreateLickForm = jest.fn();
 
     const component = shallow(<App {...props}/>);
     component.find('#button-lick-create').simulate('click');
 
-    expect(props.lick.createLick).toHaveBeenCalledTimes(1);
-    expect(props.lick.createLick).toBeCalledWith();
+    expect(props.lick.enableCreateLickForm).toHaveBeenCalledTimes(1);
+    expect(props.lick.enableCreateLickForm).toBeCalledWith();
 });
 
 it('render search', () => {
@@ -94,7 +94,10 @@ it('render search', () => {
 const getProps = () => {
     return {
         lick: {
+            isCreateFormEnabled: false,
             items: [],
+            enableCreateLickForm: () => {},
+            cancelCreateLickForm: () => {},
             createLick: () => {},
             saveLick: () => {},
             deleteLick: () => {},

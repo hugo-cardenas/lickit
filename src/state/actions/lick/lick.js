@@ -9,11 +9,11 @@ import {
 } from '../types';
 
 export default function getActions(trackStorage) {
-    function enableCreateForm() {
+    function enableCreateLickForm() {
         return { type: LICK_ENABLE_CREATE_FORM };
     }
 
-    function cancelCreateForm() {
+    function cancelCreateLickForm() {
         return { type: LICK_CANCEL_CREATE_FORM };
     }
     
@@ -98,7 +98,7 @@ export default function getActions(trackStorage) {
         return { type: LICK_CHANGE_MODE, id, mode };
     }
 
-    return { enableCreateForm, cancelCreateForm, createLick, updateLick, deleteLick, changeLickMode };
+    return { enableCreateLickForm, cancelCreateLickForm, createLick, updateLick, deleteLick, changeLickMode };
 }
 
 // TODO May write a Redux selector for this http://redux.js.org/docs/recipes/ComputingDerivedData.html

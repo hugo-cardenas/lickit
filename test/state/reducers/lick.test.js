@@ -11,7 +11,7 @@ import {
     LICK_MODE_EDIT,
     LICK_MODE_VIEW
 } from 'src/state/actions/lick/modes';
-import { enableCreateForm, cancelCreateForm, changeLickMode } from 'src/state/actions/lick';
+import { enableCreateLickForm, cancelCreateLickForm, changeLickMode } from 'src/state/actions/lick';
 
 jest.mock('electron', () => {
     return {
@@ -36,14 +36,14 @@ it('enable create form', () => {
     const state = createState([]);
     const expectedState = { items: [], isCreateFormEnabled: true };
 
-    expect(lickReducer(state, enableCreateForm())).toEqual(expectedState);
+    expect(lickReducer(state, enableCreateLickForm())).toEqual(expectedState);
 });
 
 it('cancel create form', () => {
     const state = { items: [], isCreateFormEnabled: true };
     const expectedState = { items: [], isCreateFormEnabled: false };
 
-    expect(lickReducer(state, cancelCreateForm())).toEqual(expectedState);
+    expect(lickReducer(state, cancelCreateLickForm())).toEqual(expectedState);
 });
 
 const validLicks = [

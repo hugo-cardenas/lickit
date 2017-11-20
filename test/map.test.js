@@ -1,7 +1,6 @@
 import { mapStateToProps, mapDispatchToProps, mergeProps } from 'src/map';
 import { createLick, updateLick, deleteLick, changeLickMode } from 'src/state/actions/lick';
 import { addFilter, removeFilter, setInput } from 'src/state/actions/search';
-import { LICK_CREATE } from 'src/state/actions/types';
 import { TYPE_ARTIST, TYPE_TAG } from 'src/search/filterTypes';
 
 // Mock the call electron.app.getPath('userData') - TODO extract to common
@@ -24,6 +23,12 @@ it('map state to props, map error', () => {
 
     const props = mapStateToProps(state);
     expect(props.error).toEqual(error);
+});
+
+it('map state to props, map isCreateFormEnabled', () => {
+    const state = createState({});
+    const props = mapStateToProps(state);
+    expect(props.lick.isCreateFormEnabled).toEqual(false);
 });
 
 it('map state to props, map items', () => {
@@ -103,10 +108,10 @@ it('map state to props, map items, set artist indexes and sort by createdAt', ()
     const props = mapStateToProps(state);
     expect(props.lick.items[0].lick.id).toBe('c46');
     expect(props.lick.items[0].lick.artistIndex).toEqual(1);
-    
+
     expect(props.lick.items[1].lick.id).toBe('c44');
     expect(props.lick.items[1].lick.artistIndex).toEqual(2);
-    
+
     expect(props.lick.items[2].lick.id).toBe('c42');
     expect(props.lick.items[2].lick.artistIndex).toEqual(1);
 });
@@ -128,46 +133,46 @@ const expectedFilteredIds = [
     // Filter by artist
     {
         filters: [
-            {type: TYPE_ARTIST, value: 'Charlie Foo'}
+            { type: TYPE_ARTIST, value: 'Charlie Foo' }
         ],
         expectedIds: ['c42', 'c44']
     },
     // Filter by tag
     {
         filters: [
-            {type: TYPE_TAG, value: 'foo'}
+            { type: TYPE_TAG, value: 'foo' }
         ],
         expectedIds: ['c42', 'c46', 'c50']
     },
     // Filter by multiple tags
     {
         filters: [
-            {type: TYPE_TAG, value: 'foo'},
-            {type: TYPE_TAG, value: 'bar'}
+            { type: TYPE_TAG, value: 'foo' },
+            { type: TYPE_TAG, value: 'bar' }
         ],
         expectedIds: ['c42', 'c50']
     },
     // Filter by artist and tag
     {
         filters: [
-            {type: TYPE_ARTIST, value: 'Django Bar'},
-            {type: TYPE_TAG, value: 'bar'}
+            { type: TYPE_ARTIST, value: 'Django Bar' },
+            { type: TYPE_TAG, value: 'bar' }
         ],
         expectedIds: ['c48']
     },
     // Filter by artist and multiple tags
     {
         filters: [
-            {type: TYPE_ARTIST, value: 'Charlie Foo'},
-            {type: TYPE_TAG, value: 'foo'},
-            {type: TYPE_TAG, value: 'bar'}
+            { type: TYPE_ARTIST, value: 'Charlie Foo' },
+            { type: TYPE_TAG, value: 'foo' },
+            { type: TYPE_TAG, value: 'bar' }
         ],
         expectedIds: ['c42']
     },
     // Filter not matching anything
     {
         filters: [
-            {type: TYPE_ARTIST, value: 'Non matching filter'}
+            { type: TYPE_ARTIST, value: 'Non matching filter' }
         ],
         expectedIds: []
     },
@@ -176,10 +181,10 @@ const expectedFilteredIds = [
 expectedFilteredIds.forEach((entry, i) => {
     it('map state to props, map items, apply filters #' + i, () => {
         const { filters, expectedIds } = entry;
-        
+
         const state = createStateWithItems(itemsToBeFiltered);
         state.search.filters = filters;
-        
+
         const props = mapStateToProps(state);
         const ids = props.lick.items.map(item => item.lick.id);
         expect(ids).toEqual(expectedIds);
@@ -394,6 +399,7 @@ function createState(state) {
     return {
         error: null,
         lick: {
+            isCreateFormEnabled: false,
             items: []
         },
         search: {

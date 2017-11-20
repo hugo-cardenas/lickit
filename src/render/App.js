@@ -1,5 +1,6 @@
 import React from 'react';
 import Lick from './Lick/Lick';
+import LickForm from './Lick/LickForm';
 import Search from './Search/Search';
 import PropTypes from 'prop-types';
 import ReactTooltip from 'react-tooltip';
@@ -7,7 +8,10 @@ import ReactTooltip from 'react-tooltip';
 const App = (props) => {
     const { error, lick, search } = props;
     const {
+        isCreateFormEnabled,
         items,
+        enableCreateLickForm,
+        cancelCreateLickForm,
         createLick,
         saveLick,
         deleteLick,
@@ -18,20 +22,36 @@ const App = (props) => {
         alert('ERROR:' + "\n" + error);
     }
 
-    const handleCreateLick = () => {
+    const enableCreateLick = () => {
         window.scrollTo(0, 0);
-        createLick();
+        enableCreateLickForm();
     };
 
     return <div className="main-container">
-        {renderTopContainer(handleCreateLick, search)}
-        {renderControlsContainer(handleCreateLick, search)}
+        {renderTopContainer()}
+        {renderControlsContainer(enableCreateLick, search)}
         <div className="main-content">
             <div className="lick-list">
+                {isCreateFormEnabled ? renderCreateLickForm(createLick, cancelCreateLickForm) : ''}
                 {items.map(item => renderItem(item, deleteLick, saveLick, changeLickMode))}
             </div>
         </div>
     </div>;
+};
+
+const renderCreateLickForm = (createLick, cancelCreateLickForm) => {
+    const lick = {
+        artist: '',
+        description: '',
+        tracks: [],
+        tags: []
+    };
+    const props = {
+        lick,
+        saveLick: lick => createLick(lick),
+        cancelLickEditor: () => cancelCreateLickForm()
+    };
+    return <LickForm {...props}/>;
 };
 
 const renderTopContainer = () =>
@@ -39,9 +59,9 @@ const renderTopContainer = () =>
         {renderNav()}
     </div>;
 
-const renderControlsContainer = (createLick, search) =>
+const renderControlsContainer = (enableLickCreateForm, search) =>
     <div id="controls-container">
-        {renderLickControls(createLick, search)}
+        {renderLickControls(enableLickCreateForm, search)}
     </div>;
 
 const renderNav = () =>
@@ -67,17 +87,17 @@ const renderNav = () =>
         <ReactTooltip effect="solid" place="bottom"/>
     </nav>;
 
-const renderLickControls = (createLick, search) =>
+const renderLickControls = (enableLickCreateForm, search) =>
     <div id="lick-controls">
-        {renderCreateLickButton(createLick)}
+        {renderCreateLickButton(enableLickCreateForm)}
         <Search {...search}/>
     </div>;
 
-const renderCreateLickButton = createLick =>
+const renderCreateLickButton = enableLickCreateForm =>
     <a 
         id="button-lick-create" 
         className="level-item button is-small"
-        onClick={createLick}>
+        onClick={enableLickCreateForm}>
         <span className="icon is-small">
             <i className="fa fa-plus"></i>
         </span>
@@ -98,10 +118,13 @@ export default App;
 App.propTypes = {
     error: PropTypes.object,
     lick: PropTypes.shape({
+        isCreateFormEnabled: PropTypes.bool.isRequired,
         items: PropTypes.arrayOf(PropTypes.shape({
             lick: PropTypes.object.isRequired,
             mode: PropTypes.string
         })).isRequired,
+        enableCreateLickForm: PropTypes.func.isRequired,
+        cancelCreateLickForm: PropTypes.func.isRequired,
         createLick: PropTypes.func.isRequired,
         saveLick: PropTypes.func.isRequired,
         deleteLick: PropTypes.func.isRequired,

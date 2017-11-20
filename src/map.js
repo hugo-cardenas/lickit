@@ -1,5 +1,12 @@
 import { difference, groupBy, merge, uniq } from 'lodash';
-import { createLick, updateLick, deleteLick, changeLickMode } from './state/actions/lick';
+import {
+    enableCreateLickForm,
+    cancelCreateLickForm,
+    createLick,
+    updateLick,
+    deleteLick,
+    changeLickMode
+} from './state/actions/lick';
 import { addFilter, removeFilter, setInput } from './state/actions/search';
 import { getPathResolver } from './track/pathResolver';
 import { TYPE_ARTIST, TYPE_TAG } from './search/filterTypes';
@@ -14,7 +21,7 @@ const mapStateToProps = (state) => {
 
 const mapLickStateToProps = (state) => {
     const stateItems = state.lick.items.map(mapItemToProp);
-    
+
     const groupedItems = Object.values(groupBy(stateItems, item => item.lick.artist))
         .map(items => {
             items.sort((a, b) => a.lick.createdAt - b.lick.createdAt);
@@ -42,6 +49,7 @@ const mapLickStateToProps = (state) => {
     );
 
     return {
+        isCreateFormEnabled: state.lick.isCreateFormEnabled,
         items: filteredItems
     };
 };
@@ -141,9 +149,11 @@ const getSuggestions = (items, filters) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         lick: {
-            createLick: () => dispatch(createLick()),
-            saveLick: (lick) => dispatch(updateLick(lick)),
-            deleteLick: (id) => dispatch(deleteLick(id)),
+            enableCreateLickForm: () => dispatch(enableCreateLickForm()),
+            cancelCreateLickForm: () => dispatch(cancelCreateLickForm()),
+            createLick: lick => dispatch(createLick(lick)),
+            saveLick: lick => dispatch(updateLick(lick)),
+            deleteLick: id => dispatch(deleteLick(id)),
             changeLickMode: (id, mode) => dispatch(changeLickMode(id, mode)),
         },
         search: {
