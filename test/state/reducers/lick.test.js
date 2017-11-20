@@ -32,30 +32,6 @@ it('reduce unknown action', () => {
     expect(lickReducer(state, { type: 'invalid action' })).toEqual(expectedState);
 });
 
-it('create lick', () => {
-    const initialTimestamp = Date.now();
-
-    const state = createState([{ lick: { id: 'c10' } }]);
-    const newState = lickReducer(state, { type: LICK_CREATE });
-
-    const items = newState.items;
-    expect(items).toHaveLength(2);
-
-    expect(items[0].mode).toBe('edit');
-    expect(typeof items[0].lick.id).toBe('string');
-    expect(items[0].lick.id.length).toBeGreaterThan(10);
-    expect(items[0].lick.id.length).toBeLessThan(30);
-    expect(items[0].lick.id).not.toBe('10abc');
-    expect(items[0].lick.artist).toBe('');
-    expect(items[0].lick.description).toBe('');
-    expect(items[0].lick.tracks).toEqual([]);
-    expect(items[0].lick.tags).toEqual([]);
-    expect(items[0].lick.createdAt).toBeGreaterThanOrEqual(initialTimestamp);
-    expect(items[0].lick.createdAt).toBeLessThan(Date.now());
-
-    expect(items[1]).toEqual({ lick: { id: 'c10' } });
-});
-
 const validLicks = [
     {
         id: 'c20',
@@ -91,8 +67,45 @@ const validLicks = [
         description: 'bar baz',
         tracks: [{ id: 'abc200' }],
         tags: []
+    },
+    {
+        id: 'c20',
+        artist: 'barbar',
+        description: 'bar baz',
+        tracks: [{ id: 'abc200' }],
+        tags: [],
+        foo: 'bar' // Ignores unknown properties
     }
 ];
+
+validLicks.forEach((lick, i) => {
+    it('create lick, success #' + i, () => {
+        const initialTimestamp = Date.now();
+    
+        const state = createState([{ lick: { id: 'c10' } }]);
+        const newLick = {...lick};
+        delete newLick.id;
+        const newState = lickReducer(state, { type: LICK_CREATE, lick: newLick });
+    
+        const items = newState.items;
+        expect(items).toHaveLength(2);
+    
+        expect(items[0].mode).toBe('view');
+        expect(typeof items[0].lick.id).toBe('string');
+        expect(items[0].lick.id.length).toBeGreaterThan(10);
+        expect(items[0].lick.id.length).toBeLessThan(30);
+        expect(items[0].lick.id).not.toBe('10abc');
+        expect(items[0].lick.artist).toBe(lick.artist);
+        expect(items[0].lick.description).toBe(lick.description);
+        expect(items[0].lick.tracks).toEqual(lick.tracks);
+        expect(items[0].lick.tags).toEqual(lick.tags);
+        expect(items[0].lick.createdAt).toBeGreaterThanOrEqual(initialTimestamp);
+        expect(items[0].lick.createdAt).toBeLessThan(Date.now() + 1);
+        expect(items[0].lick.foo).toBe(undefined);
+    
+        expect(items[1]).toEqual({ lick: { id: 'c10' } });
+    });
+});
 
 validLicks.forEach((lick, i) => {
     it('update lick, success #' + i, () => {
@@ -116,7 +129,7 @@ validLicks.forEach((lick, i) => {
             { lick: { id: 'c10' } },
             {
                 lick: {
-                    ...lick,
+                    ..._.pick(lick, ['id', 'artist', 'description', 'tracks', 'tags']),
                     createdAt: 12500
                 },
                 mode: 'view'
@@ -128,41 +141,6 @@ validLicks.forEach((lick, i) => {
     });
 });
 
-
-it('update lick, ignores extra attributes', () => {
-    const state = createState([
-        { lick: { id: 'c10' } },
-        {
-            lick: { id: 'c20'},
-            mode: 'edit'
-        },
-        { lick: { id: 'c30' } }
-    ]);
-
-    const lickToUpdate = {
-        id: 'c20',
-        artist: 'barbar',
-        description: 'foo',
-        tracks: [{ id: 'abc200' }, { id: 'abc200' }],
-        tags: ['foo', 'bar'],
-        extraAttribute: 'foobar'
-    };
-
-    const expectedLick = _.pick(lickToUpdate, ['id', 'artist', 'description', 'tracks', 'tags']);
-
-    const expectedState = createState([
-        { lick: { id: 'c10' } },
-        {
-            lick: expectedLick,
-            mode: 'view'
-        },
-        { lick: { id: 'c30' } }
-    ]);
-
-    expect(lickReducer(state, { type: LICK_UPDATE, lick: lickToUpdate })).toEqual(expectedState);
-});
-
-
 const validLick = {
     id: 'c20',
     artist: 'foofoo',
@@ -172,8 +150,7 @@ const validLick = {
 };
 
 const invalidLicks = [
-    // Missing fields
-    [_.pick(validLick, ['artist', 'description', 'tracks', 'tags']), ['id']],
+    // Missing fields    
     [_.pick(validLick, ['id', 'description', 'tracks', 'tags']), ['artist']],
     [_.pick(validLick, ['id', 'artist', 'tracks', 'tags']), ['description']],
     [_.pick(validLick, ['id', 'artist', 'description', 'tags']), ['tracks']],
@@ -181,9 +158,6 @@ const invalidLicks = [
     [_.pick(validLick, ['id', 'artist', 'tracks']), ['description', 'tags']],
 
     // Invalid values
-    [Object.assign({}, validLick, { id: true }), ['id']],
-    [Object.assign({}, validLick, { id: -1 }), ['id']],
-
     [Object.assign({}, validLick, { artist: 42 }), ['artist']],
 
     [Object.assign({}, validLick, { description: 42 }), ['description']],
@@ -197,6 +171,38 @@ const invalidLicks = [
 ];
 
 invalidLicks.forEach((entry, i) => {
+    it('create lick, invalid data #' + i, () => {
+        const [lick, invalidProperties] = entry;
+        const newLick = {...lick};
+        delete newLick.id;
+
+        const state = createState([]);
+
+        try {
+            lickReducer(state, { type: LICK_CREATE, lick });
+            throw new Error();
+        } catch (error) {
+            assertErrorContainsString(error, 'Unable to reduce ' + LICK_CREATE);
+            assertErrorContainsString(error, JSON.stringify(lick));
+            invalidProperties.forEach(property => {
+                assertErrorContainsString(error, ` "${property}" `); // As part of the error message, not the object JSON
+            });
+        }
+    });
+});
+
+const invalidLicksToUpdate = [
+    ...invalidLicks,
+    
+    // Missing fields
+    [_.pick(validLick, ['artist', 'description', 'tracks', 'tags']), ['id']],
+
+    // Invalid values
+    [Object.assign({}, validLick, { id: true }), ['id']],
+    [Object.assign({}, validLick, { id: -1 }), ['id']],
+];
+
+invalidLicksToUpdate.forEach((entry, i) => {
     it('update lick, invalid data #' + i, () => {
         const [lick, invalidProperties] = entry;
         const state = createState([

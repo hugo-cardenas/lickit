@@ -19,7 +19,7 @@ const defaultState = {
 export default function (state = defaultState, action) {
     switch (action.type) {
         case LICK_CREATE:
-            return createLick(state);
+            return createLick(state, action.lick);
         case LICK_UPDATE:
             return updateLick(state, action.lick);
         case LICK_DELETE:
@@ -31,20 +31,28 @@ export default function (state = defaultState, action) {
     }
 }
 
-function createLick(state) {
+function createLick(state, newLick) {
+    try {
+        validateNewLick(newLick);
+    } catch (error) {
+        throw createReducerLickError(error, LICK_CREATE, newLick);
+    }
+
+    const { artist, description, tracks, tags } = newLick;
+
     return {
         ...state,
         items: [
             {
                 lick: {
-                    id: cuid(), // TODO Not so pure - maybe move to action?
-                    artist: '',
-                    description: '',
-                    tracks: [],
-                    tags: [],
-                    createdAt: Date.now() // TODO Not so pure - maybe move to action?
+                    id: cuid(), // TODO Not pure - maybe move to action?
+                    artist,
+                    description,
+                    tracks,
+                    tags,
+                    createdAt: Date.now() // TODO Not pure - maybe move to action?
                 },
-                mode: 'edit'
+                mode: 'view'
             },
             ...state.items
         ]
@@ -53,10 +61,10 @@ function createLick(state) {
 
 function updateLick(state, newLick) {
     try {
-        validateLick(newLick);
+        validateUpdatedLick(newLick);
         var index = findItemIndex(state.items, newLick.id);
     } catch (error) {
-        throw new VError(error, 'Unable to reduce %s with lick %s', LICK_UPDATE, JSON.stringify(newLick));
+        throw createReducerLickError(error, LICK_UPDATE, newLick);
     }
     const { id, artist, description, tracks, tags } = newLick;
 
@@ -76,6 +84,10 @@ function updateLick(state, newLick) {
     };
 
     return newState;
+}
+
+function createReducerLickError(previousError, action, lick) {
+    return new VError(previousError, 'Unable to reduce %s with lick %s', action, JSON.stringify(lick));
 }
 
 function deleteLick(state, id) {
@@ -114,9 +126,24 @@ function changeLickMode(state, id, mode) {
     }
 }
 
-function validateLick(lick) {
-    const schema = Joi.object().keys({
-        id: Joi.string().required(),
+function validateNewLick(lick) {
+    const schema = getNewLickSchema();
+    const { error } = Joi.validate(lick, schema, getJoiOptions());
+    if (error) {
+        throw error;
+    }
+}
+
+function validateUpdatedLick(lick) {
+    const schema = getUpdatedLickSchema();
+    const { error } = Joi.validate(lick, schema, getJoiOptions());
+    if (error) {
+        throw error;
+    }
+}
+
+function getNewLickSchema() {
+    return Joi.object().keys({
         artist: Joi.string().allow('').required(),
         description: Joi.string().allow('').required(),
         tracks: Joi.array().items(Joi.object().keys({
@@ -124,11 +151,16 @@ function validateLick(lick) {
         })).required(),
         tags: Joi.array().items(Joi.string()).required()
     });
+}
 
-    const { error } = Joi.validate(lick, schema, { abortEarly: false, allowUnknown: true, convert: false });
-    if (error) {
-        throw error;
-    }
+function getUpdatedLickSchema() {
+    return getNewLickSchema().keys({
+        id: Joi.string().required()
+    });
+}
+
+function getJoiOptions() {
+    return { abortEarly: false, allowUnknown: true, convert: false };
 }
 
 // TODO Optimize indexing items by lick id
