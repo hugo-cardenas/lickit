@@ -8,6 +8,7 @@ class LickForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            errorMessageTrack: null,
             lick: this.props.lick,
             tagInput: ''
         };
@@ -25,7 +26,7 @@ class LickForm extends Component {
     }
 
     render() {
-        const { lick, tagInput } = this.state;
+        const { errorMessageTrack, lick, tagInput } = this.state;
         const { id, artist, description, tracks, tags } = lick;
         const { cancelLickEditor } = this.props;
 
@@ -36,7 +37,7 @@ class LickForm extends Component {
                     <div className="card-content">
                         {this.renderArtist(artist)}
                         {this.renderSong(description)}
-                        {this.renderTrackSection(tracks[0], this.handleDeleteTrack, this.handleRecordTrack)}
+                        {this.renderTrackSection(tracks[0], errorMessageTrack, this.handleDeleteTrack, this.handleRecordTrack)}
                         {this.renderTags(tags, tagInput)}
                         {this.renderSubmitButtons(id, cancelLickEditor)}
                     </div>
@@ -54,7 +55,7 @@ class LickForm extends Component {
                     name="artist" 
                     className="input artist" 
                     type="text" 
-                    placeholder="Artist name"
+                    placeholder="Artist name (optional)"
                     value={artist}
                     onChange={this.handleInputArtist}/>
             </div>
@@ -69,16 +70,17 @@ class LickForm extends Component {
                     name="song" 
                     className="input song" 
                     type="text" 
-                    placeholder="Song name"
+                    placeholder="Song name (optional)"
                     value={song}
                     onChange={this.handleInputDescription}/>
             </div>
         </div>;
     }
 
-    renderTrackSection(track, handleDeleteTrack, handleRecordTrack) {
-        return <div className="field">
-            <label className="label">Audio</label>
+    renderTrackSection(track, errorMessage, handleDeleteTrack, handleRecordTrack) {
+        const error = errorMessage ? <span className="error-message"> - {errorMessage}</span> : '';
+        return <div className="field field-track">
+            <label className="label">Audio {error}</label>
             <div className="track-container control">
                 {this.renderTrackDeleteButton(track, handleDeleteTrack)}
                 <div className="track">
@@ -212,6 +214,7 @@ class LickForm extends Component {
         // Set temporarily url as id until it gets saved (in order to be able to delete unsaved tracks)
         tracks.push({ blob, id: url, url: url });
         this.setLickState({ tracks });
+        this.setState({ errorMessageTrack: null });
     }
 
     handleDeleteTag(tag) {
@@ -221,7 +224,9 @@ class LickForm extends Component {
     }
 
     handleSave() {
-        this.props.saveLick(this.getLickState());
+        if (this.validateLick()) {
+            this.props.saveLick(this.getLickState());
+        }
     }
 
     getLickState() {
@@ -232,6 +237,14 @@ class LickForm extends Component {
         this.setState({
             lick: { ...this.getLickState(), ...state }
         });
+    }
+
+    validateLick() {
+        if (this.getLickState().tracks.length < 1) {
+            this.setState({errorMessageTrack: 'An audio track is required'});
+            return false;
+        }
+        return true;
     }
 }
 

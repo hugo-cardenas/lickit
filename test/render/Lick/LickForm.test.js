@@ -207,6 +207,18 @@ test('save lick', () => {
     expect(props.saveLick).toBeCalledWith(expectedLick);
 });
 
+test('save lick, validation fails', () => {
+    let props = getTestProps();
+    props.lick.tracks = [];
+    props.saveLick = jest.fn();
+
+    const component = shallow(<LickForm {...props}/>);
+    component.find('.lick-save').simulate('click');
+
+    expect(props.saveLick).toHaveBeenCalledTimes(0);
+    expect(component.find('.field-track .error-message').text().includes('audio track is required')).toBe(true);
+});
+
 test('cancel lick editor', () => {
     let props = getTestProps();
     props.cancelLickEditor = jest.fn();
