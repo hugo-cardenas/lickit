@@ -1,5 +1,5 @@
 import { mapStateToProps, mapDispatchToProps, mergeProps } from 'src/map';
-import { updateLick, deleteLick, changeLickMode } from 'src/state/actions/lick';
+import { createLick, updateLick, deleteLick, changeLickMode } from 'src/state/actions/lick';
 import { addFilter, removeFilter, setInput } from 'src/state/actions/search';
 import { LICK_CREATE } from 'src/state/actions/types';
 import { TYPE_ARTIST, TYPE_TAG } from 'src/search/filterTypes';
@@ -267,13 +267,16 @@ expectedSuggestions.forEach((entry, i) => {
     });
 });
 
-it('map dispatch to props - create lick', () => {
+it('map dispatch to props - create lick', async() => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
-    props.lick.createLick();
+    const lick = { foo: 'bar' };
+    await (props.lick.createLick(lick));
+
     expect(dispatch).toHaveBeenCalledTimes(1);
-    expect(dispatch).toHaveBeenCalledWith({ type: LICK_CREATE });
+    // Tricky thing - as updateLick returns a thunk, we just compare the functions returned
+    expect(dispatch.mock.calls[0][0].toString()).toEqual(createLick(dispatch).toString());
 });
 
 it('map dispatch to props - update lick', async() => {
