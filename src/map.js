@@ -12,10 +12,11 @@ import { getPathResolver } from './track/pathResolver';
 import { TYPE_ARTIST, TYPE_TAG } from './search/filterTypes';
 
 const mapStateToProps = (state) => {
+    const lickProps = mapLickStateToProps(state);
     return {
         error: state.error,
-        lick: mapLickStateToProps(state),
-        search: mapSearchStateToProps(state)
+        lick: lickProps,
+        search: mapSearchStateToProps(state.search, lickProps.items)
     };
 };
 
@@ -87,13 +88,13 @@ const mapItemToProp = (item) => {
     };
 };
 
-const mapSearchStateToProps = (state) => {
-    const filters = state.search.filters;
-    const input = state.search.input;
+const mapSearchStateToProps = (search, filteredItems) => {
+    const filters = search.filters;
+    const input = search.input;
     return {
         filters,
         input,
-        suggestions: getSuggestions(state.lick.items, filters)
+        suggestions: getSuggestions(filteredItems, filters)
     };
 };
 

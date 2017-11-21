@@ -194,7 +194,7 @@ expectedFilteredIds.forEach((entry, i) => {
 const stateWithSearch = createState({
     lick: {
         items: [
-            createItem({ artist: 'Django Bar', tags: ['bar', 'Baz'] }),
+            createItem({ artist: 'Django Bar', tags: ['Baz'] }),
             createItem({ artist: 'charlie Foo', tags: ['foo', 'bar'] }),
             createItem({ artist: 'Django Bar', tags: ['foo', 'foobar'] }),
             createItem({ artist: '', tags: [] }), // Empty artist should not appear as a suggestion
@@ -225,18 +225,20 @@ const expectedSuggestions = [
         ]
     },
     // Artist filter should prevent any other artist suggestion
+    // Also, if a filter is applied, exclude suggestions not found in the shown licks
     {
         filters: [{
             type: TYPE_ARTIST,
-            value: 'foo'
+            value: 'Django Bar'
         }],
         input: '',
         suggestions: [{
             title: TYPE_TAG,
-            suggestions: ['bar', 'Baz', 'foo', 'foobar']
+            suggestions: ['Baz', 'foo', 'foobar']
         }]
     },
     // Tag filter should prevent the same tag suggestion
+    // Also, if a filter is applied, exclude suggestions not found in the shown licks
     {
         filters: [{
             type: TYPE_TAG,
@@ -250,7 +252,7 @@ const expectedSuggestions = [
             },
             {
                 title: TYPE_TAG,
-                suggestions: ['bar', 'Baz', 'foobar']
+                suggestions: ['bar', 'foobar']
             }
         ]
     }
