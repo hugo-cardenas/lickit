@@ -44,6 +44,7 @@
     "eslint-plugin-react": "^7.1.0",
     "html-webpack-plugin": "^2.29.0",
     "jest": "^20.0.4",
+    "prettier": "^1.9.2",
     "randomcolor": "^0.5.3",
     "react-addons-perf": "^15.4.2",
     "react-test-renderer": "^15.5.4",
@@ -56,14 +57,19 @@
     "webpack-merge": "^4.1.0"
   },
   "main": "./dist/app",
+  "prettier": {
+    "singleQuote": true,
+    "tabWidth": 4
+  },
   "scripts": {
-    "start-react": "webpack-dev-server --config ./config/webpack.dev.js",
-    "start-electron": "ELECTRON_ENV=development electron ./src/app",
-    "start": "concurrently 'npm run start-react' 'wait-on --config wait-on.config.json http://localhost:3000 && npm run start-electron'",
     "build": "npm run build-bundle && npm run build-package && npm run build-dmg",
     "build-bundle": "webpack --config ./config/webpack.electron.js",
     "build-package": "electron-packager . Lickit --platform=darwin --arch=x64 --icon=./assets/icon.icns --overwrite --osxSign=true --out=./pkg --ignore='.babelrc|.gitignore|.jsbeautifyrc|config|coverage|LICENSE|node_modules|public|README.md|src|test'",
     "build-dmg": "cd ./pkg/Lickit-darwin-x64 && (rm Lickit*.dmg || echo 'No previous dmg found') && create-dmg ./Lickit.app",
+    "format": "prettier --write '{src,test}/**/*.{js,json}'",
+    "start": "concurrently 'npm run start-react' 'wait-on --config wait-on.config.json http://localhost:3000 && npm run start-electron'",
+    "start-electron": "ELECTRON_ENV=development electron ./src/app",
+    "start-react": "webpack-dev-server --config ./config/webpack.dev.js",
     "test": "NODE_PATH=. jest --config=./test/jest.config.json",
     "test-ci": "npm test -- --coverage && codecov"
   },
