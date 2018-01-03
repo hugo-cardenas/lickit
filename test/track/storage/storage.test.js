@@ -27,7 +27,7 @@ it('save blob - success, create dir if does not exist', async () => {
     expect(resolvePath.mock.calls[0][0]).toBe(id);
 });
 
-// TODO Impossible to test like this.
+// IMPROVE - Impossible to test like this.
 // Non-readable parent dir fails with EACCES before it will try to create the non-existing child dir
 it.skip('save blob - fail creating dir', async () => {
     const content = 'foo bar';

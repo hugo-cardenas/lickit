@@ -84,10 +84,10 @@ test.skip('record track', () => {
         .find('Recorder')
         .prop('handleRecordTrack');
 
-    // TODO Find a way of having URL and web Audio API work on enzyme
+    // IMPROVE Find a way of having URL and web Audio API work on enzyme
     //handleRecordTrack(new Blob(['foo']));
 
-    // TODO Check url of generated track
+    // IMPROVE Check url of generated track
     // expect(component.find('Player').prop('src')).;
 });
 

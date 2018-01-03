@@ -9,9 +9,9 @@ test('render artist', () => {
     expect(artist.text()).toBe('Charlie Foo');
 });
 
-test('render song', () => {
+test('render description', () => {
     const component = shallow(<LickView {...getTestProps()} />);
-    expect(component.find('.song').text()).toBe('#2 | Foobar baz');
+    expect(component.find('.description').text()).toBe('#2 | Foobar baz');
 });
 
 test('render track', () => {

@@ -1,16 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { linkifier } from 'react-linkifier';
 import Player from '../Audio/Player';
 import radium from 'radium';
-
-// const img = require('/Users/hugo/Library/Application Support/Electron/images/piano.jpeg');
 
 const LickView = props => {
     const { lick, editLick, deleteLick } = props;
     const { id, artist, artistIndex, description, tracks, tags } = lick;
-
-    // linear-gradient(rgba(222, 222, 222, 0.45), rgba(222, 222, 222, 0.45))
 
     // TODO Mandatory track?
     const url = tracks[0] ? tracks[0].url : '';
@@ -64,44 +59,19 @@ const renderArtist = artist => (
 );
 
 const renderDescription = (artistIndex, song) => (
-    <div className="song">
+    <div className="description">
         #{artistIndex} {song !== '' ? `| ${song}` : ''}
         {/* | <a href="#">Link</a> */}
     </div>
 );
 
-const renderTrack = url => {
-    const backgroundImage = `url("file:///Users/hugo/Library/Application Support/Electron/images/piano.jpeg")`;
-    const style = {
-        backgroundImage: [
-            `linear-gradient(
-                rgba(222, 222, 222, 0.45), 
-                rgba(222, 222, 222, 0.45)
-            )`,
-            backgroundImage
-        ].join(', '),
-        // filter: `blur(1px)`,
-        // height: '50px',
-        backgroundSize: 'cover',
-        ':hover': {
-            backgroundImage: [
-                `linear-gradient(
-                    rgba(222, 222, 222, 0.65), 
-                    rgba(222, 222, 222, 0.65)
-                )`,
-                backgroundImage
-            ].join(', ')
-        }
-    };
-
-    return (
-        <div className="track-container">
-            <div className="center">
-                <Player src={url} />
-            </div>
+const renderTrack = url => (
+    <div className="track-container">
+        <div className="center">
+            <Player src={url} />
         </div>
-    );
-};
+    </div>
+);
 
 const renderTags = tags => (
     <div className="tags">
