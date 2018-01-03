@@ -103,10 +103,10 @@ validLicks.forEach((lick, i) => {
 
         const state = {
             isCreateFormEnabled: true,
-            items: [{ lick: { id: 'c10' } }]
+            items: {'c10': { lick: { id: 'c10' } }}
         };
-        const newLick = { ...lick };
-        delete newLick.id;
+        const newLick = _.omit(lick, ['id']);
+
         const newState = lickReducer(state, {
             type: LICK_CREATE,
             lick: newLick
@@ -116,34 +116,41 @@ validLicks.forEach((lick, i) => {
 
         expect(isCreateFormEnabled).toBe(false);
 
-        expect(items).toHaveLength(2);
+        const ids = Object.keys(items);
+        expect(ids).toHaveLength(2);
 
-        expect(items[0].mode).toBe('view');
-        expect(typeof items[0].lick.id).toBe('string');
-        expect(items[0].lick.id.length).toBeGreaterThan(10);
-        expect(items[0].lick.id.length).toBeLessThan(30);
-        expect(items[0].lick.id).not.toBe('10abc');
-        expect(items[0].lick.artist).toBe(lick.artist);
-        expect(items[0].lick.description).toBe(lick.description);
-        expect(items[0].lick.tracks).toEqual(lick.tracks);
-        expect(items[0].lick.tags).toEqual(lick.tags);
-        expect(items[0].lick.createdAt).toBeGreaterThanOrEqual(
+        expect(items['c10']).toEqual({ lick: { id: 'c10' } });
+        delete items['c10'];
+
+        // We don't know in advance the value of the new generated id
+        const newId = Object.keys(items)[0];
+        expect(typeof newId).toBe('string');
+        expect(newId.length).toBeGreaterThan(10);
+        expect(newId.length).toBeLessThan(30);
+
+        const newItem = items[newId];
+        expect(newItem.mode).toBe('view');
+
+        const createdLick = newItem.lick;
+        expect(createdLick.id).toBe(undefined);
+        expect(createdLick.artist).toBe(createdLick.artist);
+        expect(createdLick.description).toBe(createdLick.description);
+        expect(createdLick.tracks).toEqual(createdLick.tracks);
+        expect(createdLick.tags).toEqual(createdLick.tags);
+        expect(createdLick.createdAt).toBeGreaterThanOrEqual(
             initialTimestamp
         );
-        expect(items[0].lick.createdAt).toBeLessThan(Date.now() + 1);
-        expect(items[0].lick.foo).toBe(undefined);
-
-        expect(items[1]).toEqual({ lick: { id: 'c10' } });
+        expect(createdLick.createdAt).toBeLessThan(Date.now() + 1);
+        expect(createdLick.foo).toBe(undefined);
     });
 });
 
 validLicks.forEach((lick, i) => {
     it('update lick, success #' + i, () => {
-        const state = createState([
-            { lick: { id: 'c10' } },
-            {
+        const state = createState({
+            'c10': { lick: { artist: 'bar' } },
+            'c20': {
                 lick: {
-                    id: 'c20',
                     artist: 'foofoo',
                     description: 'foo',
                     tracks: [{ id: 'abc200' }, { id: 'abc200' }],
@@ -152,15 +159,14 @@ validLicks.forEach((lick, i) => {
                 },
                 mode: 'edit'
             },
-            { lick: { id: 'c30' } }
-        ]);
+            'c30': { lick: { artist: 'baz' } }
+        });
 
-        const expectedState = createState([
-            { lick: { id: 'c10' } },
-            {
+        const expectedState = createState({
+            'c10': { lick: { artist: 'bar' } },
+            'c20': {
                 lick: {
                     ..._.pick(lick, [
-                        'id',
                         'artist',
                         'description',
                         'tracks',
@@ -170,8 +176,8 @@ validLicks.forEach((lick, i) => {
                 },
                 mode: 'view'
             },
-            { lick: { id: 'c30' } }
-        ]);
+            'c30': { lick: { artist: 'baz' } }
+        });
 
         expect(lickReducer(state, { type: LICK_UPDATE, lick })).toEqual(
             expectedState

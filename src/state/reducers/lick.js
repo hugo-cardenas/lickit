@@ -16,7 +16,7 @@ const defaultState = {
     items: []
 };
 
-export default function(state = defaultState, action) {
+export default function (state = defaultState, action) {
     switch (action.type) {
         case LICK_ENABLE_CREATE_FORM:
             return { ...state, isCreateFormEnabled: true };
@@ -44,23 +44,24 @@ function createLick(state, newLick) {
 
     const { artist, description, tracks, tags } = newLick;
 
+    const id = cuid(); // TODO Not pure - maybe move to action?
+    const createdAt = Date.now(); // TODO Not pure - maybe move to action?
     return {
         ...state,
         isCreateFormEnabled: false,
-        items: [
-            {
+        items: {
+            [id]: {
                 lick: {
-                    id: cuid(), // TODO Not pure - maybe move to action?
                     artist,
                     description,
                     tracks,
                     tags,
-                    createdAt: Date.now() // TODO Not pure - maybe move to action?
+                    createdAt
                 },
                 mode: 'view'
             },
             ...state.items
-        ]
+        }
     };
 }
 
@@ -161,6 +162,10 @@ function validateUpdatedLick(lick) {
     if (error) {
         throw error;
     }
+}
+
+function validateLickIndex(items, id) {
+    
 }
 
 function getNewLickSchema() {
