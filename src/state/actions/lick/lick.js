@@ -16,15 +16,22 @@ export default function getActions(trackStorage) {
     function cancelCreateLickForm() {
         return { type: LICK_CANCEL_CREATE_FORM };
     }
-    
+
     function createLick(lick) {
-        return async(dispatch) => {
+        return async dispatch => {
             let tracks;
             try {
                 // Handle all new tracks submitted in form
-                tracks = await Promise.all(lick.tracks.map(track => handleTrack(track)));
+                tracks = await Promise.all(
+                    lick.tracks.map(track => handleTrack(track))
+                );
             } catch (error) {
-                throw new VError(error, 'Unable to create action %s with lick %s', LICK_CREATE, JSON.stringify(lick));
+                throw new VError(
+                    error,
+                    'Unable to create action %s with lick %s',
+                    LICK_CREATE,
+                    JSON.stringify(lick)
+                );
             }
 
             return dispatch({
@@ -35,22 +42,33 @@ export default function getActions(trackStorage) {
     }
 
     function updateLick(lick) {
-        return async(dispatch, getState) => {
+        return async (dispatch, getState) => {
             const storedTracks = getStoredTracks(getState(), lick.id);
             let tracks;
 
             try {
                 // Handle all new tracks submitted in form
-                tracks = await Promise.all(lick.tracks.map(track => handleTrack(track)));
+                tracks = await Promise.all(
+                    lick.tracks.map(track => handleTrack(track))
+                );
             } catch (error) {
-                throw new VError(error, 'Unable to create action %s with lick %s', LICK_UPDATE, JSON.stringify(lick));
+                throw new VError(
+                    error,
+                    'Unable to create action %s with lick %s',
+                    LICK_UPDATE,
+                    JSON.stringify(lick)
+                );
             }
 
             try {
                 // Delete all stored tracks which haven't been submitted
                 const ids = tracks.map(track => track.id);
-                const toBeDeletedTracks = storedTracks.filter(track => !ids.includes(track.id));
-                await Promise.all(toBeDeletedTracks.map(track => deleteTrack(track.id)));
+                const toBeDeletedTracks = storedTracks.filter(
+                    track => !ids.includes(track.id)
+                );
+                await Promise.all(
+                    toBeDeletedTracks.map(track => deleteTrack(track.id))
+                );
             } catch (error) {
                 // If track deletion fails, just log the error and create the action successfully
                 // TODO Log error
@@ -72,9 +90,11 @@ export default function getActions(trackStorage) {
             // Already stored
             return { id: track.id };
         } else {
-            throw new VError('Invalid track %s, should contain id or blob', JSON.stringify(track));
+            throw new VError(
+                'Invalid track %s, should contain id or blob',
+                JSON.stringify(track)
+            );
         }
-
     }
 
     async function deleteTrack(id) {
@@ -82,10 +102,12 @@ export default function getActions(trackStorage) {
     }
 
     function deleteLick(id) {
-        return async(dispatch, getState) => {
+        return async (dispatch, getState) => {
             const storedTracks = getStoredTracks(getState(), id);
             try {
-                await Promise.all(storedTracks.map(track => deleteTrack(track.id)));
+                await Promise.all(
+                    storedTracks.map(track => deleteTrack(track.id))
+                );
             } catch (error) {
                 // If track deletion fails, just log the error and create the action successfully
                 // TODO Log error
@@ -98,12 +120,17 @@ export default function getActions(trackStorage) {
         return { type: LICK_CHANGE_MODE, id, mode };
     }
 
-    return { enableCreateLickForm, cancelCreateLickForm, createLick, updateLick, deleteLick, changeLickMode };
+    return {
+        enableCreateLickForm,
+        cancelCreateLickForm,
+        createLick,
+        updateLick,
+        deleteLick,
+        changeLickMode
+    };
 }
 
 // TODO May write a Redux selector for this http://redux.js.org/docs/recipes/ComputingDerivedData.html
 function getStoredTracks(state, lickId) {
-    return state.lick.items
-        .find(item => item.lick.id === lickId)
-        .lick.tracks;
+    return state.lick.items.find(item => item.lick.id === lickId).lick.tracks;
 }

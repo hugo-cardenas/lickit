@@ -14,28 +14,31 @@ import './style/main.styl';
 
 const storage = pify(jsonStorage);
 
-const ConnectedApp = connect(mapStateToProps, mapDispatchToProps, mergeProps)(App);
+const ConnectedApp = connect(mapStateToProps, mapDispatchToProps, mergeProps)(
+    App
+);
 
-storage.get('state')
-    .then(initialState => {
-        if (isDev()) {
-            initialState = createDummyState(100);
-        }
-        const store = createStore(initialState);
-        // Add exec limit
-        store.subscribe(_.throttle(() => {
+storage.get('state').then(initialState => {
+    if (isDev()) {
+        initialState = createDummyState(100);
+    }
+    const store = createStore(initialState);
+    // Add exec limit
+    store.subscribe(
+        _.throttle(() => {
             storage.set('state', store.getState());
-        }, 200));
+        }, 200)
+    );
 
-        ReactDOM.render(
-            <Provider store={store}>
-        <ConnectedApp/>
-        </Provider>, document.getElementById('root'));
+    ReactDOM.render(
+        <Provider store={store}>
+            <ConnectedApp />
+        </Provider>,
+        document.getElementById('root')
+    );
 
-        // applyDummyColors();
-    });
-
-
+    // applyDummyColors();
+});
 
 function isDev() {
     return process.env.ELECTRON_ENV === 'development';
@@ -43,6 +46,7 @@ function isDev() {
 
 function applyDummyColors() {
     const randomColor = require('randomcolor');
-    Array.from(document.getElementsByTagName('div'))
-        .forEach(el => el.style.backgroundColor = randomColor({ luminosity: 'light' }));
+    Array.from(document.getElementsByTagName('div')).forEach(
+        el => (el.style.backgroundColor = randomColor({ luminosity: 'light' }))
+    );
 }

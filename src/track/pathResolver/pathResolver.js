@@ -13,9 +13,13 @@ export default function createPathResolver(config) {
 function validateConfig(config) {
     const { error } = Joi.validate(config, {
         extension: Joi.string().required(),
-        dir: Joi.string().required(),
+        dir: Joi.string().required()
     });
     if (error) {
-        throw new VError(error, 'Invalid track path resolver config %s', JSON.stringify(config));
+        throw new VError(
+            error,
+            'Invalid track path resolver config %s',
+            JSON.stringify(config)
+        );
     }
 }

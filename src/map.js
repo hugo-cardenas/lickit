@@ -11,7 +11,7 @@ import { addFilter, removeFilter, setInput } from './state/actions/search';
 import { getPathResolver } from './track/pathResolver';
 import { TYPE_ARTIST, TYPE_TAG } from './search/filterTypes';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     const lickProps = mapLickStateToProps(state);
     return {
         error: state.error,
@@ -20,22 +20,23 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapLickStateToProps = (state) => {
+const mapLickStateToProps = state => {
     const stateItems = state.lick.items.map(mapItemToProp);
 
-    const groupedItems = Object.values(groupBy(stateItems, item => item.lick.artist))
-        .map(items => {
-            items.sort((a, b) => a.lick.createdAt - b.lick.createdAt);
-            return items.map((item, index) => {
-                return {
-                    ...item,
-                    lick: {
-                        ...item.lick,
-                        artistIndex: index + 1
-                    }
-                };
-            });
+    const groupedItems = Object.values(
+        groupBy(stateItems, item => item.lick.artist)
+    ).map(items => {
+        items.sort((a, b) => a.lick.createdAt - b.lick.createdAt);
+        return items.map((item, index) => {
+            return {
+                ...item,
+                lick: {
+                    ...item.lick,
+                    artistIndex: index + 1
+                }
+            };
         });
+    });
 
     const items = [].concat(...groupedItems);
     items.sort((a, b) => b.lick.createdAt - a.lick.createdAt);
@@ -44,9 +45,10 @@ const mapLickStateToProps = (state) => {
     const artist = getFilteredArtist(filters);
     const tags = getFilteredTags(filters);
 
-    const filteredItems = items.filter(item =>
-        (!artist || item.lick.artist === artist) &&
-        difference(tags, item.lick.tags).length === 0
+    const filteredItems = items.filter(
+        item =>
+            (!artist || item.lick.artist === artist) &&
+            difference(tags, item.lick.tags).length === 0
     );
 
     return {
@@ -63,7 +65,7 @@ const getFilteredArtist = filters => {
 const getFilteredTags = filters =>
     filters.filter(filter => filter.type === 'Tag').map(filter => filter.value);
 
-const mapItemToProp = (item) => {
+const mapItemToProp = item => {
     const lick = item.lick;
     // TODO Fix in a better way this reference problem - state modified as react state
     const tags = [...lick.tags];
@@ -110,18 +112,21 @@ const getSuggestions = (items, filters) => {
     if (filters.find(filter => filter.type === TYPE_ARTIST)) {
         artists = [];
     } else {
-        artists = uniq(items
-            .map(item => item.lick.artist)
-            .filter(item => item.length > 0));
+        artists = uniq(
+            items.map(item => item.lick.artist).filter(item => item.length > 0)
+        );
     }
 
     // Exclude tag suggestions which are already set in filters
     const isContainedInFilters = tag =>
-        filters.find(filter => filter.type === TYPE_TAG && filter.value === tag) !== undefined;
+        filters.find(
+            filter => filter.type === TYPE_TAG && filter.value === tag
+        ) !== undefined;
 
     const tags = uniq(
-        [].concat(...items.map(item => item.lick.tags))
-        .filter(tag => !isContainedInFilters(tag))
+        []
+            .concat(...items.map(item => item.lick.tags))
+            .filter(tag => !isContainedInFilters(tag))
     );
 
     const compareCaseInsensitive = (a, b) =>
@@ -145,9 +150,9 @@ const getSuggestions = (items, filters) => {
     return suggestions.filter(entry => entry.suggestions.length > 0);
 };
 
-// TODO Change to simple object 
+// TODO Change to simple object
 // https://github.com/reactjs/react-redux/blob/master/docs/api.md#connectmapstatetoprops-mapdispatchtoprops-mergeprops-options
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
     return {
         lick: {
             enableCreateLickForm: () => dispatch(enableCreateLickForm()),
@@ -155,16 +160,17 @@ const mapDispatchToProps = (dispatch) => {
             createLick: lick => dispatch(createLick(lick)),
             saveLick: lick => dispatch(updateLick(lick)),
             deleteLick: id => dispatch(deleteLick(id)),
-            changeLickMode: (id, mode) => dispatch(changeLickMode(id, mode)),
+            changeLickMode: (id, mode) => dispatch(changeLickMode(id, mode))
         },
         search: {
-            addFilter: (filter) => dispatch(addFilter(filter)),
-            removeFilter: (filter) => dispatch(removeFilter(filter)),
-            setInput: (input) => dispatch(setInput(input))
+            addFilter: filter => dispatch(addFilter(filter)),
+            removeFilter: filter => dispatch(removeFilter(filter)),
+            setInput: input => dispatch(setInput(input))
         }
     };
 };
 
-const mergeProps = (stateProps, dispatchProps) => merge(stateProps, dispatchProps);
+const mergeProps = (stateProps, dispatchProps) =>
+    merge(stateProps, dispatchProps);
 
 export { mapStateToProps, mapDispatchToProps, mergeProps };

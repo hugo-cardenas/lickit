@@ -18,8 +18,10 @@ class Lick extends React.Component {
     }
 
     shouldComponentUpdate(nextProps) {
-        return  !_.isEqual(nextProps.lick, this.props.lick) ||
-            !_.isEqual(nextProps.mode, this.props.mode);
+        return (
+            !_.isEqual(nextProps.lick, this.props.lick) ||
+            !_.isEqual(nextProps.mode, this.props.mode)
+        );
     }
 }
 
@@ -29,7 +31,7 @@ function renderView(lick, changeLickMode, deleteLick) {
         editLick: id => changeLickMode(id, LICK_MODE_EDIT),
         deleteLick
     };
-    return <LickView {...props}/>;
+    return <LickView {...props} />;
 }
 
 function renderForm(lick, saveLick, changeLickMode, deleteLick) {
@@ -39,7 +41,7 @@ function renderForm(lick, saveLick, changeLickMode, deleteLick) {
         cancelLickEditor: id => changeLickMode(id, LICK_MODE_VIEW),
         deleteLick
     };
-    return <LickForm {...props}/>;
+    return <LickForm {...props} />;
 }
 
 export default Lick;

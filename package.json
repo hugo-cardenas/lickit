@@ -58,6 +58,7 @@
   },
   "main": "./dist/app",
   "prettier": {
+    "jsxBracketSameLine": true,
     "singleQuote": true,
     "tabWidth": 4
   },

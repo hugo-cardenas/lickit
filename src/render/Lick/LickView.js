@@ -6,7 +6,7 @@ import radium from 'radium';
 
 // const img = require('/Users/hugo/Library/Application Support/Electron/images/piano.jpeg');
 
-const LickView = (props) => {
+const LickView = props => {
     const { lick, editLick, deleteLick } = props;
     const { id, artist, artistIndex, description, tracks, tags } = lick;
 
@@ -15,55 +15,62 @@ const LickView = (props) => {
     // TODO Mandatory track?
     const url = tracks[0] ? tracks[0].url : '';
 
-    return <div className="card lick lick-view">
-        <div className="card-content">
-            {renderMenu(id, editLick, deleteLick)}
-            {renderArtist(artist)}
-            {renderDescription(artistIndex, description)}
-            {renderTrack(url)}
-            {renderTags(tags)}                
+    return (
+        <div className="card lick lick-view">
+            <div className="card-content">
+                {renderMenu(id, editLick, deleteLick)}
+                {renderArtist(artist)}
+                {renderDescription(artistIndex, description)}
+                {renderTrack(url)}
+                {renderTags(tags)}
+            </div>
         </div>
-    </div>;
+    );
 };
 
 const renderMenu = (id, editLick, deleteLick) => {
-    return <div className="dropdown is-right is-hoverable is-pulled-right">
-        <div className="dropdown-trigger">
-            <span className="icon is-small" aria-haspopup="true" aria-controls="dropdown-menu">
-                <i className="fa fa-bars" aria-hidden="true"></i>
-            </span>
-        </div>
-        <div className="dropdown-menu" id="dropdown-menu" role="menu">
-            <div className="dropdown-content">
-                <a className="dropdown-item" onClick={() => editLick(id)}>
-                    <span className="icon is-small">
-                        <i className="fa fa-pencil" aria-hidden="true"></i>
-                    </span>
-                    <span>Edit</span>
-                </a>
-                <a className="dropdown-item" onClick={() => deleteLick(id)}>
-                    <span className="icon is-small">
-                        <i className="fa fa-trash" aria-hidden="true"></i>
-                    </span>
-                    <span>Delete</span>
-                </a>
+    return (
+        <div className="dropdown is-right is-hoverable is-pulled-right">
+            <div className="dropdown-trigger">
+                <span
+                    className="icon is-small"
+                    aria-haspopup="true"
+                    aria-controls="dropdown-menu">
+                    <i className="fa fa-bars" aria-hidden="true" />
+                </span>
+            </div>
+            <div className="dropdown-menu" id="dropdown-menu" role="menu">
+                <div className="dropdown-content">
+                    <a className="dropdown-item" onClick={() => editLick(id)}>
+                        <span className="icon is-small">
+                            <i className="fa fa-pencil" aria-hidden="true" />
+                        </span>
+                        <span>Edit</span>
+                    </a>
+                    <a className="dropdown-item" onClick={() => deleteLick(id)}>
+                        <span className="icon is-small">
+                            <i className="fa fa-trash" aria-hidden="true" />
+                        </span>
+                        <span>Delete</span>
+                    </a>
+                </div>
             </div>
         </div>
-    </div>;
+    );
 };
 
-const renderArtist = artist => 
-    <p className="artist">
-        {artist !== '' ? artist : "Unknown artist"}
-    </p>;
+const renderArtist = artist => (
+    <p className="artist">{artist !== '' ? artist : 'Unknown artist'}</p>
+);
 
-const renderDescription = (artistIndex, song) => 
+const renderDescription = (artistIndex, song) => (
     <div className="song">
-        #{artistIndex} {song !== '' ? `| ${song}` : ''}{/* | <a href="#">Link</a> */}
-    </div>;
+        #{artistIndex} {song !== '' ? `| ${song}` : ''}
+        {/* | <a href="#">Link</a> */}
+    </div>
+);
 
 const renderTrack = url => {
-
     const backgroundImage = `url("file:///Users/hugo/Library/Application Support/Electron/images/piano.jpeg")`;
     const style = {
         backgroundImage: [
@@ -71,7 +78,7 @@ const renderTrack = url => {
                 rgba(222, 222, 222, 0.45), 
                 rgba(222, 222, 222, 0.45)
             )`,
-            backgroundImage,
+            backgroundImage
         ].join(', '),
         // filter: `blur(1px)`,
         // height: '50px',
@@ -82,22 +89,29 @@ const renderTrack = url => {
                     rgba(222, 222, 222, 0.65), 
                     rgba(222, 222, 222, 0.65)
                 )`,
-                backgroundImage,
+                backgroundImage
             ].join(', ')
         }
     };
-    
-    return <div className="track-container">
-        <div className="center">
-            <Player src={url}/>
+
+    return (
+        <div className="track-container">
+            <div className="center">
+                <Player src={url} />
+            </div>
         </div>
-    </div>;
+    );
 };
 
-const renderTags = tags =>
+const renderTags = tags => (
     <div className="tags">
-        {tags.map(tag => <span key={tag} className="tag">{tag}</span>)}
-    </div>;
+        {tags.map(tag => (
+            <span key={tag} className="tag">
+                {tag}
+            </span>
+        ))}
+    </div>
+);
 
 export default radium(LickView);
 

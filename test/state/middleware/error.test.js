@@ -32,7 +32,9 @@ it('catches failed promise and dispatches error action', async () => {
 it('catches thrown error and dispatches error action', () => {
     const dispatch = jest.fn();
     const error = new Error('foobar');
-    const next = jest.fn().mockImplementationOnce(() => { throw error; });
+    const next = jest.fn().mockImplementationOnce(() => {
+        throw error;
+    });
     const action = { type: 'foo' };
 
     errorMiddleware({ dispatch })(next)(action);

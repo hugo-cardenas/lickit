@@ -1,7 +1,7 @@
 import path from 'path';
 import createPathResolver from 'src/track/pathResolver/pathResolver';
 
-it('resolve path', async() => {
+it('resolve path', async () => {
     const config = {
         extension: 'wav',
         dir: '/tmp/foo'
@@ -16,7 +16,7 @@ const invalidConfigs = [
         dir: '/tmp/foo'
     },
     {
-        extension: 'wav',
+        extension: 'wav'
         // dir: '/tmp/foo'
     },
     {
@@ -26,7 +26,7 @@ const invalidConfigs = [
     {
         extension: 'wav',
         dir: []
-    },
+    }
 ];
 
 invalidConfigs.forEach((config, i) => {
@@ -35,8 +35,12 @@ invalidConfigs.forEach((config, i) => {
             createPathResolver(config);
             throw new Error();
         } catch (error) {
-            expect(error.message).toEqual(expect.stringContaining('Invalid track path resolver config'));
-            expect(error.message).toEqual(expect.stringContaining(JSON.stringify(config)));
+            expect(error.message).toEqual(
+                expect.stringContaining('Invalid track path resolver config')
+            );
+            expect(error.message).toEqual(
+                expect.stringContaining(JSON.stringify(config))
+            );
         }
     });
 });

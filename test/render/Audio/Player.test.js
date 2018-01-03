@@ -3,9 +3,9 @@ import { mount } from 'enzyme';
 import path from 'path';
 import Player from 'src/render/Audio/Player';
 
-test('start and stop', async() => {
+test('start and stop', async () => {
     const props = getProps();
-    const component = mount(<Player {...props}/>);
+    const component = mount(<Player {...props} />);
 
     // Idle state show play button
     expect(component.find('.button i').hasClass('fa-play')).toBe(true);

@@ -2,19 +2,20 @@ import { LICK_CREATE, LICK_UPDATE, LICK_DELETE } from 'src/state/actions/types';
 import getActions from 'src/state/actions/lick/lick';
 import { assertErrorContainsString } from '../../helper/assertionHelper';
 
-it('create lick - success', async() => {
+it('create lick - success', async () => {
     const blob1 = new Blob(['foo']);
     const blob2 = new Blob(['bar']);
 
     const lick = {
         tracks: [
             { blob: blob1, url: 'bar10' }, // To be created
-            { blob: blob2, url: 'bar20' }, // To be created
+            { blob: blob2, url: 'bar20' } // To be created
         ]
     };
 
     const storage = {
-        saveBlob: jest.fn()
+        saveBlob: jest
+            .fn()
             .mockReturnValueOnce(Promise.resolve('c100'))
             .mockReturnValueOnce(Promise.resolve('c200'))
     };
@@ -25,10 +26,7 @@ it('create lick - success', async() => {
     await action(dispatch);
 
     const expectedLick = {
-        tracks: [
-            { id: 'c100' },
-            { id: 'c200' }
-        ]
+        tracks: [{ id: 'c100' }, { id: 'c200' }]
     };
 
     expect(storage.saveBlob).toHaveBeenCalledTimes(2);
@@ -42,7 +40,7 @@ it('create lick - success', async() => {
     });
 });
 
-it('create lick - invalid action data', async() => {
+it('create lick - invalid action data', async () => {
     const invalidTrack = { foo: 'bar' }; // Missing id or blob
     const lick = {
         tracks: [invalidTrack]
@@ -60,11 +58,16 @@ it('create lick - invalid action data', async() => {
         assertErrorContainsString(error, 'Unable to create action');
         assertErrorContainsString(error, LICK_CREATE);
         assertErrorContainsString(error, JSON.stringify(lick));
-        assertErrorContainsString(error, `Invalid track ${JSON.stringify(invalidTrack)}, should contain id or blob`);
+        assertErrorContainsString(
+            error,
+            `Invalid track ${JSON.stringify(
+                invalidTrack
+            )}, should contain id or blob`
+        );
     }
 });
 
-it('create lick - async save fails', async() => {
+it('create lick - async save fails', async () => {
     const blob1 = new Blob(['foo']);
     const blob2 = new Blob(['bar']);
 
@@ -72,15 +75,16 @@ it('create lick - async save fails', async() => {
         id: 'c1024',
         tracks: [
             { blob: blob1 }, // To be created, will succeed
-            { blob: blob2 }, // To be created, will fail
+            { blob: blob2 } // To be created, will fail
         ]
     };
 
     const errorMessage = 'Failed to save blob 2';
     const storage = {
-        saveBlob: jest.fn()
+        saveBlob: jest
+            .fn()
             .mockReturnValueOnce(Promise.resolve(100))
-            .mockReturnValueOnce(Promise.reject(new Error(errorMessage))),
+            .mockReturnValueOnce(Promise.reject(new Error(errorMessage)))
     };
     const { createLick } = getActions(storage);
 
@@ -100,7 +104,7 @@ it('create lick - async save fails', async() => {
     }
 });
 
-it('update lick - success', async() => {
+it('update lick - success', async () => {
     const state = createFullState([
         { lick: { id: 'c512' } },
         {
@@ -110,10 +114,10 @@ it('update lick - success', async() => {
                     { id: 'c40', url: 'foo1' }, // To be deleted
                     { id: 'c42', url: 'foo2' },
                     { id: 'c44', url: 'foo3' }, // To be deleted
-                    { id: 'c46', url: 'foo4' },
+                    { id: 'c46', url: 'foo4' }
                 ]
             }
-            },
+        },
         { lick: { id: 'c2048' } }
     ]);
 
@@ -126,15 +130,17 @@ it('update lick - success', async() => {
             { id: 'c42', url: 'foo2' },
             { blob: blob1, url: 'bar10' }, // To be created
             { id: 'c46', url: 'foo4' },
-            { blob: blob2, url: 'bar20' }, // To be created
+            { blob: blob2, url: 'bar20' } // To be created
         ]
     };
 
     const storage = {
-        saveBlob: jest.fn()
+        saveBlob: jest
+            .fn()
             .mockReturnValueOnce(Promise.resolve('c100'))
             .mockReturnValueOnce(Promise.resolve('c200')),
-        deleteTrack: jest.fn()
+        deleteTrack: jest
+            .fn()
             .mockReturnValueOnce(Promise.resolve())
             .mockReturnValueOnce(Promise.resolve())
     };
@@ -147,12 +153,7 @@ it('update lick - success', async() => {
 
     const expectedLick = {
         id: 'c1024',
-        tracks: [
-            { id: 'c42' },
-            { id: 'c100' },
-            { id: 'c46' },
-            { id: 'c200' }
-        ]
+        tracks: [{ id: 'c42' }, { id: 'c100' }, { id: 'c46' }, { id: 'c200' }]
     };
 
     expect(storage.saveBlob).toHaveBeenCalledTimes(2);
@@ -170,7 +171,7 @@ it('update lick - success', async() => {
     });
 });
 
-it('update lick - invalid action data', async() => {
+it('update lick - invalid action data', async () => {
     const state = createFullState([
         {
             lick: {
@@ -198,11 +199,16 @@ it('update lick - invalid action data', async() => {
         assertErrorContainsString(error, 'Unable to create action');
         assertErrorContainsString(error, LICK_UPDATE);
         assertErrorContainsString(error, JSON.stringify(lick));
-        assertErrorContainsString(error, `Invalid track ${JSON.stringify(invalidTrack)}, should contain id or blob`);
+        assertErrorContainsString(
+            error,
+            `Invalid track ${JSON.stringify(
+                invalidTrack
+            )}, should contain id or blob`
+        );
     }
 });
 
-it('update lick - async save fails', async() => {
+it('update lick - async save fails', async () => {
     const state = createFullState([
         { lick: { id: 'c512' } },
         {
@@ -222,15 +228,16 @@ it('update lick - async save fails', async() => {
         tracks: [
             { id: 'c42' },
             { blob: blob1 }, // To be created, will succeed
-            { blob: blob2 }, // To be created, will fail
+            { blob: blob2 } // To be created, will fail
         ]
     };
 
     const errorMessage = 'Failed to save blob 2';
     const storage = {
-        saveBlob: jest.fn()
+        saveBlob: jest
+            .fn()
             .mockReturnValueOnce(Promise.resolve(100))
-            .mockReturnValueOnce(Promise.reject(new Error(errorMessage))),
+            .mockReturnValueOnce(Promise.reject(new Error(errorMessage)))
     };
     const { updateLick } = getActions(storage);
 
@@ -251,7 +258,7 @@ it('update lick - async save fails', async() => {
     }
 });
 
-it('update lick - async delete fails, still creates action', async() => {
+it('update lick - async delete fails, still creates action', async () => {
     const state = createFullState([
         { lick: { id: 'c512' } },
         {
@@ -259,8 +266,8 @@ it('update lick - async delete fails, still creates action', async() => {
                 id: 'c1024',
                 tracks: [
                     { id: 'c40' }, // To be deleted, will succeed
-                    { id: 'c42' } // To be deleted, will fail  
-                    ]
+                    { id: 'c42' } // To be deleted, will fail
+                ]
             }
         },
         { lick: { id: 'c2048' } }
@@ -273,7 +280,8 @@ it('update lick - async delete fails, still creates action', async() => {
 
     const errorMessage = 'Failed to delete track 42';
     const storage = {
-        deleteTrack: jest.fn()
+        deleteTrack: jest
+            .fn()
             .mockReturnValueOnce(Promise.resolve())
             .mockReturnValueOnce(Promise.reject(new Error(errorMessage)))
     };
@@ -300,7 +308,7 @@ it('update lick - async delete fails, still creates action', async() => {
     });
 });
 
-it('delete lick - success', async() => {
+it('delete lick - success', async () => {
     const state = createFullState([
         { lick: { id: 'c512' } },
         {
@@ -309,7 +317,7 @@ it('delete lick - success', async() => {
                 tracks: [
                     { id: 'c40' }, // To be deleted
                     { id: 'c42' } // To be deleted
-                    ]
+                ]
             }
         },
         { lick: { id: 'c2048' } }
@@ -318,7 +326,8 @@ it('delete lick - success', async() => {
     const lickId = 'c1024';
 
     const storage = {
-        deleteTrack: jest.fn()
+        deleteTrack: jest
+            .fn()
             .mockReturnValueOnce(Promise.resolve())
             .mockReturnValueOnce(Promise.resolve())
     };
@@ -340,7 +349,7 @@ it('delete lick - success', async() => {
     });
 });
 
-it('delete lick - async delete fails, still creates action', async() => {
+it('delete lick - async delete fails, still creates action', async () => {
     const state = createFullState([
         { lick: { id: 'c512' } },
         {
@@ -349,7 +358,7 @@ it('delete lick - async delete fails, still creates action', async() => {
                 tracks: [
                     { id: 'c40' }, // To be deleted, will succeed
                     { id: 'c42' } // To be deleted, will fail
-                    ]
+                ]
             }
         },
         { lick: { id: 'c2048' } }
@@ -359,7 +368,8 @@ it('delete lick - async delete fails, still creates action', async() => {
 
     const errorMessage = 'Failed to delete track 42';
     const storage = {
-        deleteTrack: jest.fn()
+        deleteTrack: jest
+            .fn()
             .mockReturnValueOnce(Promise.resolve())
             .mockReturnValueOnce(Promise.reject(new Error(errorMessage)))
     };
@@ -381,7 +391,7 @@ it('delete lick - async delete fails, still creates action', async() => {
     });
 });
 
-const createFullState = (items) => {
+const createFullState = items => {
     return Object.freeze({
         lick: {
             items

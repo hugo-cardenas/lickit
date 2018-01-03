@@ -7,11 +7,12 @@ import {
     LICK_DELETE,
     LICK_CHANGE_MODE
 } from 'src/state/actions/types';
+import { LICK_MODE_EDIT, LICK_MODE_VIEW } from 'src/state/actions/lick/modes';
 import {
-    LICK_MODE_EDIT,
-    LICK_MODE_VIEW
-} from 'src/state/actions/lick/modes';
-import { enableCreateLickForm, cancelCreateLickForm, changeLickMode } from 'src/state/actions/lick';
+    enableCreateLickForm,
+    cancelCreateLickForm,
+    changeLickMode
+} from 'src/state/actions/lick';
 
 jest.mock('electron', () => {
     return {
@@ -22,14 +23,18 @@ jest.mock('electron', () => {
 it('define default state', () => {
     const expectedState = createState([]);
 
-    expect(lickReducer(undefined, { type: 'invalid action' })).toEqual(expectedState);
+    expect(lickReducer(undefined, { type: 'invalid action' })).toEqual(
+        expectedState
+    );
 });
 
 it('reduce unknown action', () => {
     const state = createState([]);
     const expectedState = createState([]);
 
-    expect(lickReducer(state, { type: 'invalid action' })).toEqual(expectedState);
+    expect(lickReducer(state, { type: 'invalid action' })).toEqual(
+        expectedState
+    );
 });
 
 it('enable create form', () => {
@@ -96,10 +101,16 @@ validLicks.forEach((lick, i) => {
     it('create lick, success #' + i, () => {
         const initialTimestamp = Date.now();
 
-        const state = { isCreateFormEnabled: true, items: [{ lick: { id: 'c10' } }] };
+        const state = {
+            isCreateFormEnabled: true,
+            items: [{ lick: { id: 'c10' } }]
+        };
         const newLick = { ...lick };
         delete newLick.id;
-        const newState = lickReducer(state, { type: LICK_CREATE, lick: newLick });
+        const newState = lickReducer(state, {
+            type: LICK_CREATE,
+            lick: newLick
+        });
 
         const { isCreateFormEnabled, items } = newState;
 
@@ -116,7 +127,9 @@ validLicks.forEach((lick, i) => {
         expect(items[0].lick.description).toBe(lick.description);
         expect(items[0].lick.tracks).toEqual(lick.tracks);
         expect(items[0].lick.tags).toEqual(lick.tags);
-        expect(items[0].lick.createdAt).toBeGreaterThanOrEqual(initialTimestamp);
+        expect(items[0].lick.createdAt).toBeGreaterThanOrEqual(
+            initialTimestamp
+        );
         expect(items[0].lick.createdAt).toBeLessThan(Date.now() + 1);
         expect(items[0].lick.foo).toBe(undefined);
 
@@ -146,7 +159,13 @@ validLicks.forEach((lick, i) => {
             { lick: { id: 'c10' } },
             {
                 lick: {
-                    ..._.pick(lick, ['id', 'artist', 'description', 'tracks', 'tags']),
+                    ..._.pick(lick, [
+                        'id',
+                        'artist',
+                        'description',
+                        'tracks',
+                        'tags'
+                    ]),
                     createdAt: 12500
                 },
                 mode: 'view'
@@ -154,7 +173,9 @@ validLicks.forEach((lick, i) => {
             { lick: { id: 'c30' } }
         ]);
 
-        expect(lickReducer(state, { type: LICK_UPDATE, lick })).toEqual(expectedState);
+        expect(lickReducer(state, { type: LICK_UPDATE, lick })).toEqual(
+            expectedState
+        );
     });
 });
 
@@ -167,7 +188,7 @@ const validLick = {
 };
 
 const invalidLicks = [
-    // Missing fields    
+    // Missing fields
     [_.pick(validLick, ['id', 'description', 'tracks', 'tags']), ['artist']],
     [_.pick(validLick, ['id', 'artist', 'tracks', 'tags']), ['description']],
     [_.pick(validLick, ['id', 'artist', 'description', 'tags']), ['tracks']],
@@ -180,8 +201,16 @@ const invalidLicks = [
     [Object.assign({}, validLick, { description: 42 }), ['description']],
 
     [Object.assign({}, validLick, { tracks: 42 }), ['tracks']],
-    [Object.assign({}, validLick, { tracks: [{ id: 'abc200' }, 999] }), ['tracks']],
-    [Object.assign({}, validLick, { tracks: [{ id: 'abc200' }, { id: true }] }), ['tracks']],
+    [
+        Object.assign({}, validLick, { tracks: [{ id: 'abc200' }, 999] }),
+        ['tracks']
+    ],
+    [
+        Object.assign({}, validLick, {
+            tracks: [{ id: 'abc200' }, { id: true }]
+        }),
+        ['tracks']
+    ],
 
     [Object.assign({}, validLick, { tags: 42 }), ['tags']],
     [Object.assign({}, validLick, { tags: ['foo', 42] }), ['tags']]
@@ -216,7 +245,7 @@ const invalidLicksToUpdate = [
 
     // Invalid values
     [Object.assign({}, validLick, { id: true }), ['id']],
-    [Object.assign({}, validLick, { id: -1 }), ['id']],
+    [Object.assign({}, validLick, { id: -1 }), ['id']]
 ];
 
 invalidLicksToUpdate.forEach((entry, i) => {
@@ -277,7 +306,9 @@ it('delete lick, success', () => {
         { lick: { id: 'c30' } }
     ]);
 
-    expect(lickReducer(state, { type: LICK_DELETE, id: 'c20' })).toEqual(expectedState);
+    expect(lickReducer(state, { type: LICK_DELETE, id: 'c20' })).toEqual(
+        expectedState
+    );
 });
 
 it('delete lick, id not found', () => {
@@ -325,7 +356,10 @@ it('change lick mode, invalid mode', () => {
         lickReducer(state, changeLickMode('c10', mode));
         throw new Error();
     } catch (error) {
-        assertErrorContainsString(error, 'Unable to reduce ' + LICK_CHANGE_MODE);
+        assertErrorContainsString(
+            error,
+            'Unable to reduce ' + LICK_CHANGE_MODE
+        );
         assertErrorContainsString(error, 'Invalid mode');
         assertErrorContainsString(error, mode);
         assertErrorContainsString(error, validModes.join(', '));
@@ -341,12 +375,15 @@ it('change lick mode, id not found', () => {
         lickReducer(state, changeLickMode('c15', LICK_MODE_EDIT));
         throw new Error();
     } catch (error) {
-        assertErrorContainsString(error, 'Unable to reduce ' + LICK_CHANGE_MODE);
+        assertErrorContainsString(
+            error,
+            'Unable to reduce ' + LICK_CHANGE_MODE
+        );
         assertErrorContainsString(error, 'Id c15 not found');
     }
 });
 
-const createState = (items) => {
+const createState = items => {
     return Object.freeze({
         isCreateFormEnabled: false,
         items

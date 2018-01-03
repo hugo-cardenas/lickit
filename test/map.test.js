@@ -1,5 +1,10 @@
 import { mapStateToProps, mapDispatchToProps, mergeProps } from 'src/map';
-import { createLick, updateLick, deleteLick, changeLickMode } from 'src/state/actions/lick';
+import {
+    createLick,
+    updateLick,
+    deleteLick,
+    changeLickMode
+} from 'src/state/actions/lick';
 import { addFilter, removeFilter, setInput } from 'src/state/actions/search';
 import { TYPE_ARTIST, TYPE_TAG } from 'src/search/filterTypes';
 
@@ -117,11 +122,36 @@ it('map state to props, map items, set artist indexes and sort by createdAt', ()
 });
 
 const itemsToBeFiltered = [
-    createItem({ id: 'c42', artist: 'Charlie Foo', description: 'Foo bar 42', tags: ['foo', 'bar'] }),
-    createItem({ id: 'c44', artist: 'Charlie Foo', description: 'Foo bar 42', tags: ['baz', 'foobar'] }),
-    createItem({ id: 'c46', artist: 'Django Bar', description: 'Foo bar 42', tags: ['foo'] }),
-    createItem({ id: 'c48', artist: 'Django Bar', description: 'Foo bar 42', tags: ['bar'] }),
-    createItem({ id: 'c50', artist: 'Stephane Baz', description: 'Foo bar 42', tags: ['foobar', 'foo', 'bar'] }),
+    createItem({
+        id: 'c42',
+        artist: 'Charlie Foo',
+        description: 'Foo bar 42',
+        tags: ['foo', 'bar']
+    }),
+    createItem({
+        id: 'c44',
+        artist: 'Charlie Foo',
+        description: 'Foo bar 42',
+        tags: ['baz', 'foobar']
+    }),
+    createItem({
+        id: 'c46',
+        artist: 'Django Bar',
+        description: 'Foo bar 42',
+        tags: ['foo']
+    }),
+    createItem({
+        id: 'c48',
+        artist: 'Django Bar',
+        description: 'Foo bar 42',
+        tags: ['bar']
+    }),
+    createItem({
+        id: 'c50',
+        artist: 'Stephane Baz',
+        description: 'Foo bar 42',
+        tags: ['foobar', 'foo', 'bar']
+    })
 ];
 
 const expectedFilteredIds = [
@@ -132,16 +162,12 @@ const expectedFilteredIds = [
     },
     // Filter by artist
     {
-        filters: [
-            { type: TYPE_ARTIST, value: 'Charlie Foo' }
-        ],
+        filters: [{ type: TYPE_ARTIST, value: 'Charlie Foo' }],
         expectedIds: ['c42', 'c44']
     },
     // Filter by tag
     {
-        filters: [
-            { type: TYPE_TAG, value: 'foo' }
-        ],
+        filters: [{ type: TYPE_TAG, value: 'foo' }],
         expectedIds: ['c42', 'c46', 'c50']
     },
     // Filter by multiple tags
@@ -171,11 +197,9 @@ const expectedFilteredIds = [
     },
     // Filter not matching anything
     {
-        filters: [
-            { type: TYPE_ARTIST, value: 'Non matching filter' }
-        ],
+        filters: [{ type: TYPE_ARTIST, value: 'Non matching filter' }],
         expectedIds: []
-    },
+    }
 ];
 
 expectedFilteredIds.forEach((entry, i) => {
@@ -197,14 +221,11 @@ const stateWithSearch = createState({
             createItem({ artist: 'Django Bar', tags: ['Baz'] }),
             createItem({ artist: 'charlie Foo', tags: ['foo', 'bar'] }),
             createItem({ artist: 'Django Bar', tags: ['foo', 'foobar'] }),
-            createItem({ artist: '', tags: [] }), // Empty artist should not appear as a suggestion
+            createItem({ artist: '', tags: [] }) // Empty artist should not appear as a suggestion
         ]
     },
     search: {
-        filters: [
-            { type: 'foo', value: 123 },
-            { type: 'bar', value: 456 }
-        ]
+        filters: [{ type: 'foo', value: 123 }, { type: 'bar', value: 456 }]
     }
 });
 
@@ -227,23 +248,29 @@ const expectedSuggestions = [
     // Artist filter should prevent any other artist suggestion
     // Also, if a filter is applied, exclude suggestions not found in the shown licks
     {
-        filters: [{
-            type: TYPE_ARTIST,
-            value: 'Django Bar'
-        }],
+        filters: [
+            {
+                type: TYPE_ARTIST,
+                value: 'Django Bar'
+            }
+        ],
         input: '',
-        suggestions: [{
-            title: TYPE_TAG,
-            suggestions: ['Baz', 'foo', 'foobar']
-        }]
+        suggestions: [
+            {
+                title: TYPE_TAG,
+                suggestions: ['Baz', 'foo', 'foobar']
+            }
+        ]
     },
     // Tag filter should prevent the same tag suggestion
     // Also, if a filter is applied, exclude suggestions not found in the shown licks
     {
-        filters: [{
-            type: TYPE_TAG,
-            value: 'foo'
-        }],
+        filters: [
+            {
+                type: TYPE_TAG,
+                value: 'foo'
+            }
+        ],
         input: '',
         suggestions: [
             {
@@ -274,42 +301,48 @@ expectedSuggestions.forEach((entry, i) => {
     });
 });
 
-it('map dispatch to props - create lick', async() => {
+it('map dispatch to props - create lick', async () => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
     const lick = { foo: 'bar' };
-    await (props.lick.createLick(lick));
+    await props.lick.createLick(lick);
 
     expect(dispatch).toHaveBeenCalledTimes(1);
     // Tricky thing - as updateLick returns a thunk, we just compare the functions returned
-    expect(dispatch.mock.calls[0][0].toString()).toEqual(createLick(dispatch).toString());
+    expect(dispatch.mock.calls[0][0].toString()).toEqual(
+        createLick(dispatch).toString()
+    );
 });
 
-it('map dispatch to props - update lick', async() => {
+it('map dispatch to props - update lick', async () => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
     const lick = { foo: 'bar' };
-    await (props.lick.saveLick(lick));
+    await props.lick.saveLick(lick);
 
     expect(dispatch).toHaveBeenCalledTimes(1);
     // Tricky thing - as updateLick returns a thunk, we just compare the functions returned
-    expect(dispatch.mock.calls[0][0].toString()).toEqual(updateLick(dispatch).toString());
+    expect(dispatch.mock.calls[0][0].toString()).toEqual(
+        updateLick(dispatch).toString()
+    );
 });
 
-it('map dispatch to props - delete lick', async() => {
+it('map dispatch to props - delete lick', async () => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
-    await (props.lick.deleteLick('a42'));
+    await props.lick.deleteLick('a42');
 
     expect(dispatch).toHaveBeenCalledTimes(1);
     // Tricky thing - as updateLick returns a thunk, we just compare the functions returned
-    expect(dispatch.mock.calls[0][0].toString()).toEqual(deleteLick(dispatch).toString());
+    expect(dispatch.mock.calls[0][0].toString()).toEqual(
+        deleteLick(dispatch).toString()
+    );
 });
 
-it('map dispatch to props - change lick mode', async() => {
+it('map dispatch to props - change lick mode', async () => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
@@ -318,7 +351,7 @@ it('map dispatch to props - change lick mode', async() => {
     expect(dispatch).toHaveBeenCalledWith(changeLickMode('a42', 'modeFoo'));
 });
 
-it('map dispatch to props - add filter', async() => {
+it('map dispatch to props - add filter', async () => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
@@ -327,7 +360,7 @@ it('map dispatch to props - add filter', async() => {
     expect(dispatch).toHaveBeenCalledWith(addFilter({ foo: 'bar' }));
 });
 
-it('map dispatch to props - remove filter', async() => {
+it('map dispatch to props - remove filter', async () => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
@@ -336,7 +369,7 @@ it('map dispatch to props - remove filter', async() => {
     expect(dispatch).toHaveBeenCalledWith(removeFilter({ foo: 'bar' }));
 });
 
-it('map dispatch to props - set input', async() => {
+it('map dispatch to props - set input', async () => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 

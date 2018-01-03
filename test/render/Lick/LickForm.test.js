@@ -3,7 +3,7 @@ import { mount, shallow } from 'enzyme';
 import LickForm from 'src/render/Lick/LickForm';
 
 test('render artist', () => {
-    const component = shallow(<LickForm {...getTestProps()}/>);
+    const component = shallow(<LickForm {...getTestProps()} />);
     const artist = component.find('.artist');
     expect(artist.type()).toBe('input');
     expect(artist.prop('name')).toBe('artist');
@@ -11,7 +11,7 @@ test('render artist', () => {
 });
 
 test('input artist', () => {
-    const component = shallow(<LickForm {...getTestProps()}/>);
+    const component = shallow(<LickForm {...getTestProps()} />);
     const artist = component.find('.artist');
 
     artist.simulate('change', {
@@ -32,7 +32,7 @@ test('input artist', () => {
 });
 
 test('render song', () => {
-    const component = shallow(<LickForm {...getTestProps()}/>);
+    const component = shallow(<LickForm {...getTestProps()} />);
     const song = component.find('.song');
     expect(song.type()).toBe('input');
     expect(song.prop('name')).toBe('song');
@@ -40,7 +40,7 @@ test('render song', () => {
 });
 
 test('input song', () => {
-    const component = shallow(<LickForm {...getTestProps()}/>);
+    const component = shallow(<LickForm {...getTestProps()} />);
     const song = component.find('.song');
 
     song.simulate('change', {
@@ -62,17 +62,15 @@ test('input song', () => {
 
 test('render track', () => {
     const props = getTestProps();
-    const component = shallow(<LickForm {...props}/>);
+    const component = shallow(<LickForm {...props} />);
     const player = component.find('Player');
     expect(player.prop('src')).toEqual(props.lick.tracks[0].url);
 });
 
 test('delete track', () => {
     let props = getTestProps();
-    props.lick.tracks = [
-        { id: 'a10', url: 'foo.abc' }
-    ];
-    const component = shallow(<LickForm {...props}/>);
+    props.lick.tracks = [{ id: 'a10', url: 'foo.abc' }];
+    const component = shallow(<LickForm {...props} />);
 
     component.find('.track-delete').simulate('click');
 
@@ -81,8 +79,10 @@ test('delete track', () => {
 });
 
 test.skip('record track', () => {
-    const component = shallow(<LickForm {...getTestProps()}/>);
-    const handleRecordTrack = component.find('Recorder').prop('handleRecordTrack');
+    const component = shallow(<LickForm {...getTestProps()} />);
+    const handleRecordTrack = component
+        .find('Recorder')
+        .prop('handleRecordTrack');
 
     // TODO Find a way of having URL and web Audio API work on enzyme
     //handleRecordTrack(new Blob(['foo']));
@@ -96,7 +96,7 @@ test('render tags', () => {
     props.lick.tags = ['bar', 'foo', 'baz'];
     const expectedTags = ['bar', 'foo', 'baz']; // Prop tags are expected to be already sorted
 
-    const component = shallow(<LickForm {...props}/>);
+    const component = shallow(<LickForm {...props} />);
     const tagsParent = component.find('.tags');
     expect(tagsParent.type()).toBe('div');
 
@@ -116,7 +116,7 @@ test('render tags', () => {
 
 test('delete tag', () => {
     let expectedTags = ['bar', 'baz', 'foo'];
-    const component = shallow(<LickForm {...getTestProps()}/>);
+    const component = shallow(<LickForm {...getTestProps()} />);
 
     const tagElements = component.find('.tag');
     tagElements.forEach(tagElement => {
@@ -133,7 +133,7 @@ test('delete tag', () => {
 });
 
 test('input new tag', () => {
-    const component = shallow(<LickForm {...getTestProps()}/>);
+    const component = shallow(<LickForm {...getTestProps()} />);
     const tagInput = component.find('.tag-container input');
 
     // When typing, the value is kept in the field
@@ -156,12 +156,12 @@ test('input new tag', () => {
 
     const tags = getTags(component);
     // Expected tags sorted alphabetically
-    expect(tags).toEqual(['bar', 'baz', 'faa', 'foo']); 
+    expect(tags).toEqual(['bar', 'baz', 'faa', 'foo']);
     expect(getTagInputValue(component)).toBe('');
 });
 
 test('input duplicate tag', () => {
-    const component = shallow(<LickForm {...getTestProps()}/>);
+    const component = shallow(<LickForm {...getTestProps()} />);
     const tagInput = component.find('.tag-container input');
 
     // When typing, the value is kept in the field
@@ -200,7 +200,7 @@ test('save lick', () => {
         tags: props.lick.tags
     };
 
-    const component = shallow(<LickForm {...props}/>);
+    const component = shallow(<LickForm {...props} />);
     component.find('.lick-save').simulate('click');
 
     expect(props.saveLick).toHaveBeenCalledTimes(1);
@@ -212,18 +212,23 @@ test('save lick, validation fails', () => {
     props.lick.tracks = [];
     props.saveLick = jest.fn();
 
-    const component = shallow(<LickForm {...props}/>);
+    const component = shallow(<LickForm {...props} />);
     component.find('.lick-save').simulate('click');
 
     expect(props.saveLick).toHaveBeenCalledTimes(0);
-    expect(component.find('.field-track .error-message').text().includes('audio track is required')).toBe(true);
+    expect(
+        component
+            .find('.field-track .error-message')
+            .text()
+            .includes('audio track is required')
+    ).toBe(true);
 });
 
 test('cancel lick editor', () => {
     let props = getTestProps();
     props.cancelLickEditor = jest.fn();
 
-    const component = shallow(<LickForm {...props}/>);
+    const component = shallow(<LickForm {...props} />);
     component.find('.lick-cancel').simulate('click');
 
     expect(props.cancelLickEditor).toHaveBeenCalledTimes(1);
@@ -231,15 +236,11 @@ test('cancel lick editor', () => {
 });
 
 function getTags(component) {
-    return component
-        .find('.tag')
-        .map(element => element.text());
+    return component.find('.tag').map(element => element.text());
 }
 
 function getTagInputValue(component) {
-    return component
-        .find('.tag-container input')
-        .prop('value');
+    return component.find('.tag-container input').prop('value');
 }
 
 function getTestProps() {
@@ -249,11 +250,10 @@ function getTestProps() {
             artist: 'Charlie Foo',
             description: 'Foobar baz',
             tracks: [
-                { id: 'abc10', url: 'foo.baz' }, { id: 'abc20', url: 'bar.baz' }
+                { id: 'abc10', url: 'foo.baz' },
+                { id: 'abc20', url: 'bar.baz' }
             ],
-            tags: [
-              'foo', 'bar', 'baz'
-            ]
+            tags: ['foo', 'bar', 'baz']
         },
         saveLick: () => {},
         cancelLickEditor: () => {},

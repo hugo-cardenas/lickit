@@ -25,28 +25,32 @@ const theme = {
 const getSuggestions = (suggestions, value) => {
     const inputValue = value.trim().toLowerCase();
 
-    return suggestions
-        // Return suggestions matching the input and not contained in filters
-        .map(section => {
-            return {
-                title: section.title,
-                suggestions: section.suggestions.filter(suggestion =>
-                    suggestion.toLowerCase().includes(inputValue)
-                )
-            };
-        })
-        // Filter out sections with 0 suggestions
-        .filter(section => section.suggestions.length > 0);
+    return (
+        suggestions
+            // Return suggestions matching the input and not contained in filters
+            .map(section => {
+                return {
+                    title: section.title,
+                    suggestions: section.suggestions.filter(suggestion =>
+                        suggestion.toLowerCase().includes(inputValue)
+                    )
+                };
+            })
+            // Filter out sections with 0 suggestions
+            .filter(section => section.suggestions.length > 0)
+    );
 };
 
 const disableMainScroll = () => {
-    Array.from(document.getElementsByTagName('html'))
-        .forEach(elem => elem.style.overflow = "hidden");
+    Array.from(document.getElementsByTagName('html')).forEach(
+        elem => (elem.style.overflow = 'hidden')
+    );
 };
 
 const enableMainScroll = () => {
-    Array.from(document.getElementsByTagName('html'))
-        .forEach(elem => elem.style.overflow = "auto");
+    Array.from(document.getElementsByTagName('html')).forEach(
+        elem => (elem.style.overflow = 'auto')
+    );
 };
 
 class Search extends Component {
@@ -80,11 +84,7 @@ class Search extends Component {
     }
 
     render() {
-        const {
-            filters,
-            input,
-            setInput
-        } = this.props;
+        const { filters, input, setInput } = this.props;
 
         const showableSuggestions = this.state.showableSuggestions;
 
@@ -97,13 +97,14 @@ class Search extends Component {
         };
 
         // Need to override the default render in order to add the mouse events
-        const renderSuggestionsContainer = ({ containerProps, children }) =>
-            <div 
-                {...containerProps} 
-                onMouseEnter={disableMainScroll} 
+        const renderSuggestionsContainer = ({ containerProps, children }) => (
+            <div
+                {...containerProps}
+                onMouseEnter={disableMainScroll}
                 onMouseLeave={enableMainScroll}>
-                    {children}
-            </div>;
+                {children}
+            </div>
+        );
 
         const autoSuggestProps = {
             // alwaysRenderSuggestions: true,
@@ -113,8 +114,12 @@ class Search extends Component {
             inputProps,
             multiSection: true,
             onSuggestionSelected: this.onSuggestionSelected.bind(this),
-            onSuggestionsClearRequested: this.onSuggestionsClearRequested.bind(this),
-            onSuggestionsFetchRequested: this.onSuggestionsFetchRequested.bind(this),
+            onSuggestionsClearRequested: this.onSuggestionsClearRequested.bind(
+                this
+            ),
+            onSuggestionsFetchRequested: this.onSuggestionsFetchRequested.bind(
+                this
+            ),
             renderSectionTitle,
             renderSuggestion,
             renderSuggestionsContainer,
@@ -123,27 +128,36 @@ class Search extends Component {
             theme
         };
 
-        return <div id="search-container">
-            <Autosuggest {...autoSuggestProps}/>
-            {this.renderFilters(filters)}
-        </div>;
+        return (
+            <div id="search-container">
+                <Autosuggest {...autoSuggestProps} />
+                {this.renderFilters(filters)}
+            </div>
+        );
     }
 
     renderFilters(filters) {
-        return <div className="lick-filters level is-pulled-left">
-            <div className="level-left">
-                {filters.map(filter => this.renderFilter(filter))}
+        return (
+            <div className="lick-filters level is-pulled-left">
+                <div className="level-left">
+                    {filters.map(filter => this.renderFilter(filter))}
+                </div>
             </div>
-        </div>;
+        );
     }
 
     renderFilter(filter) {
-        return <div key={filter.type + filter.value} className="level-item">
-            <div className="tags has-addons">
-                <span className="tag">{filter.value}</span>
-                <a className="tag is-delete" onClick={() => this.removeFilter(filter)}></a>
+        return (
+            <div key={filter.type + filter.value} className="level-item">
+                <div className="tags has-addons">
+                    <span className="tag">{filter.value}</span>
+                    <a
+                        className="tag is-delete"
+                        onClick={() => this.removeFilter(filter)}
+                    />
+                </div>
             </div>
-        </div>;
+        );
     }
 }
 
@@ -153,17 +167,17 @@ Search.propTypes = {
     filters: PropTypes.arrayOf(
         PropTypes.shape({
             type: PropTypes.oneOf([TYPE_ARTIST, TYPE_TAG]).isRequired,
-            value: PropTypes.string.isRequired,
+            value: PropTypes.string.isRequired
         })
     ).isRequired,
     input: PropTypes.string.isRequired,
     suggestions: PropTypes.arrayOf(
         PropTypes.shape({
             title: PropTypes.oneOf([TYPE_ARTIST, TYPE_TAG]).isRequired,
-            suggestions: PropTypes.arrayOf(PropTypes.string).isRequired,
+            suggestions: PropTypes.arrayOf(PropTypes.string).isRequired
         })
     ).isRequired,
     addFilter: PropTypes.func.isRequired,
     removeFilter: PropTypes.func.isRequired,
-    setInput: PropTypes.func.isRequired,
+    setInput: PropTypes.func.isRequired
 };

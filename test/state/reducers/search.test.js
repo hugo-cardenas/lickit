@@ -1,6 +1,10 @@
 import searchReducer from 'src/state/reducers/search';
 import { addFilter, removeFilter, setInput } from 'src/state/actions/search';
-import { SEARCH_ADD_FILTER, SEARCH_REMOVE_FILTER, SEARCH_SET_INPUT } from 'src/state/actions/types';
+import {
+    SEARCH_ADD_FILTER,
+    SEARCH_REMOVE_FILTER,
+    SEARCH_SET_INPUT
+} from 'src/state/actions/types';
 import { TYPE_ARTIST, TYPE_TAG } from 'src/search/filterTypes';
 import { assertErrorContainsString } from '../../helper/assertionHelper';
 
@@ -82,7 +86,10 @@ invalidFilters.forEach((filter, i) => {
             searchReducer(state, addFilter(filter));
             throw new Error();
         } catch (error) {
-            assertErrorContainsString(error, 'Unable to reduce ' + SEARCH_ADD_FILTER);
+            assertErrorContainsString(
+                error,
+                'Unable to reduce ' + SEARCH_ADD_FILTER
+            );
             assertErrorContainsString(error, JSON.stringify(filter));
             assertErrorContainsString(error, 'Invalid filter');
         }
@@ -94,10 +101,11 @@ it('remove filter', () => {
         { type: TYPE_ARTIST, value: 'foo' },
         { type: TYPE_TAG, value: 'bar' }
     ]);
-    const newState = searchReducer(state, removeFilter({ type: TYPE_ARTIST, value: 'foo' }));
-    const expectedState = createState([
-        { type: TYPE_TAG, value: 'bar' }
-    ]);
+    const newState = searchReducer(
+        state,
+        removeFilter({ type: TYPE_ARTIST, value: 'foo' })
+    );
+    const expectedState = createState([{ type: TYPE_TAG, value: 'bar' }]);
 
     expect(newState).toEqual(expectedState);
 });
@@ -107,7 +115,10 @@ it('remove filter, not found', () => {
         { type: TYPE_ARTIST, value: 'foo' },
         { type: TYPE_TAG, value: 'bar' }
     ]);
-    const newState = searchReducer(state, removeFilter({ type: TYPE_ARTIST, value: 'baz' }));
+    const newState = searchReducer(
+        state,
+        removeFilter({ type: TYPE_ARTIST, value: 'baz' })
+    );
     const expectedState = createState([
         { type: TYPE_ARTIST, value: 'foo' },
         { type: TYPE_TAG, value: 'bar' }
@@ -118,7 +129,10 @@ it('remove filter, not found', () => {
 
 it('remove filter, empty filter collection', () => {
     const state = createState([]);
-    const newState = searchReducer(state, removeFilter({ type: TYPE_ARTIST, value: 'baz' }));
+    const newState = searchReducer(
+        state,
+        removeFilter({ type: TYPE_ARTIST, value: 'baz' })
+    );
     const expectedState = createState([]);
 
     expect(newState).toEqual(expectedState);
@@ -135,7 +149,10 @@ invalidFilters.forEach((filter, i) => {
             searchReducer(state, removeFilter(filter));
             throw new Error();
         } catch (error) {
-            assertErrorContainsString(error, 'Unable to reduce ' + SEARCH_REMOVE_FILTER);
+            assertErrorContainsString(
+                error,
+                'Unable to reduce ' + SEARCH_REMOVE_FILTER
+            );
             assertErrorContainsString(error, JSON.stringify(filter));
             assertErrorContainsString(error, 'Invalid filter');
         }
@@ -144,37 +161,30 @@ invalidFilters.forEach((filter, i) => {
 
 it('set input', () => {
     const state = createState([{ type: TYPE_ARTIST, value: 'foo' }], '');
-    
-    expect(
-        searchReducer(state, setInput('foobar'))
-    ).toEqual(
+
+    expect(searchReducer(state, setInput('foobar'))).toEqual(
         createState([{ type: TYPE_ARTIST, value: 'foo' }], 'foobar')
     );
 
-    expect(
-        searchReducer(state, setInput(''))
-    ).toEqual(
+    expect(searchReducer(state, setInput(''))).toEqual(
         createState([{ type: TYPE_ARTIST, value: 'foo' }], '')
     );
 });
 
-const invalidInputs = [
-    null,
-    50,
-    false,
-    {},
-    []
-];
+const invalidInputs = [null, 50, false, {}, []];
 
 invalidInputs.forEach((input, i) => {
     it('set input, invalid value #' + i, () => {
         const state = createState([{ type: TYPE_ARTIST, value: 'foo' }], '');
-        
+
         try {
             searchReducer(state, setInput(input));
             throw new Error();
         } catch (error) {
-            assertErrorContainsString(error, 'Unable to reduce ' + SEARCH_SET_INPUT);
+            assertErrorContainsString(
+                error,
+                'Unable to reduce ' + SEARCH_SET_INPUT
+            );
             assertErrorContainsString(error, JSON.stringify(input));
             assertErrorContainsString(error, 'Invalid input');
         }

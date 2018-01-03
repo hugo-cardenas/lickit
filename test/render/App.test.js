@@ -40,8 +40,10 @@ it('render without crashing', () => {
 
     ReactDOM.render(
         <Provider store={store}>
-      <App {...getProps()}/>
-  </Provider>, div);
+            <App {...getProps()} />
+        </Provider>,
+        div
+    );
 });
 
 it('render expected number of licks', () => {
@@ -58,7 +60,7 @@ it('render expected number of licks', () => {
         };
     });
 
-    const component = shallow(<App {...props}/>);
+    const component = shallow(<App {...props} />);
     expect(component.find('Lick')).toHaveLength(7);
 });
 
@@ -66,7 +68,7 @@ it('create new lick', () => {
     const props = getProps();
     props.lick.enableCreateLickForm = jest.fn();
 
-    const component = shallow(<App {...props}/>);
+    const component = shallow(<App {...props} />);
     component.find('#button-lick-create').simulate('click');
 
     expect(props.lick.enableCreateLickForm).toHaveBeenCalledTimes(1);
@@ -77,18 +79,22 @@ it('render search', () => {
     const props = getProps();
     props.createLick = jest.fn();
 
-    const component = shallow(<App {...props}/>);
+    const component = shallow(<App {...props} />);
     const searchComponent = component.find('Search');
 
-    expect(searchComponent.prop('filters')).toEqual([{
-        type: TYPE_ARTIST,
-        value: 'baz'
-    }]);
+    expect(searchComponent.prop('filters')).toEqual([
+        {
+            type: TYPE_ARTIST,
+            value: 'baz'
+        }
+    ]);
     expect(searchComponent.prop('input')).toEqual('foobar');
-    expect(searchComponent.prop('suggestions')).toEqual([{
-        title: TYPE_ARTIST,
-        suggestions: ['foo', 'bar']
-    }]);
+    expect(searchComponent.prop('suggestions')).toEqual([
+        {
+            title: TYPE_ARTIST,
+            suggestions: ['foo', 'bar']
+        }
+    ]);
 });
 
 const getProps = () => {
@@ -104,18 +110,22 @@ const getProps = () => {
             changeLickMode: () => {}
         },
         search: {
-            filters: [{
-                type: TYPE_ARTIST,
-                value: 'baz'
-            }],
+            filters: [
+                {
+                    type: TYPE_ARTIST,
+                    value: 'baz'
+                }
+            ],
             input: 'foobar',
-            suggestions: [{
-                title: TYPE_ARTIST,
-                suggestions: ['foo', 'bar']
-            }],
+            suggestions: [
+                {
+                    title: TYPE_ARTIST,
+                    suggestions: ['foo', 'bar']
+                }
+            ],
             addFilter: () => {},
             removeFilter: () => {},
-            setInput: () => {},
+            setInput: () => {}
         }
     };
 };

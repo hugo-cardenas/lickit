@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-const
-    STATUS_STOPPED = 'stopped',
+const STATUS_STOPPED = 'stopped',
     STATUS_PLAYING = 'playing';
 
 class Player extends Component {
@@ -19,16 +18,27 @@ class Player extends Component {
         const { status } = this.state;
 
         const isPlaying = status === STATUS_PLAYING;
-        const buttonStyle = isPlaying ? { visibility: 'visible'} : {};
+        const buttonStyle = isPlaying ? { visibility: 'visible' } : {};
 
-        return <div>
-            <audio src={src} onEnded={this.switchState} ref={audio => this.audio = audio}></audio>
-            <a style={buttonStyle} className="button-audio button is-primary" onClick={this.switchState}>
-                <span className="icon is-small">
-                    <i className={isPlaying ? 'fa fa-stop' : 'fa fa-play'}></i>
-                </span>
-            </a>
-        </div>;
+        return (
+            <div>
+                <audio
+                    src={src}
+                    onEnded={this.switchState}
+                    ref={audio => (this.audio = audio)}
+                />
+                <a
+                    style={buttonStyle}
+                    className="button-audio button is-primary"
+                    onClick={this.switchState}>
+                    <span className="icon is-small">
+                        <i
+                            className={isPlaying ? 'fa fa-stop' : 'fa fa-play'}
+                        />
+                    </span>
+                </a>
+            </div>
+        );
     }
 
     switchState() {

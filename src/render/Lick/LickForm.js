@@ -30,135 +30,182 @@ class LickForm extends Component {
         const { id, artist, description, tracks, tags } = lick;
         const { cancelLickEditor } = this.props;
 
-        return <div className="modal is-active">
-            <div className="modal-background"></div>
-            <div className="modal-content">
-                <div className="card lick lick-form">
-                    <div className="card-content">
-                        {this.renderArtist(artist)}
-                        {this.renderSong(description)}
-                        {this.renderTrackSection(tracks[0], errorMessageTrack, this.handleDeleteTrack, this.handleRecordTrack)}
-                        {this.renderTags(tags, tagInput)}
-                        {this.renderSubmitButtons(id, cancelLickEditor)}
+        return (
+            <div className="modal is-active">
+                <div className="modal-background" />
+                <div className="modal-content">
+                    <div className="card lick lick-form">
+                        <div className="card-content">
+                            {this.renderArtist(artist)}
+                            {this.renderSong(description)}
+                            {this.renderTrackSection(
+                                tracks[0],
+                                errorMessageTrack,
+                                this.handleDeleteTrack,
+                                this.handleRecordTrack
+                            )}
+                            {this.renderTags(tags, tagInput)}
+                            {this.renderSubmitButtons(id, cancelLickEditor)}
+                        </div>
                     </div>
                 </div>
+                <button
+                    className="modal-close is-large"
+                    aria-label="close"
+                    onClick={() => cancelLickEditor(id)}
+                />
             </div>
-            <button className="modal-close is-large" aria-label="close" onClick={() => cancelLickEditor(id)}></button>
-        </div>;
+        );
     }
 
     renderArtist(artist) {
-        return <div className="field">
-            <label className="label">Artist</label>
-            <div className="control">
-                <input 
-                    name="artist" 
-                    className="input artist" 
-                    type="text" 
-                    placeholder="Artist name (optional)"
-                    value={artist}
-                    onChange={this.handleInputArtist}/>
+        return (
+            <div className="field">
+                <label className="label">Artist</label>
+                <div className="control">
+                    <input
+                        name="artist"
+                        className="input artist"
+                        type="text"
+                        placeholder="Artist name (optional)"
+                        value={artist}
+                        onChange={this.handleInputArtist}
+                    />
+                </div>
             </div>
-        </div>;
+        );
     }
 
     renderSong(song) {
-        return <div className="field">
-            <label className="label">Song</label>
-            <div className="control">
-                <input 
-                    name="song" 
-                    className="input song" 
-                    type="text" 
-                    placeholder="Song name (optional)"
-                    value={song}
-                    onChange={this.handleInputDescription}/>
+        return (
+            <div className="field">
+                <label className="label">Song</label>
+                <div className="control">
+                    <input
+                        name="song"
+                        className="input song"
+                        type="text"
+                        placeholder="Song name (optional)"
+                        value={song}
+                        onChange={this.handleInputDescription}
+                    />
+                </div>
             </div>
-        </div>;
+        );
     }
 
-    renderTrackSection(track, errorMessage, handleDeleteTrack, handleRecordTrack) {
-        const error = errorMessage ? <span className="error-message"> - {errorMessage}</span> : '';
-        return <div className="field field-track">
-            <label className="label">Audio {error}</label>
-            <div className="track-container control">
-                {this.renderTrackDeleteButton(track, handleDeleteTrack)}
-                <div className="track">
-                    {track ? <Player src={track.url}/> : <Recorder handleRecordTrack={handleRecordTrack}/>}
+    renderTrackSection(
+        track,
+        errorMessage,
+        handleDeleteTrack,
+        handleRecordTrack
+    ) {
+        const error = errorMessage ? (
+            <span className="error-message"> - {errorMessage}</span>
+        ) : (
+            ''
+        );
+        return (
+            <div className="field field-track">
+                <label className="label">Audio {error}</label>
+                <div className="track-container control">
+                    {this.renderTrackDeleteButton(track, handleDeleteTrack)}
+                    <div className="track">
+                        {track ? (
+                            <Player src={track.url} />
+                        ) : (
+                            <Recorder handleRecordTrack={handleRecordTrack} />
+                        )}
+                    </div>
                 </div>
-                
             </div>
-        </div>;
+        );
     }
 
     renderTrackDeleteButton(track, handleDeleteTrack) {
         if (track) {
-            return <a 
-                className="button is-small is-pulled-right track-delete" 
-                onClick={() => handleDeleteTrack(track.id)}>
-                <span className="icon is-small">
-                    <i className="fa fa-trash"></i>
-                </span>
-                <span>Delete track</span>
-            </a>;
+            return (
+                <a
+                    className="button is-small is-pulled-right track-delete"
+                    onClick={() => handleDeleteTrack(track.id)}>
+                    <span className="icon is-small">
+                        <i className="fa fa-trash" />
+                    </span>
+                    <span>Delete track</span>
+                </a>
+            );
         } else {
             return '';
         }
     }
 
     renderTags(tags, tagInput) {
-        return <div className="field tag-container">
-            <label className="label">Tags</label>
-            <div className="tags">
-                {tags.map(tag => <span key={tag} className="tag">{tag}
-                    <button
-                        className="delete is-small tag-delete"
-                        onClick={() => this.handleDeleteTag(tag)}></button>
-                </span>)}
+        return (
+            <div className="field tag-container">
+                <label className="label">Tags</label>
+                <div className="tags">
+                    {tags.map(tag => (
+                        <span key={tag} className="tag">
+                            {tag}
+                            <button
+                                className="delete is-small tag-delete"
+                                onClick={() => this.handleDeleteTag(tag)}
+                            />
+                        </span>
+                    ))}
+                </div>
+                {this.renderTagInput(tagInput)}
             </div>
-            {this.renderTagInput(tagInput)}
-        </div>;
+        );
     }
 
     renderTagInput(tagInput) {
-        return <p className="control tag-input">
-            <input
-                name="tagInput"
-                className="input is-small"
-                type="text"
-                placeholder="Add a tag and press Enter"
-                value={tagInput}
-                onChange={this.handleInputTag}
-                onKeyPress={this.handleCreateTag}/>
-        </p>;
+        return (
+            <p className="control tag-input">
+                <input
+                    name="tagInput"
+                    className="input is-small"
+                    type="text"
+                    placeholder="Add a tag and press Enter"
+                    value={tagInput}
+                    onChange={this.handleInputTag}
+                    onKeyPress={this.handleCreateTag}
+                />
+            </p>
+        );
     }
 
     renderSubmitButtons(id, cancelLickEditor) {
-        return <div className="field is-grouped">
-            <p className="control">
-                <a className="button is-small is-primary lick-save" onClick={this.handleSave.bind(this)}>
-                    <span className="icon is-small">
-                        <i className="fa fa-check"></i>
-                    </span>
-                    <span>Save</span>
-                </a>
-            </p>
-            <p className="control">
-                <a className="button is-small is-light lick-cancel" onClick={() => cancelLickEditor(id)}>
-                    <span className="icon is-small">
-                        <i className="fa fa-times"></i>
-                    </span>
-                    <span>Cancel</span>
-                </a>
-            </p>
-        </div>;
+        return (
+            <div className="field is-grouped">
+                <p className="control">
+                    <a
+                        className="button is-small is-primary lick-save"
+                        onClick={this.handleSave.bind(this)}>
+                        <span className="icon is-small">
+                            <i className="fa fa-check" />
+                        </span>
+                        <span>Save</span>
+                    </a>
+                </p>
+                <p className="control">
+                    <a
+                        className="button is-small is-light lick-cancel"
+                        onClick={() => cancelLickEditor(id)}>
+                        <span className="icon is-small">
+                            <i className="fa fa-times" />
+                        </span>
+                        <span>Cancel</span>
+                    </a>
+                </p>
+            </div>
+        );
     }
 
     handleInputChange(event) {
         const target = event.target;
-        const value = target.type === 'checkbox' ?
-            target.checked :
-            target.value;
+        const value =
+            target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
 
         this.setState({
@@ -203,7 +250,9 @@ class LickForm extends Component {
     }
 
     handleDeleteTrack(id) {
-        const tracks = this.getLickState().tracks.filter(track => track.id !== id);
+        const tracks = this.getLickState().tracks.filter(
+            track => track.id !== id
+        );
         this.setLickState({ tracks });
     }
 
@@ -219,7 +268,9 @@ class LickForm extends Component {
 
     handleDeleteTag(tag) {
         this.setLickState({
-            tags: this.getLickState().tags.filter(storedTag => storedTag !== tag)
+            tags: this.getLickState().tags.filter(
+                storedTag => storedTag !== tag
+            )
         });
     }
 
@@ -241,7 +292,7 @@ class LickForm extends Component {
 
     validateLick() {
         if (this.getLickState().tracks.length < 1) {
-            this.setState({errorMessageTrack: 'An audio track is required'});
+            this.setState({ errorMessageTrack: 'An audio track is required' });
             return false;
         }
         return true;

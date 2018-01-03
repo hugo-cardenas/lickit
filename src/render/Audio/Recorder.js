@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LibRecorder from 'react-recorder';
 
-const
-    STATE_IDLE = 'idle',
+const STATE_IDLE = 'idle',
     STATE_RECORDING = 'recording';
-    
 
 class Recorder extends Component {
     constructor(props) {
@@ -28,25 +26,39 @@ class Recorder extends Component {
     }
 
     renderRecorderIdle() {
-        return <div className="recorder">
-            <a className="button-audio button is-primary" onClick={this.handleRecordStart}>
-                <span className="icon is-small">
-                    <i className="fa fa-microphone"></i>
-                </span>
-            </a>
-            <LibRecorder command="stop" onStop={this.props.handleRecordTrack}/>
-        </div>;
+        return (
+            <div className="recorder">
+                <a
+                    className="button-audio button is-primary"
+                    onClick={this.handleRecordStart}>
+                    <span className="icon is-small">
+                        <i className="fa fa-microphone" />
+                    </span>
+                </a>
+                <LibRecorder
+                    command="stop"
+                    onStop={this.props.handleRecordTrack}
+                />
+            </div>
+        );
     }
 
     renderRecorderRecording() {
-        return <div className="recorder">
-            <a className="button-audio button is-primary" onClick={this.handleRecordStop}>
-                <span className="icon is-small">
-                    <i className="fa fa-stop"></i>
-                </span>
-            </a>
-            <LibRecorder command="start" onStop={this.props.handleRecordTrack}/>
-        </div>;
+        return (
+            <div className="recorder">
+                <a
+                    className="button-audio button is-primary"
+                    onClick={this.handleRecordStop}>
+                    <span className="icon is-small">
+                        <i className="fa fa-stop" />
+                    </span>
+                </a>
+                <LibRecorder
+                    command="start"
+                    onStop={this.props.handleRecordTrack}
+                />
+            </div>
+        );
     }
 
     handleRecordStart() {

@@ -9,17 +9,14 @@ import {
     LICK_DELETE,
     LICK_CHANGE_MODE
 } from '../actions/types';
-import {
-    LICK_MODE_EDIT,
-    LICK_MODE_VIEW
-} from '../actions/lick/modes';
+import { LICK_MODE_EDIT, LICK_MODE_VIEW } from '../actions/lick/modes';
 
 const defaultState = {
     isCreateFormEnabled: false,
     items: []
 };
 
-export default function (state = defaultState, action) {
+export default function(state = defaultState, action) {
     switch (action.type) {
         case LICK_ENABLE_CREATE_FORM:
             return { ...state, isCreateFormEnabled: true };
@@ -78,9 +75,7 @@ function updateLick(state, newLick) {
 
     const newState = {
         ...state,
-        items: [
-            ...state.items,
-        ]
+        items: [...state.items]
     };
 
     const item = state.items[index];
@@ -94,14 +89,24 @@ function updateLick(state, newLick) {
 }
 
 function createReducerLickError(previousError, action, lick) {
-    return new VError(previousError, 'Unable to reduce %s with lick %s', action, JSON.stringify(lick));
+    return new VError(
+        previousError,
+        'Unable to reduce %s with lick %s',
+        action,
+        JSON.stringify(lick)
+    );
 }
 
 function deleteLick(state, id) {
     try {
         var index = findItemIndex(state.items, id);
     } catch (error) {
-        throw new VError(error, 'Unable to reduce %s with id %s', LICK_DELETE, id);
+        throw new VError(
+            error,
+            'Unable to reduce %s with id %s',
+            LICK_DELETE,
+            id
+        );
     }
 
     const items = [...state.items];
@@ -117,7 +122,11 @@ function changeLickMode(state, id, mode) {
     const validModes = [LICK_MODE_EDIT, LICK_MODE_VIEW];
     try {
         if (!validModes.includes(mode)) {
-            throw new VError('Invalid mode %s, should be one of %s', mode, validModes.join(', '));
+            throw new VError(
+                'Invalid mode %s, should be one of %s',
+                mode,
+                validModes.join(', ')
+            );
         }
         const index = findItemIndex(state.items, id);
         const items = [...state.items];
@@ -127,9 +136,14 @@ function changeLickMode(state, id, mode) {
             ...state,
             items
         };
-
     } catch (error) {
-        throw new VError(error, 'Unable to reduce %s with id %s and mode %s', LICK_CHANGE_MODE, id, mode);
+        throw new VError(
+            error,
+            'Unable to reduce %s with id %s and mode %s',
+            LICK_CHANGE_MODE,
+            id,
+            mode
+        );
     }
 }
 
@@ -151,12 +165,22 @@ function validateUpdatedLick(lick) {
 
 function getNewLickSchema() {
     return Joi.object().keys({
-        artist: Joi.string().allow('').required(),
-        description: Joi.string().allow('').required(),
-        tracks: Joi.array().items(Joi.object().keys({
-            id: Joi.string().required()
-        })).required(),
-        tags: Joi.array().items(Joi.string()).required()
+        artist: Joi.string()
+            .allow('')
+            .required(),
+        description: Joi.string()
+            .allow('')
+            .required(),
+        tracks: Joi.array()
+            .items(
+                Joi.object().keys({
+                    id: Joi.string().required()
+                })
+            )
+            .required(),
+        tags: Joi.array()
+            .items(Joi.string())
+            .required()
     });
 }
 

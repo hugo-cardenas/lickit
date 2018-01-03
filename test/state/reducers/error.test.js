@@ -18,7 +18,7 @@ it('create error with invalid error object', () => {
 });
 
 it('return null state for any other action', () => {
-    const action = {type: 'baz'};
+    const action = { type: 'baz' };
     // Previous state is irrelevant
     expect(errorReducer('foo bar', action)).toBe(null);
 });
