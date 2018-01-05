@@ -30,47 +30,43 @@ it('map state to props, map error', () => {
     expect(props.error).toEqual(error);
 });
 
-it('map state to props, map isCreateFormEnabled', () => {
-    const state = createState({});
+it('map state to props, map lick state', () => {
+    const state = createState();
     const props = mapStateToProps(state);
-    expect(props.lick.isCreateFormEnabled).toEqual(false);
+    expect(props.lick.isCreationOpen).toBe(false);
+    expect(props.lick.editLickId).toBe(null);
 });
 
-it('map state to props, map items', () => {
-    const state = createStateWithItems([
-        {
-            mode: 'edit',
-            lick: {
-                id: 'c42',
-                artist: 'Charlie Foo',
-                description: 'Foo bar 42',
-                tracks: [{ id: 'abc10' }, { id: 'abc20' }],
-                tags: ['foo', 'bar'],
-                createdAt: 12500
-            }
+it('map state to props, map licks', () => {
+    const state = createStateWithLicks({
+        c42: {
+            artist: 'Charlie Foo',
+            description: 'Foo bar 42',
+            tracks: [{ id: 'abc10' }, { id: 'abc20' }],
+            tags: ['foo', 'bar'],
+            createdAt: 12500
         }
-    ]);
+    });
+    state.lick.editLickId = 'c42';
 
-    const expectedItems = [
+    const expectedLicks = [
         {
+            id: 'c42',
+            artist: 'Charlie Foo',
+            artistIndex: 1,
+            description: 'Foo bar 42',
             mode: 'edit',
-            lick: {
-                id: 'c42',
-                artist: 'Charlie Foo',
-                artistIndex: 1,
-                description: 'Foo bar 42',
-                tracks: [
-                    { id: 'abc10', url: 'file:///tmp/foo/tracks/abc10.wav' },
-                    { id: 'abc20', url: 'file:///tmp/foo/tracks/abc20.wav' }
-                ],
-                tags: ['bar', 'foo'], // Tags should be sorted alphabetically
-                createdAt: 12500
-            }
+            tracks: [
+                { id: 'abc10', url: 'file:///tmp/foo/tracks/abc10.wav' },
+                { id: 'abc20', url: 'file:///tmp/foo/tracks/abc20.wav' }
+            ],
+            tags: ['bar', 'foo'], // Tags should be sorted alphabetically
+            createdAt: 12500
         }
     ];
 
     const props = mapStateToProps(state);
-    expect(props.lick.items).toEqual(expectedItems);
+    expect(props.lick.licks).toEqual(expectedLicks);
 });
 
 it('map state to props, map items, set artist indexes and sort by createdAt', () => {
@@ -122,31 +118,31 @@ it('map state to props, map items, set artist indexes and sort by createdAt', ()
 });
 
 const itemsToBeFiltered = [
-    createItem({
+    createLick({
         id: 'c42',
         artist: 'Charlie Foo',
         description: 'Foo bar 42',
         tags: ['foo', 'bar']
     }),
-    createItem({
+    createLick({
         id: 'c44',
         artist: 'Charlie Foo',
         description: 'Foo bar 42',
         tags: ['baz', 'foobar']
     }),
-    createItem({
+    createLick({
         id: 'c46',
         artist: 'Django Bar',
         description: 'Foo bar 42',
         tags: ['foo']
     }),
-    createItem({
+    createLick({
         id: 'c48',
         artist: 'Django Bar',
         description: 'Foo bar 42',
         tags: ['bar']
     }),
-    createItem({
+    createLick({
         id: 'c50',
         artist: 'Stephane Baz',
         description: 'Foo bar 42',
@@ -218,10 +214,10 @@ expectedFilteredIds.forEach((entry, i) => {
 const stateWithSearch = createState({
     lick: {
         items: [
-            createItem({ artist: 'Django Bar', tags: ['Baz'] }),
-            createItem({ artist: 'charlie Foo', tags: ['foo', 'bar'] }),
-            createItem({ artist: 'Django Bar', tags: ['foo', 'foobar'] }),
-            createItem({ artist: '', tags: [] }) // Empty artist should not appear as a suggestion
+            createLick({ artist: 'Django Bar', tags: ['Baz'] }),
+            createLick({ artist: 'charlie Foo', tags: ['foo', 'bar'] }),
+            createLick({ artist: 'Django Bar', tags: ['foo', 'foobar'] }),
+            createLick({ artist: '', tags: [] }) // Empty artist should not appear as a suggestion
         ]
     },
     search: {
@@ -301,7 +297,7 @@ expectedSuggestions.forEach((entry, i) => {
     });
 });
 
-it('map dispatch to props - create lick', async () => {
+it('map dispatch to props - create lick', async() => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
@@ -315,7 +311,7 @@ it('map dispatch to props - create lick', async () => {
     );
 });
 
-it('map dispatch to props - update lick', async () => {
+it('map dispatch to props - update lick', async() => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
@@ -329,7 +325,7 @@ it('map dispatch to props - update lick', async () => {
     );
 });
 
-it('map dispatch to props - delete lick', async () => {
+it('map dispatch to props - delete lick', async() => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
@@ -342,7 +338,7 @@ it('map dispatch to props - delete lick', async () => {
     );
 });
 
-it('map dispatch to props - change lick mode', async () => {
+it('map dispatch to props - change lick mode', async() => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
@@ -351,7 +347,7 @@ it('map dispatch to props - change lick mode', async () => {
     expect(dispatch).toHaveBeenCalledWith(changeLickMode('a42', 'modeFoo'));
 });
 
-it('map dispatch to props - add filter', async () => {
+it('map dispatch to props - add filter', async() => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
@@ -360,7 +356,7 @@ it('map dispatch to props - add filter', async () => {
     expect(dispatch).toHaveBeenCalledWith(addFilter({ foo: 'bar' }));
 });
 
-it('map dispatch to props - remove filter', async () => {
+it('map dispatch to props - remove filter', async() => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
@@ -369,7 +365,7 @@ it('map dispatch to props - remove filter', async () => {
     expect(dispatch).toHaveBeenCalledWith(removeFilter({ foo: 'bar' }));
 });
 
-it('map dispatch to props - set input', async () => {
+it('map dispatch to props - set input', async() => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
@@ -422,20 +418,23 @@ it('merge props', () => {
     expect(mergeProps(stateProps, dispatchProps)).toEqual(expectedProps);
 });
 
-const createStateWithItems = items => {
+const createStateWithLicks = licks => {
     return createState({
         lick: {
-            items
+            isCreationOpen: false,
+            editLickId: null,
+            byId: licks
         }
     });
 };
 
-function createState(state) {
+function createState(state = {}) {
     return {
         error: null,
         lick: {
-            isCreateFormEnabled: false,
-            items: []
+            isCreationOpen: false,
+            editLickId: null,
+            byId: {}
         },
         search: {
             filters: [],
@@ -445,16 +444,10 @@ function createState(state) {
     };
 }
 
-function createItem(lick) {
-    return {
-        mode: 'view',
-        lick: {
-            id: 'c862',
-            artist: '',
-            description: '',
-            tracks: [],
-            tags: [],
-            ...lick
-        }
-    };
-}
+const createLickObject = lick => ({
+    artist: '',
+    description: '',
+    tracks: [],
+    tags: [],
+    ...lick
+});

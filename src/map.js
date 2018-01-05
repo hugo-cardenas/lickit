@@ -10,50 +10,50 @@ import {
 import { addFilter, removeFilter, setInput } from './state/actions/search';
 import { getPathResolver } from './track/pathResolver';
 import { TYPE_ARTIST, TYPE_TAG } from './search/filterTypes';
+import { LICK_MODE_EDIT, LICK_MODE_VIEW } from './state/actions/lick/modes';
 
 const mapStateToProps = state => {
     const lickProps = mapLickStateToProps(state);
     return {
         error: state.error,
         lick: lickProps,
-        search: mapSearchStateToProps(state.search, lickProps.items)
+        // search: mapSearchStateToProps(state.search, lickProps.items)
     };
 };
 
 const mapLickStateToProps = state => {
-    const stateItems = state.lick.items.map(mapItemToProp);
+    const { byId, editLickId } = state.lick;
+    const stateLicks = Object.keys(byId)
+        .map(id => mapLickToProp(id, byId[id], editLickId));
 
-    const groupedItems = Object.values(
-        groupBy(stateItems, item => item.lick.artist)
-    ).map(items => {
-        items.sort((a, b) => a.lick.createdAt - b.lick.createdAt);
-        return items.map((item, index) => {
+    const groupedByArtist = Object.values(
+        groupBy(stateLicks, lick => lick.artist)
+    ).map(licks => {
+        licks.sort((a, b) => a.createdAt - b.createdAt);
+        return licks.map((lick, index) => {
             return {
-                ...item,
-                lick: {
-                    ...item.lick,
-                    artistIndex: index + 1
-                }
+                ...lick,
+                artistIndex: index + 1
             };
         });
     });
 
-    const items = [].concat(...groupedItems);
-    items.sort((a, b) => b.lick.createdAt - a.lick.createdAt);
+    const licks = [].concat(...groupedByArtist);
+    licks.sort((a, b) => b.lick.createdAt - a.lick.createdAt);
 
     const filters = state.search.filters;
     const artist = getFilteredArtist(filters);
     const tags = getFilteredTags(filters);
 
-    const filteredItems = items.filter(
-        item =>
-            (!artist || item.lick.artist === artist) &&
-            difference(tags, item.lick.tags).length === 0
+    const filteredLicks = licks.filter(
+        lick =>
+        (!artist || lick.artist === artist) &&
+        difference(tags, lick.tags).length === 0
     );
 
     return {
-        isCreateFormEnabled: state.lick.isCreateFormEnabled,
-        items: filteredItems
+        isCreationOpen: state.lick.isCreationOpen,
+        licks: filteredLicks
     };
 };
 
@@ -65,28 +65,25 @@ const getFilteredArtist = filters => {
 const getFilteredTags = filters =>
     filters.filter(filter => filter.type === 'Tag').map(filter => filter.value);
 
-const mapItemToProp = item => {
-    const lick = item.lick;
+const mapLickToProp = (id, lick, editLickId) => {
     // TODO Fix in a better way this reference problem - state modified as react state
     const tags = [...lick.tags];
     tags.sort();
 
     return {
-        mode: item.mode ? item.mode : undefined,
-        lick: {
-            id: lick.id,
-            artist: lick.artist,
-            description: lick.description,
-            tags,
-            tracks: lick.tracks.map(track => {
-                return {
-                    ...track,
-                    // Calculate track urls to filesystem from their id
-                    url: 'file://' + getPathResolver()(track.id)
-                };
-            }),
-            createdAt: lick.createdAt
-        }
+        id,
+        artist: lick.artist,
+        description: lick.description,
+        mode: editLickId === id ? LICK_MODE_EDIT : LICK_MODE_VIEW,
+        tags,
+        tracks: lick.tracks.map(track => {
+            return {
+                ...track,
+                // Calculate track urls to filesystem from their id
+                url: 'file://' + getPathResolver()(track.id)
+            };
+        }),
+        createdAt: lick.createdAt
     };
 };
 
@@ -125,8 +122,8 @@ const getSuggestions = (items, filters) => {
 
     const tags = uniq(
         []
-            .concat(...items.map(item => item.lick.tags))
-            .filter(tag => !isContainedInFilters(tag))
+        .concat(...items.map(item => item.lick.tags))
+        .filter(tag => !isContainedInFilters(tag))
     );
 
     const compareCaseInsensitive = (a, b) =>

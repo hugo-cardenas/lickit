@@ -1,32 +1,25 @@
-import VError from 'verror';
-import _ from 'lodash';
+const fs = require('fs');
+const _  = require('lodash');
 
-const defaultState = {
-    isCreateFormEnabled: false,
-    items: []
-};
+const state = require('/tmp/state.json');
 
-export default (state = defaultState) => {
-    return {
-        ...state,
-        items: indexItemsById(state.items)
-    };
-};
 
 const indexItemsById = items => {
-    const newItems = {};
+    const byId = {};
     items.forEach(item => {
-        try {
-            newItems[item.lick.id] = {
-                ...item,
-                lick: _.omit(item.lick, ['id'])
-            };
-        } catch (error) {
-            throw new VError(
-                error,
-                `Unable to index by id item ${JSON.stringify(item)}`
-            );
-        }
+        byId[item.lick.id] = _.omit(item.lick, ['id']);
     });
-    return newItems;
+    return byId;
 };
+
+const newState = {
+    ...state,
+    lick: {
+        isCreationOpen: false,
+        editLickId: null,
+        byId: indexItemsById(state.lick.items)
+    }
+};
+
+
+fs.writeFileSync('/tmp/newState.json', JSON.stringify(newState));
