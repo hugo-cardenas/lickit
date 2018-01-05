@@ -22,7 +22,10 @@ const indexItemsById = items => {
                 lick: _.omit(item.lick, ['id'])
             };
         } catch (error) {
-            throw new VError(error, `Unable to index by id item ${JSON.stringify(item)}`);
+            throw new VError(
+                error,
+                `Unable to index by id item ${JSON.stringify(item)}`
+            );
         }
     });
     return newItems;

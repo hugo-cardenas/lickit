@@ -104,7 +104,7 @@ validLicks.forEach((lick, i) => {
         const state = createState({
             isCreationOpen: true,
             byId: {
-                'c10': { artist: 'foo' }
+                c10: { artist: 'foo' }
             }
         });
         const newLick = _.omit(lick, ['id']);
@@ -136,9 +136,7 @@ validLicks.forEach((lick, i) => {
         expect(createdLick.description).toBe(createdLick.description);
         expect(createdLick.tracks).toEqual(createdLick.tracks);
         expect(createdLick.tags).toEqual(createdLick.tags);
-        expect(createdLick.createdAt).toBeGreaterThanOrEqual(
-            initialTimestamp
-        );
+        expect(createdLick.createdAt).toBeGreaterThanOrEqual(initialTimestamp);
         expect(createdLick.createdAt).toBeLessThan(Date.now() + 1);
         expect(createdLick.foo).toBe(undefined);
     });
@@ -148,23 +146,23 @@ validLicks.forEach((lick, i) => {
     it('update lick, success #' + i, () => {
         const state = createState({
             byId: {
-                'c10': { artist: 'bar' },
-                'c20': {
+                c10: { artist: 'bar' },
+                c20: {
                     artist: 'foofoo',
                     description: 'foo',
                     tracks: [{ id: 'abc200' }, { id: 'abc200' }],
                     tags: ['foo', 'bar'],
                     createdAt: 12500
                 },
-                'c30': { artist: 'baz' }
+                c30: { artist: 'baz' }
             },
             editLickId: 'c20'
         });
 
         const expectedState = createState({
             byId: {
-                'c10': { artist: 'bar' },
-                'c20': {
+                c10: { artist: 'bar' },
+                c20: {
                     ..._.pick(lick, [
                         'artist',
                         'description',
@@ -173,7 +171,7 @@ validLicks.forEach((lick, i) => {
                     ]),
                     createdAt: 12500
                 },
-                'c30': { artist: 'baz' }
+                c30: { artist: 'baz' }
             },
             editLickId: null
         });
@@ -256,9 +254,9 @@ invalidLicksToUpdate.forEach((entry, i) => {
         const [lick, invalidProperties] = entry;
         const state = createState({
             byId: {
-                'c10': { artist: 'foo' },
-                'c20': { artist: 'bar' },
-                'c30': { artist: 'baz' }
+                c10: { artist: 'foo' },
+                c20: { artist: 'bar' },
+                c30: { artist: 'baz' }
             }
         });
 
@@ -278,8 +276,8 @@ invalidLicksToUpdate.forEach((entry, i) => {
 it('update lick, id not found', () => {
     const state = createState({
         byId: {
-            'c10': { artist: 'foo' },
-            'c30': { artist: 'baz' }
+            c10: { artist: 'foo' },
+            c30: { artist: 'baz' }
         }
     });
 
@@ -304,16 +302,16 @@ it('update lick, id not found', () => {
 it('delete lick, success', () => {
     const state = createState({
         byId: {
-            'c10': { artist: 'foo' },
-            'c20': { artist: 'bar' },
-            'c30': { artist: 'baz' }
+            c10: { artist: 'foo' },
+            c20: { artist: 'bar' },
+            c30: { artist: 'baz' }
         }
     });
 
     const expectedState = createState({
         byId: {
-            'c10': { artist: 'foo' },
-            'c30': { artist: 'baz' }
+            c10: { artist: 'foo' },
+            c30: { artist: 'baz' }
         }
     });
 
@@ -325,9 +323,9 @@ it('delete lick, success', () => {
 it('delete lick, id not found', () => {
     const state = createState({
         byId: {
-            'c10': { artist: 'foo' },
-            'c20': { artist: 'bar' },
-            'c30': { artist: 'baz' }
+            c10: { artist: 'foo' },
+            c20: { artist: 'bar' },
+            c30: { artist: 'baz' }
         }
     });
 

@@ -98,14 +98,13 @@ const updateLick = (licks, newLick) => {
     };
 };
 
-const createReducerLickError = (previousError, action, lick) => (
+const createReducerLickError = (previousError, action, lick) =>
     new VError(
         previousError,
         'Unable to reduce %s with lick %s',
         action,
         JSON.stringify(lick)
-    )
-);
+    );
 
 const deleteLick = (licks, id) => {
     try {
@@ -142,7 +141,7 @@ const changeLickMode = (editLickId, id, mode) => {
     }
 };
 
-const validateNewLick = (lick) => {
+const validateNewLick = lick => {
     const schema = getNewLickSchema();
     const { error } = Joi.validate(lick, schema, getJoiOptions());
     if (error) {
@@ -150,7 +149,7 @@ const validateNewLick = (lick) => {
     }
 };
 
-const validateUpdatingLick = (lick) => {
+const validateUpdatingLick = lick => {
     const schema = getUpdatedLickSchema();
     const { error } = Joi.validate(lick, schema, getJoiOptions());
     if (error) {
