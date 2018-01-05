@@ -1,7 +1,7 @@
 import VError from 'verror';
 import {
-    LICK_ENABLE_CREATE_FORM,
-    LICK_CANCEL_CREATE_FORM,
+    LICK_OPEN_CREATION,
+    LICK_CANCEL_CREATION,
     LICK_CREATE,
     LICK_UPDATE,
     LICK_DELETE,
@@ -9,12 +9,12 @@ import {
 } from '../types';
 
 export default function getActions(trackStorage) {
-    function enableCreateLickForm() {
-        return { type: LICK_ENABLE_CREATE_FORM };
+    function openCreation() {
+        return { type: LICK_OPEN_CREATION };
     }
 
-    function cancelCreateLickForm() {
-        return { type: LICK_CANCEL_CREATE_FORM };
+    function cancelCreation() {
+        return { type: LICK_CANCEL_CREATION };
     }
 
     function createLick(lick) {
@@ -121,8 +121,8 @@ export default function getActions(trackStorage) {
     }
 
     return {
-        enableCreateLickForm,
-        cancelCreateLickForm,
+        openCreation,
+        cancelCreation,
         createLick,
         updateLick,
         deleteLick,

@@ -9,8 +9,8 @@ import {
 } from 'src/state/actions/types';
 import { LICK_MODE_EDIT, LICK_MODE_VIEW } from 'src/state/actions/lick/modes';
 import {
-    enableCreateLickForm,
-    cancelCreateLickForm,
+    openCreation,
+    cancelCreation,
     changeLickMode
 } from 'src/state/actions/lick';
 
@@ -21,7 +21,7 @@ jest.mock('electron', () => {
 });
 
 it('define default state', () => {
-    const expectedState = createState([]);
+    const expectedState = createState();
 
     expect(lickReducer(undefined, { type: 'invalid action' })).toEqual(
         expectedState
@@ -29,26 +29,26 @@ it('define default state', () => {
 });
 
 it('reduce unknown action', () => {
-    const state = createState([]);
-    const expectedState = createState([]);
+    const state = createState();
+    const expectedState = createState();
 
     expect(lickReducer(state, { type: 'invalid action' })).toEqual(
         expectedState
     );
 });
 
-it('enable create form', () => {
-    const state = createState([]);
-    const expectedState = { items: [], isCreateFormEnabled: true };
+it('open creation', () => {
+    const state = createState();
+    const expectedState = createState({ isCreationOpen: true });
 
-    expect(lickReducer(state, enableCreateLickForm())).toEqual(expectedState);
+    expect(lickReducer(state, openCreation())).toEqual(expectedState);
 });
 
-it('cancel create form', () => {
-    const state = { items: [], isCreateFormEnabled: true };
-    const expectedState = { items: [], isCreateFormEnabled: false };
+it('cancel creation', () => {
+    const state = createState({ isCreationOpen: true });
+    const expectedState = createState({ isCreationOpen: false });
 
-    expect(lickReducer(state, cancelCreateLickForm())).toEqual(expectedState);
+    expect(lickReducer(state, cancelCreation())).toEqual(expectedState);
 });
 
 const validLicks = [
@@ -101,10 +101,12 @@ validLicks.forEach((lick, i) => {
     it('create lick, success #' + i, () => {
         const initialTimestamp = Date.now();
 
-        const state = {
-            isCreateFormEnabled: true,
-            items: {'c10': { lick: { id: 'c10' } }}
-        };
+        const state = createState({
+            isCreationOpen: true,
+            byId: {
+                'c10': { artist: 'foo' }
+            }
+        });
         const newLick = _.omit(lick, ['id']);
 
         const newState = lickReducer(state, {
@@ -112,26 +114,23 @@ validLicks.forEach((lick, i) => {
             lick: newLick
         });
 
-        const { isCreateFormEnabled, items } = newState;
+        const { isCreationOpen, byId: licks } = newState;
 
-        expect(isCreateFormEnabled).toBe(false);
+        expect(isCreationOpen).toBe(false);
 
-        const ids = Object.keys(items);
+        const ids = Object.keys(licks);
         expect(ids).toHaveLength(2);
 
-        expect(items['c10']).toEqual({ lick: { id: 'c10' } });
-        delete items['c10'];
+        expect(licks['c10']).toEqual({ artist: 'foo' });
+        delete licks['c10'];
 
         // We don't know in advance the value of the new generated id
-        const newId = Object.keys(items)[0];
+        const newId = Object.keys(licks)[0];
         expect(typeof newId).toBe('string');
         expect(newId.length).toBeGreaterThan(10);
         expect(newId.length).toBeLessThan(30);
 
-        const newItem = items[newId];
-        expect(newItem.mode).toBe('view');
-
-        const createdLick = newItem.lick;
+        const createdLick = licks[newId];
         expect(createdLick.id).toBe(undefined);
         expect(createdLick.artist).toBe(createdLick.artist);
         expect(createdLick.description).toBe(createdLick.description);
@@ -148,24 +147,24 @@ validLicks.forEach((lick, i) => {
 validLicks.forEach((lick, i) => {
     it('update lick, success #' + i, () => {
         const state = createState({
-            'c10': { lick: { artist: 'bar' } },
-            'c20': {
-                lick: {
+            byId: {
+                'c10': { artist: 'bar' },
+                'c20': {
                     artist: 'foofoo',
                     description: 'foo',
                     tracks: [{ id: 'abc200' }, { id: 'abc200' }],
                     tags: ['foo', 'bar'],
                     createdAt: 12500
                 },
-                mode: 'edit'
+                'c30': { artist: 'baz' }
             },
-            'c30': { lick: { artist: 'baz' } }
+            editLickId: 'c20'
         });
 
         const expectedState = createState({
-            'c10': { lick: { artist: 'bar' } },
-            'c20': {
-                lick: {
+            byId: {
+                'c10': { artist: 'bar' },
+                'c20': {
                     ..._.pick(lick, [
                         'artist',
                         'description',
@@ -174,9 +173,9 @@ validLicks.forEach((lick, i) => {
                     ]),
                     createdAt: 12500
                 },
-                mode: 'view'
+                'c30': { artist: 'baz' }
             },
-            'c30': { lick: { artist: 'baz' } }
+            editLickId: null
         });
 
         expect(lickReducer(state, { type: LICK_UPDATE, lick })).toEqual(
@@ -224,11 +223,9 @@ const invalidLicks = [
 
 invalidLicks.forEach((entry, i) => {
     it('create lick, invalid data #' + i, () => {
-        const [lick, invalidProperties] = entry;
-        const newLick = { ...lick };
-        delete newLick.id;
-
-        const state = createState([]);
+        const lick = _.omit(entry[0], ['id']);
+        const invalidProperties = entry[1];
+        const state = createState();
 
         try {
             lickReducer(state, { type: LICK_CREATE, lick });
@@ -257,11 +254,13 @@ const invalidLicksToUpdate = [
 invalidLicksToUpdate.forEach((entry, i) => {
     it('update lick, invalid data #' + i, () => {
         const [lick, invalidProperties] = entry;
-        const state = createState([
-            { lick: { id: 'c10' } },
-            { lick: { id: 'c20' } },
-            { lick: { id: 'c30' } }
-        ]);
+        const state = createState({
+            byId: {
+                'c10': { artist: 'foo' },
+                'c20': { artist: 'bar' },
+                'c30': { artist: 'baz' }
+            }
+        });
 
         try {
             lickReducer(state, { type: LICK_UPDATE, lick });
@@ -277,10 +276,12 @@ invalidLicksToUpdate.forEach((entry, i) => {
 });
 
 it('update lick, id not found', () => {
-    const state = createState([
-        { lick: { id: 'c10' } },
-        { lick: { id: 'c30' } }
-    ]);
+    const state = createState({
+        byId: {
+            'c10': { artist: 'foo' },
+            'c30': { artist: 'baz' }
+        }
+    });
 
     const lick = {
         id: 'c20',
@@ -296,21 +297,25 @@ it('update lick, id not found', () => {
     } catch (error) {
         assertErrorContainsString(error, 'Unable to reduce ' + LICK_UPDATE);
         assertErrorContainsString(error, JSON.stringify(lick));
-        assertErrorContainsString(error, 'Id c20 not found');
+        assertErrorContainsString(error, 'id c20 not found');
     }
 });
 
 it('delete lick, success', () => {
-    const state = createState([
-        { lick: { id: 'c10' } },
-        { lick: { id: 'c20' } },
-        { lick: { id: 'c30' } }
-    ]);
+    const state = createState({
+        byId: {
+            'c10': { artist: 'foo' },
+            'c20': { artist: 'bar' },
+            'c30': { artist: 'baz' }
+        }
+    });
 
-    const expectedState = createState([
-        { lick: { id: 'c10' } },
-        { lick: { id: 'c30' } }
-    ]);
+    const expectedState = createState({
+        byId: {
+            'c10': { artist: 'foo' },
+            'c30': { artist: 'baz' }
+        }
+    });
 
     expect(lickReducer(state, { type: LICK_DELETE, id: 'c20' })).toEqual(
         expectedState
@@ -318,46 +323,55 @@ it('delete lick, success', () => {
 });
 
 it('delete lick, id not found', () => {
-    const state = createState([
-        { lick: { id: 'c10' } },
-        { lick: { id: 'c20' } },
-        { lick: { id: 'c30' } }
-    ]);
+    const state = createState({
+        byId: {
+            'c10': { artist: 'foo' },
+            'c20': { artist: 'bar' },
+            'c30': { artist: 'baz' }
+        }
+    });
 
     try {
         lickReducer(state, { type: LICK_DELETE, id: 'c999' });
         throw new Error();
     } catch (error) {
         assertErrorContainsString(error, 'Unable to reduce ' + LICK_DELETE);
-        assertErrorContainsString(error, 'Id c999 not found');
+        assertErrorContainsString(error, 'id c999 not found');
     }
 });
 
-const validModes = [LICK_MODE_EDIT, LICK_MODE_VIEW];
-
-validModes.forEach((mode, i) => {
-    it('change lick mode, success #' + i, () => {
-        const state = createState([
-            { lick: { id: 'c5' } },
-            { lick: { id: 'c10' }, mode: 'irrelevant' }
-        ]);
-
-        const expectedState = createState([
-            { lick: { id: 'c5' } },
-            { lick: { id: 'c10' }, mode }
-        ]);
-
-        const newState = lickReducer(state, changeLickMode('c10', mode));
-        expect(newState).toEqual(expectedState);
+it('change lick mode, set edit', () => {
+    const state = createState({
+        editLickId: null
     });
+
+    const expectedState = createState({
+        editLickId: 'c10'
+    });
+
+    const newState = lickReducer(state, changeLickMode('c10', LICK_MODE_EDIT));
+    expect(newState).toEqual(expectedState);
+});
+
+it('change lick mode, set view', () => {
+    const state = createState({
+        editLickId: 'c10'
+    });
+
+    const expectedState = createState({
+        editLickId: null
+    });
+
+    const newState = lickReducer(state, changeLickMode('c10', LICK_MODE_VIEW));
+    expect(newState).toEqual(expectedState);
 });
 
 it('change lick mode, invalid mode', () => {
+    const validModes = [LICK_MODE_EDIT, LICK_MODE_VIEW];
     const mode = 'modeFooInvalid';
-    const state = createState([
-        { lick: { id: 'c5' } },
-        { lick: { id: 'c10' }, mode: 'foo' }
-    ]);
+    const state = createState({
+        editLickId: 'c10'
+    });
     try {
         lickReducer(state, changeLickMode('c10', mode));
         throw new Error();
@@ -372,26 +386,11 @@ it('change lick mode, invalid mode', () => {
     }
 });
 
-it('change lick mode, id not found', () => {
-    const state = createState([
-        { lick: { id: 'c5' } },
-        { lick: { id: 'c10' }, mode: 'foo' }
-    ]);
-    try {
-        lickReducer(state, changeLickMode('c15', LICK_MODE_EDIT));
-        throw new Error();
-    } catch (error) {
-        assertErrorContainsString(
-            error,
-            'Unable to reduce ' + LICK_CHANGE_MODE
-        );
-        assertErrorContainsString(error, 'Id c15 not found');
-    }
-});
-
-const createState = items => {
+const createState = properties => {
     return Object.freeze({
-        isCreateFormEnabled: false,
-        items
+        editLickId: null,
+        isCreationOpen: false,
+        byId: {},
+        ...properties
     });
 };

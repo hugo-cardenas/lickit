@@ -2,40 +2,59 @@ import VError from 'verror';
 import Joi from 'joi-browser';
 import cuid from 'cuid';
 import {
-    LICK_ENABLE_CREATE_FORM,
-    LICK_CANCEL_CREATE_FORM,
+    LICK_OPEN_CREATION,
+    LICK_CANCEL_CREATION,
     LICK_CREATE,
     LICK_UPDATE,
     LICK_DELETE,
     LICK_CHANGE_MODE
 } from '../actions/types';
 import { LICK_MODE_EDIT, LICK_MODE_VIEW } from '../actions/lick/modes';
+import { combineReducers } from 'redux';
 
-const defaultState = {
-    isCreateFormEnabled: false,
-    items: []
+const isCreationOpen = (isCreationOpen = false, action) => {
+    switch (action.type) {
+        case LICK_OPEN_CREATION:
+            return true;
+        case LICK_CREATE:
+        case LICK_CANCEL_CREATION:
+            return false;
+        default:
+            return isCreationOpen;
+    }
 };
 
-export default function (state = defaultState, action) {
+const editLickId = (editLickId = null, action) => {
     switch (action.type) {
-        case LICK_ENABLE_CREATE_FORM:
-            return { ...state, isCreateFormEnabled: true };
-        case LICK_CANCEL_CREATE_FORM:
-            return { ...state, isCreateFormEnabled: false };
-        case LICK_CREATE:
-            return createLick(state, action.lick);
-        case LICK_UPDATE:
-            return updateLick(state, action.lick);
-        case LICK_DELETE:
-            return deleteLick(state, action.id);
         case LICK_CHANGE_MODE:
-            return changeLickMode(state, action.id, action.mode);
+            return changeLickMode(editLickId, action.id, action.mode);
+        case LICK_UPDATE:
+            return null;
         default:
-            return state;
+            return editLickId;
     }
-}
+};
 
-function createLick(state, newLick) {
+const byId = (licks = {}, action) => {
+    switch (action.type) {
+        case LICK_CREATE:
+            return createLick(licks, action.lick);
+        case LICK_UPDATE:
+            return updateLick(licks, action.lick);
+        case LICK_DELETE:
+            return deleteLick(licks, action.id);
+        default:
+            return licks;
+    }
+};
+
+export default combineReducers({
+    isCreationOpen,
+    editLickId,
+    byId
+});
+
+const createLick = (licks, newLick) => {
     try {
         validateNewLick(newLick);
     } catch (error) {
@@ -43,64 +62,54 @@ function createLick(state, newLick) {
     }
 
     const { artist, description, tracks, tags } = newLick;
-
     const id = cuid(); // TODO Not pure - maybe move to action?
     const createdAt = Date.now(); // TODO Not pure - maybe move to action?
+
     return {
-        ...state,
-        isCreateFormEnabled: false,
-        items: {
-            [id]: {
-                lick: {
-                    artist,
-                    description,
-                    tracks,
-                    tags,
-                    createdAt
-                },
-                mode: 'view'
-            },
-            ...state.items
+        ...licks,
+        [id]: {
+            artist,
+            description,
+            tracks,
+            tags,
+            createdAt
         }
     };
-}
+};
 
-function updateLick(state, newLick) {
+const updateLick = (licks, newLick) => {
     try {
-        validateUpdatedLick(newLick);
-        var index = findItemIndex(state.items, newLick.id);
+        validateUpdatingLick(newLick);
+        validateLickIndex(licks, newLick.id);
     } catch (error) {
         throw createReducerLickError(error, LICK_UPDATE, newLick);
     }
+
     const { id, artist, description, tracks, tags } = newLick;
-
-    const newState = {
-        ...state,
-        items: [...state.items]
+    return {
+        ...licks,
+        [newLick.id]: {
+            ...licks[id],
+            artist,
+            description,
+            tracks,
+            tags
+        }
     };
+};
 
-    const item = state.items[index];
-    newState.items[index] = {
-        ...item,
-        lick: { ...item.lick, id, artist, description, tracks, tags },
-        mode: 'view'
-    };
-
-    return newState;
-}
-
-function createReducerLickError(previousError, action, lick) {
-    return new VError(
+const createReducerLickError = (previousError, action, lick) => (
+    new VError(
         previousError,
         'Unable to reduce %s with lick %s',
         action,
         JSON.stringify(lick)
-    );
-}
+    )
+);
 
-function deleteLick(state, id) {
+const deleteLick = (licks, id) => {
     try {
-        var index = findItemIndex(state.items, id);
+        validateLickIndex(licks, id);
     } catch (error) {
         throw new VError(
             error,
@@ -110,33 +119,18 @@ function deleteLick(state, id) {
         );
     }
 
-    const items = [...state.items];
-    items.splice(index, 1);
+    const nextLicks = { ...licks };
+    delete nextLicks[id];
+    return nextLicks;
+};
 
-    return {
-        ...state,
-        items
-    };
-}
-
-function changeLickMode(state, id, mode) {
-    const validModes = [LICK_MODE_EDIT, LICK_MODE_VIEW];
+const changeLickMode = (editLickId, id, mode) => {
     try {
-        if (!validModes.includes(mode)) {
-            throw new VError(
-                'Invalid mode %s, should be one of %s',
-                mode,
-                validModes.join(', ')
-            );
+        validateMode(mode);
+        if (mode === LICK_MODE_EDIT) {
+            return id;
         }
-        const index = findItemIndex(state.items, id);
-        const items = [...state.items];
-        items[index] = { ...state.items[index], mode };
-
-        return {
-            ...state,
-            items
-        };
+        return null;
     } catch (error) {
         throw new VError(
             error,
@@ -146,26 +140,39 @@ function changeLickMode(state, id, mode) {
             mode
         );
     }
-}
+};
 
-function validateNewLick(lick) {
+const validateNewLick = (lick) => {
     const schema = getNewLickSchema();
     const { error } = Joi.validate(lick, schema, getJoiOptions());
     if (error) {
         throw error;
     }
-}
+};
 
-function validateUpdatedLick(lick) {
+const validateUpdatingLick = (lick) => {
     const schema = getUpdatedLickSchema();
     const { error } = Joi.validate(lick, schema, getJoiOptions());
     if (error) {
         throw error;
     }
-}
+};
 
-function validateLickIndex(items, id) {
-    
+const validateMode = mode => {
+    const validModes = [LICK_MODE_EDIT, LICK_MODE_VIEW];
+    if (!validModes.includes(mode)) {
+        throw new VError(
+            'Invalid mode %s, should be one of %s',
+            mode,
+            validModes.join(', ')
+        );
+    }
+};
+
+function validateLickIndex(licks, id) {
+    if (!licks[id]) {
+        throw new VError(`Lick id ${id} not found`);
+    }
 }
 
 function getNewLickSchema() {

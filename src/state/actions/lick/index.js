@@ -2,8 +2,8 @@ import getActions from './lick';
 import { getStorage } from '../../../track/storage';
 
 export const {
-    enableCreateLickForm,
-    cancelCreateLickForm,
+    openCreation,
+    cancelCreation,
     createLick,
     updateLick,
     deleteLick,
