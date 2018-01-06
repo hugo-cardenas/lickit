@@ -30,11 +30,10 @@ it('map state to props, map error', () => {
     expect(props.error).toEqual(error);
 });
 
-it('map state to props, map lick state', () => {
+it('map state to props, map other lick state', () => {
     const state = createState();
     const props = mapStateToProps(state);
     expect(props.lick.isCreationOpen).toBe(false);
-    expect(props.lick.editLickId).toBe(null);
 });
 
 it('map state to props, map licks', () => {
@@ -69,86 +68,69 @@ it('map state to props, map licks', () => {
     expect(props.lick.licks).toEqual(expectedLicks);
 });
 
-it('map state to props, map items, set artist indexes and sort by createdAt', () => {
-    const state = createStateWithItems([
-        {
-            mode: 'edit',
-            lick: {
-                id: 'c42',
-                artist: 'Charlie Foo',
-                description: 'Foo bar 42',
-                tracks: [{ id: 'abc10' }, { id: 'abc20' }],
-                tags: ['foo', 'bar'],
-                createdAt: 12500
-            }
+it('map state to props, map licks, set artist indexes and sort by createdAt', () => {
+    const state = createStateWithLicks({
+        c42: {
+            artist: 'Charlie Foo',
+            description: 'Foo bar 42',
+            tracks: [{ id: 'abc10' }, { id: 'abc20' }],
+            tags: ['foo', 'bar'],
+            createdAt: 12500
         },
-        {
-            mode: 'edit',
-            lick: {
-                id: 'c44',
-                artist: 'Charlie Foo',
-                description: 'Foo bar 42',
-                tracks: [{ id: 'abc10' }, { id: 'abc20' }],
-                tags: ['foo', 'bar'],
-                createdAt: 12600
-            }
+        c44: {
+            artist: 'Charlie Foo',
+            description: 'Foo bar 42',
+            tracks: [{ id: 'abc10' }, { id: 'abc20' }],
+            tags: ['foo', 'bar'],
+            createdAt: 12600
         },
-        {
-            mode: 'edit',
-            lick: {
-                id: 'c46',
-                artist: 'Charlie Bar',
-                description: 'Foo bar 42',
-                tracks: [{ id: 'abc10' }, { id: 'abc20' }],
-                tags: ['foo', 'bar'],
-                createdAt: 12700
-            }
+        c46: {
+            artist: 'Charlie Bar',
+            description: 'Foo bar 42',
+            tracks: [{ id: 'abc10' }, { id: 'abc20' }],
+            tags: ['foo', 'bar'],
+            createdAt: 12700
         }
-    ]);
+    });
 
     const props = mapStateToProps(state);
-    expect(props.lick.items[0].lick.id).toBe('c46');
-    expect(props.lick.items[0].lick.artistIndex).toEqual(1);
+    expect(props.lick.licks[0].id).toBe('c46');
+    expect(props.lick.licks[0].artistIndex).toEqual(1);
 
-    expect(props.lick.items[1].lick.id).toBe('c44');
-    expect(props.lick.items[1].lick.artistIndex).toEqual(2);
+    expect(props.lick.licks[1].id).toBe('c44');
+    expect(props.lick.licks[1].artistIndex).toEqual(2);
 
-    expect(props.lick.items[2].lick.id).toBe('c42');
-    expect(props.lick.items[2].lick.artistIndex).toEqual(1);
+    expect(props.lick.licks[2].id).toBe('c42');
+    expect(props.lick.licks[2].artistIndex).toEqual(1);
 });
 
-const itemsToBeFiltered = [
-    createLick({
-        id: 'c42',
+const licksToBeFiltered = {
+    c42: createLickObject({
         artist: 'Charlie Foo',
         description: 'Foo bar 42',
         tags: ['foo', 'bar']
     }),
-    createLick({
-        id: 'c44',
+    c44: createLickObject({
         artist: 'Charlie Foo',
         description: 'Foo bar 42',
         tags: ['baz', 'foobar']
     }),
-    createLick({
-        id: 'c46',
+    c46: createLickObject({
         artist: 'Django Bar',
         description: 'Foo bar 42',
         tags: ['foo']
     }),
-    createLick({
-        id: 'c48',
+    c48: createLickObject({
         artist: 'Django Bar',
         description: 'Foo bar 42',
         tags: ['bar']
     }),
-    createLick({
-        id: 'c50',
+    c50: createLickObject({
         artist: 'Stephane Baz',
         description: 'Foo bar 42',
         tags: ['foobar', 'foo', 'bar']
     })
-];
+};
 
 const expectedFilteredIds = [
     // No filters
@@ -199,27 +181,33 @@ const expectedFilteredIds = [
 ];
 
 expectedFilteredIds.forEach((entry, i) => {
-    it('map state to props, map items, apply filters #' + i, () => {
+    it('map state to props, map licks, apply filters #' + i, () => {
         const { filters, expectedIds } = entry;
 
-        const state = createStateWithItems(itemsToBeFiltered);
+        const state = createStateWithLicks(licksToBeFiltered);
         state.search.filters = filters;
 
         const props = mapStateToProps(state);
-        const ids = props.lick.items.map(item => item.lick.id);
+        const ids = props.lick.licks.map(lick => lick.id);
         expect(ids).toEqual(expectedIds);
     });
 });
 
 const stateWithSearch = createState({
-    lick: {
-        items: [
-            createLick({ artist: 'Django Bar', tags: ['Baz'] }),
-            createLick({ artist: 'charlie Foo', tags: ['foo', 'bar'] }),
-            createLick({ artist: 'Django Bar', tags: ['foo', 'foobar'] }),
-            createLick({ artist: '', tags: [] }) // Empty artist should not appear as a suggestion
-        ]
-    },
+    lick: createLickState({
+        byId: {
+            10: createLickObject({ artist: 'Django Bar', tags: ['Baz'] }),
+            20: createLickObject({
+                artist: 'charlie Foo',
+                tags: ['foo', 'bar']
+            }),
+            30: createLickObject({
+                artist: 'Django Bar',
+                tags: ['foo', 'foobar']
+            }),
+            40: createLickObject({ artist: '', tags: [] }) // Empty artist should not appear as a suggestion
+        }
+    }),
     search: {
         filters: [{ type: 'foo', value: 123 }, { type: 'bar', value: 456 }]
     }
@@ -297,7 +285,7 @@ expectedSuggestions.forEach((entry, i) => {
     });
 });
 
-it('map dispatch to props - create lick', async() => {
+it('map dispatch to props - create lick', async () => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
@@ -311,7 +299,7 @@ it('map dispatch to props - create lick', async() => {
     );
 });
 
-it('map dispatch to props - update lick', async() => {
+it('map dispatch to props - update lick', async () => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
@@ -325,7 +313,7 @@ it('map dispatch to props - update lick', async() => {
     );
 });
 
-it('map dispatch to props - delete lick', async() => {
+it('map dispatch to props - delete lick', async () => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
@@ -338,7 +326,7 @@ it('map dispatch to props - delete lick', async() => {
     );
 });
 
-it('map dispatch to props - change lick mode', async() => {
+it('map dispatch to props - change lick mode', async () => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
@@ -347,7 +335,7 @@ it('map dispatch to props - change lick mode', async() => {
     expect(dispatch).toHaveBeenCalledWith(changeLickMode('a42', 'modeFoo'));
 });
 
-it('map dispatch to props - add filter', async() => {
+it('map dispatch to props - add filter', async () => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
@@ -356,7 +344,7 @@ it('map dispatch to props - add filter', async() => {
     expect(dispatch).toHaveBeenCalledWith(addFilter({ foo: 'bar' }));
 });
 
-it('map dispatch to props - remove filter', async() => {
+it('map dispatch to props - remove filter', async () => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
@@ -365,7 +353,7 @@ it('map dispatch to props - remove filter', async() => {
     expect(dispatch).toHaveBeenCalledWith(removeFilter({ foo: 'bar' }));
 });
 
-it('map dispatch to props - set input', async() => {
+it('map dispatch to props - set input', async () => {
     const dispatch = jest.fn();
     const props = mapDispatchToProps(dispatch);
 
@@ -444,10 +432,21 @@ function createState(state = {}) {
     };
 }
 
-const createLickObject = lick => ({
-    artist: '',
-    description: '',
-    tracks: [],
-    tags: [],
-    ...lick
-});
+function createLickState(state) {
+    return {
+        isCreationOpen: false,
+        editLickId: null,
+        byId: {},
+        ...state
+    };
+}
+
+function createLickObject(lick) {
+    return {
+        artist: '',
+        description: '',
+        tracks: [],
+        tags: [],
+        ...lick
+    };
+}

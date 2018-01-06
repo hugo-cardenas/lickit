@@ -17,14 +17,15 @@ const mapStateToProps = state => {
     return {
         error: state.error,
         lick: lickProps,
-        // search: mapSearchStateToProps(state.search, lickProps.items)
+        search: mapSearchStateToProps(state.search, lickProps.licks)
     };
 };
 
 const mapLickStateToProps = state => {
     const { byId, editLickId } = state.lick;
-    const stateLicks = Object.keys(byId)
-        .map(id => mapLickToProp(id, byId[id], editLickId));
+    const stateLicks = Object.keys(byId).map(id =>
+        mapLickToProp(id, byId[id], editLickId)
+    );
 
     const groupedByArtist = Object.values(
         groupBy(stateLicks, lick => lick.artist)
@@ -39,7 +40,7 @@ const mapLickStateToProps = state => {
     });
 
     const licks = [].concat(...groupedByArtist);
-    licks.sort((a, b) => b.lick.createdAt - a.lick.createdAt);
+    licks.sort((a, b) => b.createdAt - a.createdAt);
 
     const filters = state.search.filters;
     const artist = getFilteredArtist(filters);
@@ -47,8 +48,8 @@ const mapLickStateToProps = state => {
 
     const filteredLicks = licks.filter(
         lick =>
-        (!artist || lick.artist === artist) &&
-        difference(tags, lick.tags).length === 0
+            (!artist || lick.artist === artist) &&
+            difference(tags, lick.tags).length === 0
     );
 
     return {
@@ -87,18 +88,18 @@ const mapLickToProp = (id, lick, editLickId) => {
     };
 };
 
-const mapSearchStateToProps = (search, filteredItems) => {
+const mapSearchStateToProps = (search, filteredLicks) => {
     const filters = search.filters;
     const input = search.input;
     return {
         filters,
         input,
-        suggestions: getSuggestions(filteredItems, filters)
+        suggestions: getSuggestions(filteredLicks, filters)
     };
 };
 
 // TODO Move this out of map and memoize ops - Redux selector
-const getSuggestions = (items, filters) => {
+const getSuggestions = (licks, filters) => {
     // Allow to set max 5 filters, don't show any more suggestions
     if (filters.length >= 5) {
         return [];
@@ -110,7 +111,7 @@ const getSuggestions = (items, filters) => {
         artists = [];
     } else {
         artists = uniq(
-            items.map(item => item.lick.artist).filter(item => item.length > 0)
+            licks.map(lick => lick.artist).filter(artist => artist.length > 0)
         );
     }
 
@@ -122,8 +123,8 @@ const getSuggestions = (items, filters) => {
 
     const tags = uniq(
         []
-        .concat(...items.map(item => item.lick.tags))
-        .filter(tag => !isContainedInFilters(tag))
+            .concat(...licks.map(lick => lick.tags))
+            .filter(tag => !isContainedInFilters(tag))
     );
 
     const compareCaseInsensitive = (a, b) =>

@@ -1,8 +1,7 @@
 const fs = require('fs');
-const _  = require('lodash');
+const _ = require('lodash');
 
 const state = require('/tmp/state.json');
-
 
 const indexItemsById = items => {
     const byId = {};
@@ -20,6 +19,5 @@ const newState = {
         byId: indexItemsById(state.lick.items)
     }
 };
-
 
 fs.writeFileSync('/tmp/newState.json', JSON.stringify(newState));
