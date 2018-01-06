@@ -4,7 +4,7 @@ import Lick from 'src/render/Lick/Lick';
 
 test('render form due to mode prop', () => {
     const props = getTestProps();
-    props.mode = 'edit';
+    props.lick.mode = 'edit';
     props.changeLickMode = jest.fn();
 
     const component = shallow(<Lick {...props} />);
@@ -21,7 +21,7 @@ test('render form due to mode prop', () => {
 
 test('render view due to mode prop', () => {
     const props = getTestProps();
-    props.mode = 'view';
+    props.lick.mode = 'view';
     props.changeLickMode = jest.fn();
 
     const component = shallow(<Lick {...props} />);

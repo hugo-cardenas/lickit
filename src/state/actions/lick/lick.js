@@ -132,5 +132,5 @@ export default function getActions(trackStorage) {
 
 // TODO May write a Redux selector for this http://redux.js.org/docs/recipes/ComputingDerivedData.html
 function getStoredTracks(state, lickId) {
-    return state.lick.items.find(item => item.lick.id === lickId).lick.tracks;
+    return state.lick.byId[lickId].tracks;
 }

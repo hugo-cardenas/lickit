@@ -48,15 +48,13 @@ it('render without crashing', () => {
 
 it('render expected number of licks', () => {
     const props = getProps();
-    props.lick.items = range(7).map(i => {
+    props.lick.licks = range(7).map(i => {
         return {
-            lick: {
-                id: 'c' + i,
-                artist: '',
-                description: '',
-                tracks: [],
-                tags: []
-            }
+            id: 'c' + i,
+            artist: '',
+            description: '',
+            tracks: [],
+            tags: []
         };
     });
 
@@ -100,8 +98,8 @@ it('render search', () => {
 const getProps = () => {
     return {
         lick: {
-            isCreateFormEnabled: false,
-            items: [],
+            isCreationOpen: false,
+            licks: [],
             enableCreateLickForm: () => {},
             cancelCreateLickForm: () => {},
             createLick: () => {},

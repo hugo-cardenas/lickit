@@ -72,7 +72,6 @@ it('create lick - async save fails', async () => {
     const blob2 = new Blob(['bar']);
 
     const lick = {
-        id: 'c1024',
         tracks: [
             { blob: blob1 }, // To be created, will succeed
             { blob: blob2 } // To be created, will fail
@@ -105,21 +104,19 @@ it('create lick - async save fails', async () => {
 });
 
 it('update lick - success', async () => {
-    const state = createFullState([
-        { lick: { id: 'c512' } },
-        {
-            lick: {
-                id: 'c1024',
-                tracks: [
-                    { id: 'c40', url: 'foo1' }, // To be deleted
-                    { id: 'c42', url: 'foo2' },
-                    { id: 'c44', url: 'foo3' }, // To be deleted
-                    { id: 'c46', url: 'foo4' }
-                ]
-            }
+    const state = createState({
+        c512: { artist: 'foo' },
+        c1024: {
+            artist: 'bar',
+            tracks: [
+                { id: 'c40', url: 'foo1' }, // To be deleted
+                { id: 'c42', url: 'foo2' },
+                { id: 'c44', url: 'foo3' }, // To be deleted
+                { id: 'c46', url: 'foo4' }
+            ]
         },
-        { lick: { id: 'c2048' } }
-    ]);
+        c2048: { artist: 'baz' }
+    });
 
     const blob1 = new Blob(['foo']);
     const blob2 = new Blob(['bar']);
@@ -172,14 +169,11 @@ it('update lick - success', async () => {
 });
 
 it('update lick - invalid action data', async () => {
-    const state = createFullState([
-        {
-            lick: {
-                id: 'c1024',
-                tracks: []
-            }
+    const state = createState({
+        c1024: {
+            tracks: []
         }
-    ]);
+    });
     const invalidTrack = { foo: 'bar' }; // Missing id or blob
     const lick = {
         id: 'c1024',
@@ -209,16 +203,14 @@ it('update lick - invalid action data', async () => {
 });
 
 it('update lick - async save fails', async () => {
-    const state = createFullState([
-        { lick: { id: 'c512' } },
-        {
-            lick: {
-                id: 'c1024',
-                tracks: [{ id: 'c42' }]
-            }
+    const state = createState({
+        c512: { artist: 'foo' },
+        c1024: {
+            artist: 'bar',
+            tracks: [{ id: 'c42' }]
         },
-        { lick: { id: 'c2048' } }
-    ]);
+        c2048: { artist: 'baz' }
+    });
 
     const blob1 = new Blob(['foo']);
     const blob2 = new Blob(['bar']);
@@ -259,19 +251,17 @@ it('update lick - async save fails', async () => {
 });
 
 it('update lick - async delete fails, still creates action', async () => {
-    const state = createFullState([
-        { lick: { id: 'c512' } },
-        {
-            lick: {
-                id: 'c1024',
-                tracks: [
-                    { id: 'c40' }, // To be deleted, will succeed
-                    { id: 'c42' } // To be deleted, will fail
-                ]
-            }
+    const state = createState({
+        c512: { artist: 'foo' },
+        c1024: {
+            artist: 'bar',
+            tracks: [
+                { id: 'c40' }, // To be deleted, will succeed
+                { id: 'c42' } // To be deleted, will fail
+            ]
         },
-        { lick: { id: 'c2048' } }
-    ]);
+        c2048: { artist: 'baz' }
+    });
 
     const lick = {
         id: 'c1024',
@@ -309,19 +299,17 @@ it('update lick - async delete fails, still creates action', async () => {
 });
 
 it('delete lick - success', async () => {
-    const state = createFullState([
-        { lick: { id: 'c512' } },
-        {
-            lick: {
-                id: 'c1024',
-                tracks: [
-                    { id: 'c40' }, // To be deleted
-                    { id: 'c42' } // To be deleted
-                ]
-            }
+    const state = createState({
+        c512: { artist: 'foo' },
+        c1024: {
+            artist: 'bar',
+            tracks: [
+                { id: 'c40' }, // To be deleted
+                { id: 'c42' } // To be deleted
+            ]
         },
-        { lick: { id: 'c2048' } }
-    ]);
+        c2048: { artist: 'baz' }
+    });
 
     const lickId = 'c1024';
 
@@ -350,19 +338,17 @@ it('delete lick - success', async () => {
 });
 
 it('delete lick - async delete fails, still creates action', async () => {
-    const state = createFullState([
-        { lick: { id: 'c512' } },
-        {
-            lick: {
-                id: 'c1024',
-                tracks: [
-                    { id: 'c40' }, // To be deleted, will succeed
-                    { id: 'c42' } // To be deleted, will fail
-                ]
-            }
+    const state = createState({
+        c512: { artist: 'foo' },
+        c1024: {
+            artist: 'bar',
+            tracks: [
+                { id: 'c40' }, // To be deleted, will succeed
+                { id: 'c42' } // To be deleted, will fail
+            ]
         },
-        { lick: { id: 'c2048' } }
-    ]);
+        c2048: { artist: 'baz' }
+    });
 
     const lickId = 'c1024';
 
@@ -391,10 +377,10 @@ it('delete lick - async delete fails, still creates action', async () => {
     });
 });
 
-const createFullState = items => {
+const createState = licks => {
     return Object.freeze({
         lick: {
-            items
+            byId: licks
         }
     });
 };

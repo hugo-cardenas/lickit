@@ -1,43 +1,11 @@
 import _ from 'lodash';
 
 const artists = [
-    [
-        'Django Reinhardt',
-        'Lady be good',
-        [
-            'https://upload.wikimedia.org/wikipedia/commons/f/f5/Django_Reinhardt_%28Gottlieb_07301%29.jpg',
-            30
-        ]
-    ],
-    [
-        '',
-        'Blues clair',
-        [
-            'https://upload.wikimedia.org/wikipedia/commons/f/f5/Django_Reinhardt_%28Gottlieb_07301%29.jpg',
-            30
-        ]
-    ],
-    [
-        'Coleman Hawkins',
-        '',
-        ['https://rilm.files.wordpress.com/2014/11/coleman-hawkins.jpg', 25]
-    ],
-    [
-        'Charlie Parker',
-        'Confirmation',
-        [
-            'https://cps-static.rovicorp.com/3/JPG_400/MI0002/750/MI0002750232.jpg?partner=allrovi.com',
-            30
-        ]
-    ],
-    [
-        'Dizzy Gillespie',
-        'A night in Tunisia',
-        [
-            'http://mediad.publicbroadcasting.net/p/kuvo/files/styles/medium/public/201707/dizzy_gillespie.jpg',
-            35
-        ]
-    ]
+    ['Django Reinhardt', 'Lady be good'],
+    ['', 'Blues clair'],
+    ['Coleman Hawkins', ''],
+    ['Charlie Parker', 'Confirmation'],
+    ['Dizzy Gillespie', 'A night in Tunisia']
 ];
 
 const tags = [
@@ -51,22 +19,21 @@ const tags = [
     'rhythm changes'
 ];
 
-const url =
-    'http://developer.mozilla.org/@api/deki/files/2926/=AudioTest_(1).ogg';
-
 export default function getDummyState(numItems) {
-    const licks = _.range(numItems).map(createItem);
+    const licksById = {};
+    _.range(numItems).forEach(i => {
+        const lick = createItem(i);
+        licksById[lick.id] = _.omit(lick, ['id']);
+    });
 
     const state = {
         lick: {
-            isCreateFormEnabled: false,
-            items: licks.map(lick => {
-                return { lick };
-            })
+            editLickId: null,
+            isCreationOpen: false,
+            byId: licksById
         }
     };
 
-    // state.lick.items[0].mode = 'edit';
     return state;
 }
 
@@ -89,9 +56,7 @@ const createItem = i => {
 
 const createTrack = i => {
     return {
-        // id: `${i}`,
-        id: 'cj99x1nk90001uvc9y3mjpjne',
-        url: url + `?a=${i}`
+        id: 'cj99x1nk90001uvc9y3mjpjne'
     };
 };
 

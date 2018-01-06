@@ -7,8 +7,8 @@ import { LICK_MODE_EDIT, LICK_MODE_VIEW } from '../../state/actions/lick/modes';
 
 class Lick extends React.Component {
     render() {
-        const { lick, mode, saveLick, deleteLick, changeLickMode } = this.props;
-        switch (mode) {
+        const { lick, saveLick, deleteLick, changeLickMode } = this.props;
+        switch (lick.mode) {
             case LICK_MODE_EDIT:
                 return renderForm(lick, saveLick, changeLickMode, deleteLick);
             case LICK_MODE_VIEW:
@@ -18,10 +18,7 @@ class Lick extends React.Component {
     }
 
     shouldComponentUpdate(nextProps) {
-        return (
-            !_.isEqual(nextProps.lick, this.props.lick) ||
-            !_.isEqual(nextProps.mode, this.props.mode)
-        );
+        return !_.isEqual(nextProps.lick, this.props.lick);
     }
 }
 

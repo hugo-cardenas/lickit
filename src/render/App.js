@@ -9,7 +9,7 @@ const App = props => {
     const { error, lick, search } = props;
     const {
         isCreateFormEnabled,
-        items,
+        licks,
         enableCreateLickForm,
         cancelCreateLickForm,
         createLick,
@@ -19,7 +19,8 @@ const App = props => {
     } = lick;
 
     if (error instanceof Error) {
-        alert('ERROR:' + '\n' + error);
+        // TODO Use sweetalert
+        alert(`Error: ${error.message}\n${error.stack}`);
     }
 
     const enableCreateLick = () => {
@@ -36,8 +37,8 @@ const App = props => {
                     {isCreateFormEnabled
                         ? renderCreateLickForm(createLick, cancelCreateLickForm)
                         : ''}
-                    {items.map(item =>
-                        renderItem(item, deleteLick, saveLick, changeLickMode)
+                    {licks.map(lick =>
+                        renderLick(lick, deleteLick, saveLick, changeLickMode)
                     )}
                 </div>
             </div>
@@ -111,11 +112,10 @@ const renderCreateLickButton = enableLickCreateForm => (
     </a>
 );
 
-const renderItem = (item, deleteLick, saveLick, changeLickMode) => (
+const renderLick = (lick, deleteLick, saveLick, changeLickMode) => (
     <Lick
-        key={item.lick.id}
-        lick={item.lick}
-        mode={item.mode}
+        key={lick.id}
+        lick={lick}
         deleteLick={deleteLick}
         saveLick={saveLick}
         changeLickMode={changeLickMode}
@@ -127,13 +127,8 @@ export default App;
 App.propTypes = {
     error: PropTypes.object,
     lick: PropTypes.shape({
-        isCreateFormEnabled: PropTypes.bool.isRequired,
-        items: PropTypes.arrayOf(
-            PropTypes.shape({
-                lick: PropTypes.object.isRequired,
-                mode: PropTypes.string
-            })
-        ).isRequired,
+        isCreationOpen: PropTypes.bool.isRequired,
+        licks: PropTypes.arrayOf(PropTypes.object).isRequired,
         enableCreateLickForm: PropTypes.func.isRequired,
         cancelCreateLickForm: PropTypes.func.isRequired,
         createLick: PropTypes.func.isRequired,
