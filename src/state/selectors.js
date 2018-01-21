@@ -4,6 +4,9 @@ import { getPathResolver } from '../track/pathResolver';
 import { TYPE_ARTIST, TYPE_TAG } from '../search/filterTypes';
 import { LICK_MODE_EDIT, LICK_MODE_VIEW } from './actions/lick/modes';
 
+const getError = state => state.error;
+
+const isLickCreationOpen = state => state.lick.isCreationOpen;
 const getLicksById = state => state.lick.byId;
 const getEditLickId = state => state.lick.editLickId;
 
@@ -158,6 +161,8 @@ const getSearch = createSelector(
 );
 
 export {
+    getError,
+    isLickCreationOpen,
     getLicks,
     getSearch
 };
