@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Player from '../Audio/Player';
 import radium from 'radium';
+import ReactTooltip from 'react-tooltip';
 
 const LickView = props => {
     const { lick, editLick, deleteLick } = props;
@@ -73,15 +74,40 @@ const renderTrack = url => (
     </div>
 );
 
-const renderTags = tags => (
-    <div className="tags">
-        {tags.map(tag => (
-            <span key={tag} className="tag">
+const renderTags = tags => {
+    // Hack to estimate fitting tags in one line
+    const letterWidth = 6;
+    const paddingSum = 9 + 9;
+    const marginRight = 8;
+
+    const maxWidth = 228;
+    const ellipsisWidth = 11 + paddingSum + marginRight;
+    const tagWidths = tags.map(tag =>  letterWidth * tag.length + paddingSum + marginRight);
+    
+    let totalWidth = 0;
+    const visibleTags = tags.reduce((visibleTags, tag, index) => {
+        if (totalWidth + tagWidths[index] < maxWidth) {
+            visibleTags.push(tag);
+            totalWidth += tagWidths[index];
+        }
+        return visibleTags;
+    }, []);
+    
+    if (visibleTags.length < tags.length) {
+        visibleTags.push('...');
+        totalWidth += ellipsisWidth;
+        delete visibleTags[visibleTags.length - 2];
+    }
+
+    return <div className="tags">
+        {visibleTags.map(tag => (
+            <div key={tag} className="tag" data-tip={tag === '...' ? tags.join(' | ') : null}>
                 {tag}
-            </span>
+            </div>
         ))}
-    </div>
-);
+        <ReactTooltip effect="solid" place="bottom" />
+    </div>;
+};
 
 export default radium(LickView);
 

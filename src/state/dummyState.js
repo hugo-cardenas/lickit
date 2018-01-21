@@ -48,7 +48,7 @@ const createItem = i => {
         background,
         tracks: _.range(rand(1, 1)).map(createTrack),
         tags: _.uniq(
-            _.range(rand(2, 2)).map(() => tags[rand(0, tags.length - 1)])
+            _.range(rand(5, 5)).map(() => tags[rand(0, tags.length - 1)])
         ),
         createdAt: i
     };

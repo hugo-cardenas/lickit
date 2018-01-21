@@ -30,7 +30,7 @@ test('render tags', () => {
     const tagsParent = component.find('.tags');
     expect(tagsParent.type()).toBe('div');
 
-    const tagElements = tagsParent.children();
+    const tagElements = component.find('.tags > .tag');
     expect(tagElements).toHaveLength(3);
 
     const tags = getTags(component);
