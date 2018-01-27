@@ -21,6 +21,10 @@ module.exports = {
             {
                 test: /\.styl$/,
                 use: ['style-loader', 'css-loader', 'stylus-loader']
+            },
+            {
+                test: /\.(eot|svg|ttf|woff|woff2)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                loader: "file-loader"
             }
         ]
     },

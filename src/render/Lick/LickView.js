@@ -4,6 +4,18 @@ import Player from '../Audio/Player';
 import radium from 'radium';
 import ReactTooltip from 'react-tooltip';
 
+const propTypes = {
+    lick: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        artist: PropTypes.string.isRequired,
+        description: PropTypes.string.isRequired,
+        tracks: PropTypes.arrayOf(PropTypes.object).isRequired,
+        tags: PropTypes.arrayOf(PropTypes.string).isRequired
+    }).isRequired,
+    editLick: PropTypes.func.isRequired,
+    deleteLick: PropTypes.func.isRequired
+};
+
 const LickView = props => {
     const { lick, editLick, deleteLick } = props;
     const { id, artist, artistIndex, description, tracks, tags } = lick;
@@ -109,16 +121,6 @@ const renderTags = tags => {
     </div>;
 };
 
-export default radium(LickView);
+LickView.propTypes = propTypes;
 
-LickView.propTypes = {
-    lick: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        artist: PropTypes.string.isRequired,
-        description: PropTypes.string.isRequired,
-        tracks: PropTypes.arrayOf(PropTypes.object).isRequired,
-        tags: PropTypes.arrayOf(PropTypes.string).isRequired
-    }).isRequired,
-    editLick: PropTypes.func.isRequired,
-    deleteLick: PropTypes.func.isRequired
-};
+export default radium(LickView);

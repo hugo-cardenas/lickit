@@ -9,6 +9,7 @@ import createStore from './state/store';
 import jsonStorage from 'electron-json-storage';
 import { mapStateToProps, mapDispatchToProps, mergeProps } from './map';
 import createDummyState from './state/dummyState';
+import 'font-awesome/css/font-awesome.css';
 import 'bulma/css/bulma.css';
 import './style/main.styl';
 
