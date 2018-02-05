@@ -1,6 +1,5 @@
 import React from 'react';
-import Lick from './Lick/Lick';
-import LickForm from './Lick/LickForm';
+import LickList from './Lick/LickList';
 import Search from './Search/Search';
 import PropTypes from 'prop-types';
 import ReactTooltip from 'react-tooltip';
@@ -33,33 +32,26 @@ const App = props => {
             {renderTopContainer()}
             {renderControlsContainer(enableCreateLick, search)}
             <div className="main-content">
-                <div className="lick-list">
-                    {isCreateFormEnabled
-                        ? renderCreateLickForm(createLick, cancelCreateLickForm)
-                        : ''}
-                    {licks.map(lick =>
-                        renderLick(lick, deleteLick, saveLick, changeLickMode)
-                    )}
-                </div>
+                <LickList {...props.lick}/>
             </div>
         </div>
     );
 };
 
-const renderCreateLickForm = (createLick, cancelCreateLickForm) => {
-    const lick = {
-        artist: '',
-        description: '',
-        tracks: [],
-        tags: []
-    };
-    const props = {
-        lick,
-        saveLick: lick => createLick(lick),
-        cancelLickEditor: () => cancelCreateLickForm()
-    };
-    return <LickForm {...props} />;
-};
+// const renderCreateLickForm = (createLick, cancelCreateLickForm) => {
+//     const lick = {
+//         artist: '',
+//         description: '',
+//         tracks: [],
+//         tags: []
+//     };
+//     const props = {
+//         lick,
+//         saveLick: lick => createLick(lick),
+//         cancelLickEditor: () => cancelCreateLickForm()
+//     };
+//     return <LickForm {...props} />;
+// };
 
 const renderTopContainer = () => <div id="top-container">{renderNav()}</div>;
 
@@ -112,15 +104,15 @@ const renderCreateLickButton = enableLickCreateForm => (
     </a>
 );
 
-const renderLick = (lick, deleteLick, saveLick, changeLickMode) => (
-    <Lick
-        key={lick.id}
-        lick={lick}
-        deleteLick={deleteLick}
-        saveLick={saveLick}
-        changeLickMode={changeLickMode}
-    />
-);
+// const renderLick = (lick, deleteLick, saveLick, changeLickMode) => (
+//     <Lick
+//         key={lick.id}
+//         lick={lick}
+//         deleteLick={deleteLick}
+//         saveLick={saveLick}
+//         changeLickMode={changeLickMode}
+//     />
+// );
 
 export default App;
 
