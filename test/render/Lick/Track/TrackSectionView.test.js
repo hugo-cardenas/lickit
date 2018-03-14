@@ -3,33 +3,33 @@ import { shallow } from 'enzyme';
 import TrackSectionView from 'src/render/Lick/Track/TrackSectionView';
 
 test('render tracks', () => {
-    const tracks = [
-        { id: 'a1', url: 'http://foo.mp3' },
-        { id: 'a2', url: 'http://bar.mp3' },
-        { id: 'a3', url: 'http://baz.mp3' }
-    ];
-    const props = { tracks };
-    const component = shallow(<TrackSectionView {...props} />);
+  const tracks = [
+    { id: 'a1', url: 'http://foo.mp3' },
+    { id: 'a2', url: 'http://bar.mp3' },
+    { id: 'a3', url: 'http://baz.mp3' }
+  ];
+  const props = { tracks };
+  const component = shallow(<TrackSectionView {...props} />);
 
-    const container = component.find('.track-container');
-    expect(container.type()).toBe('div');
+  const container = component.find('.track-container');
+  expect(container.type()).toBe('div');
 
-    const list = container.find('.track-list');
-    expect(list.type()).toBe('div');
+  const list = container.find('.track-list');
+  expect(list.type()).toBe('div');
 
-    const trackElements = list.children();
-    expect(trackElements).toHaveLength(3);
+  const trackElements = list.children();
+  expect(trackElements).toHaveLength(3);
 
-    trackElements.forEach((trackElement, i) => {
-        expect(trackElement.hasClass('track')).toBe(true);
-        expect(trackElement.hasClass('level')).toBe(true);
+  trackElements.forEach((trackElement, i) => {
+    expect(trackElement.hasClass('track')).toBe(true);
+    expect(trackElement.hasClass('level')).toBe(true);
 
-        expect(trackElement.key()).toBe(tracks[i].id.toString());
+    expect(trackElement.key()).toBe(tracks[i].id.toString());
 
-        const audio = trackElement.find('audio');
-        expect(audio).toHaveLength(1);
-        expect(audio.hasClass('level-left')).toBe(true);
-        expect(audio.prop('controls')).toBeTruthy();
-        expect(audio.prop('src')).toBe(tracks[i].url);
-    });
+    const audio = trackElement.find('audio');
+    expect(audio).toHaveLength(1);
+    expect(audio.hasClass('level-left')).toBe(true);
+    expect(audio.prop('controls')).toBeTruthy();
+    expect(audio.prop('src')).toBe(tracks[i].url);
+  });
 });

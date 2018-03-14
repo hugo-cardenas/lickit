@@ -4,12 +4,12 @@ import createStorage from './storage';
 let storage;
 
 export function getStorage() {
-    if (!storage) {
-        storage = createStorage(getPathResolver());
-    }
-    return storage;
+  if (!storage) {
+    storage = createStorage(getPathResolver());
+  }
+  return storage;
 }
 
 export function setStorage(newStorage) {
-    storage = newStorage;
+  storage = newStorage;
 }

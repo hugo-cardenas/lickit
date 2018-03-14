@@ -4,9 +4,9 @@ import lick from './lick';
 import search from './search';
 
 const rootReducer = combineReducers({
-    error,
-    lick,
-    search
+  error,
+  lick,
+  search
 });
 
 export default rootReducer;
