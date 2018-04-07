@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import App from 'src/render/App';
 import createStore from 'src/state/store';
 import { range } from 'lodash';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import { TYPE_ARTIST } from 'src/search/filterTypes';
 
 // Mock the call electron.app.getPath('userData')
@@ -58,15 +58,15 @@ it('render expected number of licks', () => {
     };
   });
 
-  const component = shallow(<App {...props} />);
-  expect(component.find('Lick')).toHaveLength(7);
+  const component = mount(<App {...props} />);
+  expect(component.find('.lick-view')).toHaveLength(7);
 });
 
 it('create new lick', () => {
   const props = getProps();
   props.lick.enableCreateLickForm = jest.fn();
 
-  const component = shallow(<App {...props} />);
+  const component = mount(<App {...props} />);
   component.find('#button-lick-create').simulate('click');
 
   expect(props.lick.enableCreateLickForm).toHaveBeenCalledTimes(1);
@@ -77,7 +77,7 @@ it('render search', () => {
   const props = getProps();
   props.createLick = jest.fn();
 
-  const component = shallow(<App {...props} />);
+  const component = mount(<App {...props} />);
   const searchComponent = component.find('Search');
 
   expect(searchComponent.prop('filters')).toEqual([
