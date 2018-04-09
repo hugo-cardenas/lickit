@@ -1,7 +1,7 @@
 import { difference, groupBy, merge, uniq } from 'lodash';
 import {
-    enableCreateLickForm,
-    cancelCreateLickForm,
+    openCreation,
+    cancelCreation,
     createLick,
     updateLick,
     deleteLick,
@@ -29,8 +29,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         lick: {
-            enableCreateLickForm: () => dispatch(enableCreateLickForm()),
-            cancelCreateLickForm: () => dispatch(cancelCreateLickForm()),
+            enableCreateLickForm: () => dispatch(openCreation()),
+            cancelCreateLickForm: () => dispatch(cancelCreation()),
             createLick: lick => dispatch(createLick(lick)),
             saveLick: lick => dispatch(updateLick(lick)),
             deleteLick: id => dispatch(deleteLick(id)),

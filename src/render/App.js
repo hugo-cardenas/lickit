@@ -8,7 +8,7 @@ import ReactTooltip from 'react-tooltip';
 const App = props => {
     const { error, lick, search } = props;
     const {
-        isCreateFormEnabled,
+        isCreationOpen,
         licks,
         enableCreateLickForm,
         cancelCreateLickForm,
@@ -34,7 +34,7 @@ const App = props => {
             {renderControlsContainer(enableCreateLick, search)}
             <div className="main-content">
                 <div className="lick-list">
-                    {isCreateFormEnabled
+                    {isCreationOpen
                         ? renderCreateLickForm(createLick, cancelCreateLickForm)
                         : ''}
                     {licks.map(lick =>
